@@ -1,0 +1,31 @@
+apply plugin: 'android-library'
+
+android {
+    compileSdkVersion 19
+    buildToolsVersion "19.0.3"
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 19
+    }
+    buildTypes {
+        release {
+            runProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+}
+
+dependencies {
+    compile 'com.android.support:support-v4:19.1.+'
+    compile 'org.jsoup:jsoup:1.7.3'
+    compile 'com.squareup.picasso:picasso:2.2.+'
+    compile('de.greenrobot:eventbus:2.2.0') {
+        exclude group: 'com.google.android', module: 'support-v4' // already included below
+    }
+    compile 'com.koushikdutta.ion:ion:1.2.4'
+//    compile 'com.github.manuelpeinado.fadingactionbar:fadingactionbar:3.1.2'
+    compile 'com.google.android.gms:play-services:4.+'
+    compile project(':showcaseview')
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+}

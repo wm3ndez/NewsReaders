@@ -1,0 +1,17 @@
+*.iml
+.gradle
+local.properties
+.idea/
+newsreader.jks
+local.properties
+keystore.properties
+.DS_Store
+build/
+*.class
+gradle-wrapper.jar
+strings_private.xml
+
+#ShowcaseView Lib: https://github.com/amlcurran/ShowcaseView
+showcaseview/
+
+

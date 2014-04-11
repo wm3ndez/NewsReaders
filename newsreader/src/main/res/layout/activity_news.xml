@@ -1,0 +1,29 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/news_activity_padding"
+    android:paddingRight="@dimen/news_activity_padding"
+    tools:context="com.wmendez.newsreader.lib.ui.NewsActivity">
+
+    <LinearLayout
+        android:id="@+id/admob_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"/>
+
+    <ImageView
+        android:id="@+id/news_image"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/news_image_size"
+        android:scaleType="centerCrop" />
+
+
+    <ListView
+        android:id="@+id/fullscreen_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/admob_view" />
+
+</RelativeLayout>

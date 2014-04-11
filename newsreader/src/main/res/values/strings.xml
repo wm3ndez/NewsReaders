@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">News Reader</string>
+    <string name="title_feed_detail">Noticia</string>
+    <string name="title_item_list">Noticias</string>
+    <string name="title_item_detail">Noticia</string>
+    <string name="title_activity_news">Noticia</string>
+    <string name="share_button">Compartir</string>
+    <string name="showcase_main_title">Arrastrar para refrescar</string>
+    <string name="showcase_main_message">Arrastrando hacia abajo traerá las últimas noticias de la sección.</string>
+    <string name="menu_title_favorite">Favorito</string>
+
+</resources>
