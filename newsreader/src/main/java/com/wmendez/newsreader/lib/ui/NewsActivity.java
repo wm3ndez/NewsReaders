@@ -198,7 +198,7 @@ public class NewsActivity extends Activity {
         entry.isFavorite = !entry.isFavorite;
         ContentValues values = new ContentValues();
         values.put(DBHelper.NEWS_IS_FAVORITE, entry.isFavorite);
-        int update = db.update(DBHelper.NEWS_TABLE, values, DBHelper.NEWS_URL + " = ? ", new String[]{entry.link});
+        db.update(DBHelper.NEWS_TABLE, values, DBHelper.NEWS_URL + " = ? ", new String[]{entry.link});
         if (entry.isFavorite) {
             favoriteItem.setIcon(R.drawable.ic_action_heart_red);
         } else {
@@ -226,11 +226,11 @@ public class NewsActivity extends Activity {
     }
 
     public Intent createShareIntent() {
-        String textToShare = entry.link;
+        String textToShare = entry.title + " - " + entry.link;
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
-        shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, entry.title);
-        shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, textToShare);
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, entry.title);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, textToShare);
         return shareIntent;
     }
 
