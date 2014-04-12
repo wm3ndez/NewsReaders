@@ -33,7 +33,12 @@ public class DiarioLibreApp extends Application {
         Feeds.parser = new NewsHTMLParser() {
             @Override
             public String getHtml(Document doc) {
-                return doc.getElementById("newstext").html();
+                try {
+                    return doc.getElementById("newstext").html();
+                }catch (NullPointerException e){
+                    //No News
+                    return "<h4 style='text-align:center;'>Oh oh! Esta noticia no existe.</h4>";
+                }
             }
         };
     }
