@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="225dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_launcher" />
+        />
 
     <ImageView
         android:id="@+id/favorite_indicator"
@@ -16,7 +16,8 @@
         android:layout_height="48dp"
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/default_padding"
-        android:src="@drawable/ic_action_heart" />
+        android:src="@drawable/ic_action_heart_dark"
+        android:background="#0AAAAAAA"/>
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -22,7 +22,6 @@ import java.util.ArrayList;
 public class FeedListAdapter extends CursorAdapter {
     private final Context mContext;
     private final LayoutInflater mInflater;
-    private ArrayList<Entry> news = new ArrayList<Entry>();
 
     public FeedListAdapter(Context context, Cursor c, boolean autoRequery) {
         super(context, c, autoRequery);
@@ -52,8 +51,7 @@ public class FeedListAdapter extends CursorAdapter {
         if (!entry.image.equals("")) {
             Picasso.with(mContext).load(entry.image).placeholder(R.drawable.ic_launcher).into(imageView);
         } else {
-            Picasso.with(mContext).load(R.drawable.ic_launcher)
-                    .resize(125, 125).centerInside().into(imageView);
+            Picasso.with(mContext).load(R.drawable.picture_not_available).into(imageView);
         }
         ((TextView) view.findViewById(R.id.news_title)).setText(entry.title);
         ((TextView) view.findViewById(R.id.pub_date)).setText(DateUtils.getRelativeTimeSpanString(entry.pubDate));
@@ -85,11 +83,6 @@ public class FeedListAdapter extends CursorAdapter {
         } else {
             ((ImageView) v).setImageResource(R.drawable.ic_action_heart);
         }
-    }
-
-    public void setList(ArrayList<Entry> news) {
-        this.news = news;
-        notifyDataSetInvalidated();
     }
 
     public Entry getEntry(int position) {

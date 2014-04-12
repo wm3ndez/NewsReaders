@@ -106,7 +106,7 @@ public class NewsActivity extends Activity {
 
     private void setNewsImage(Entry entry) {
         if (!entry.image.equals(""))
-            Picasso.with(this).load(entry.image).error(R.drawable.ic_launcher).into(imageView);
+            Picasso.with(this).load(entry.image).error(R.drawable.picture_not_available).into(imageView);
     }
 
     class MyAdapter extends BaseAdapter {
