@@ -10,5 +10,6 @@
     <string name="showcase_main_title">Arrastrar para refrescar</string>
     <string name="showcase_main_message">Arrastrando hacia abajo traerá las últimas noticias de la sección.</string>
     <string name="menu_title_favorite">Favorito</string>
+    <string name="no_content"><![CDATA[<h3>Resumen...</h3>]]></string>
 
 </resources>

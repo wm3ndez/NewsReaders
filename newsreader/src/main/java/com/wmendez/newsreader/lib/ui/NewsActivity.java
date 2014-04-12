@@ -86,7 +86,7 @@ public class NewsActivity extends Activity {
 
     }
 
-    private Future<Response<String>> fetchNews(Entry entry) {
+    private Future<Response<String>> fetchNews(final Entry entry) {
         return Ion.with(this, entry.link)
                 .asString()
                 .withResponse()
@@ -94,7 +94,8 @@ public class NewsActivity extends Activity {
                     @Override
                     public void onCompleted(Exception e, Response<String> result) {
                         if (e != null) {
-                            webView.loadData("<h3>Contenido no disponible</h3>", "text/html", "UTF-8");
+                            String data = getString(R.string.no_content) + "<p> " + entry.description + "</p>";
+                            webView.loadData(data, "text/html", "UTF-8");
                         } else {
                             Document doc = Jsoup.parse(result.getResult());
                             webView.loadData(Feeds.parser.getHtml(doc), "text/html", "UTF-8");
