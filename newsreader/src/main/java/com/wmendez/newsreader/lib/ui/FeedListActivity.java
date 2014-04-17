@@ -6,7 +6,9 @@ import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
 
 import com.wmendez.newsreader.lib.R;
-import com.wmendez.newsreader.lib.helpers.Entry;
+import com.wmendez.newsreader.lib.event.NewsItemSelectedEvent;
+
+import de.greenrobot.event.EventBus;
 
 
 /**
@@ -18,7 +20,7 @@ import com.wmendez.newsreader.lib.helpers.Entry;
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link FeedListFragment}.
  */
-public class FeedListActivity extends FragmentActivity implements FeedListFragment.Callbacks {
+public class FeedListActivity extends FragmentActivity {
 
     private static final String TAG = FeedListActivity.class.getSimpleName();
 
@@ -54,6 +56,8 @@ public class FeedListActivity extends FragmentActivity implements FeedListFragme
                     .add(R.id.feed_detail_container, fragment)
                     .commit();
         }
+
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -65,10 +69,16 @@ public class FeedListActivity extends FragmentActivity implements FeedListFragme
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onNewsItemSelected(Entry newsItem) {
+    public void onEvent(NewsItemSelectedEvent event) {
         Intent intent = new Intent(this, NewsActivity.class);
-        intent.putExtra("news", newsItem);
+        intent.putExtra("news", event.getEntry());
         startActivity(intent);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
 }

@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
 import com.wmendez.newsreader.lib.R;
-import com.wmendez.newsreader.lib.helpers.Entry;
+import com.wmendez.newsreader.lib.event.NewsItemSelectedEvent;
 import com.wmendez.newsreader.lib.helpers.Feeds;
+
+import de.greenrobot.event.EventBus;
 
 
 /**
@@ -26,7 +28,7 @@ import com.wmendez.newsreader.lib.helpers.Feeds;
  * to listen for item selections.
  */
 public class FeedCategoryListActivity extends FragmentActivity
-        implements FeedCategoryListFragment.Callbacks, FeedListFragment.Callbacks {
+        implements FeedCategoryListFragment.Callbacks {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -51,9 +53,9 @@ public class FeedCategoryListActivity extends FragmentActivity
             ((FeedCategoryListFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.item_list))
                     .setActivateOnItemClick(true);
+            EventBus.getDefault().register(this);
         }
 
-        // TODO: If exposing deep links into your app, handle intents here.
     }
 
 
@@ -85,10 +87,16 @@ public class FeedCategoryListActivity extends FragmentActivity
         }
     }
 
-    @Override
-    public void onNewsItemSelected(Entry newsItem) {
+    public void onEvent(NewsItemSelectedEvent event) {
         Intent intent = new Intent(this, NewsActivity.class);
-        intent.putExtra("news", newsItem);
+        intent.putExtra("news", event.getEntry());
         startActivity(intent);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
 }

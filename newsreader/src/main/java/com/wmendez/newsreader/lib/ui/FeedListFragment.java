@@ -1,6 +1,5 @@
 package com.wmendez.newsreader.lib.ui;
 
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -31,7 +30,7 @@ import com.koushikdutta.ion.Ion;
 import com.wmendez.newsreader.lib.R;
 import com.wmendez.newsreader.lib.adapters.FeedListAdapter;
 import com.wmendez.newsreader.lib.db.DBHelper;
-import com.wmendez.newsreader.lib.helpers.Entry;
+import com.wmendez.newsreader.lib.event.NewsItemSelectedEvent;
 import com.wmendez.newsreader.lib.helpers.Feeds;
 import com.wmendez.newsreader.lib.util.Utils;
 
@@ -45,6 +44,8 @@ import org.jsoup.select.Elements;
 import java.util.Arrays;
 import java.util.List;
 
+import de.greenrobot.event.EventBus;
+
 /**
  * A fragment representing a single Feed detail screen.
  * This fragment is either contained in a {@link FeedCategoryListActivity}
@@ -57,12 +58,6 @@ public class FeedListFragment extends Fragment implements AdapterView.OnItemClic
     private GridView gridView;
     private FeedListAdapter adapter;
 
-
-    /**
-     * The fragment's current callback object, which is notified of list item
-     * clicks.
-     */
-    private Callbacks mCallbacks = sDummyCallbacks;
 
     /**
      * The current activated item position. Only used on tablets.
@@ -162,29 +157,6 @@ public class FeedListFragment extends Fragment implements AdapterView.OnItemClic
         return exists;
     }
 
-
-    /**
-     * A callback interface that all activities containing this fragment must
-     * implement. This mechanism allows activities to be notified of item
-     * selections.
-     */
-    public interface Callbacks {
-        /**
-         * Callback for when an item has been selected.
-         */
-        public void onNewsItemSelected(Entry newsItem);
-    }
-
-    /**
-     * A dummy implementation of the {@link Callbacks} interface that does
-     * nothing. Used only when this fragment is not attached to an activity.
-     */
-    private static Callbacks sDummyCallbacks = new Callbacks() {
-        @Override
-        public void onNewsItemSelected(Entry newsItem) {
-
-        }
-    };
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -292,29 +264,10 @@ public class FeedListFragment extends Fragment implements AdapterView.OnItemClic
 
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        // Activities containing this fragment must implement its callbacks.
-        if (!(activity instanceof Callbacks)) {
-            throw new IllegalStateException("Activity must implement fragment's callbacks.");
-        }
-
-        mCallbacks = (Callbacks) activity;
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
-        // Reset the active callbacks interface to the dummy implementation.
-        mCallbacks = sDummyCallbacks;
-    }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        mCallbacks.onNewsItemSelected(adapter.getEntry(position));
+        EventBus.getDefault().post(new NewsItemSelectedEvent(adapter.getEntry(position)));
     }
 
 
