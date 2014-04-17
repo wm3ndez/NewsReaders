@@ -17,7 +17,6 @@ import com.wmendez.newsreader.lib.R;
 import com.wmendez.newsreader.lib.db.DBHelper;
 import com.wmendez.newsreader.lib.helpers.Entry;
 
-import java.util.ArrayList;
 
 public class FeedListAdapter extends CursorAdapter {
     private final Context mContext;

@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.espian.showcaseview.OnShowcaseEventListener;
@@ -40,6 +39,7 @@ import org.apache.http.impl.cookie.DateParseException;
 import org.apache.http.impl.cookie.DateUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.Arrays;
@@ -67,18 +67,18 @@ public class FeedListFragment extends Fragment implements AdapterView.OnItemClic
     /**
      * The current activated item position. Only used on tablets.
      */
-    private int mActivatedPosition = ListView.INVALID_POSITION;
     private SwipeRefreshLayout swipeLayout;
     private SQLiteDatabase db;
     private Cursor cursor;
-    private FragmentActivity activity;
+
+    final String[] formats = new String[]{
+            "EEE, dd MMM yyyy HH:mm:ss",
+            "EEE, dd MMM yyyy HH:mm:ss zzz"
+    };
 
     @Override
     public void onRefresh() {
-        final String[] formats = new String[]{
-                "EEE, dd MMM yyyy HH:mm:ss",
-                "EEE, dd MMM yyyy HH:mm:ss zzz"
-        };
+
         Ion.with(getActivity(), mItem.uri)
                 .asString()
                 .setCallback(new FutureCallback<String>() {
@@ -90,36 +90,16 @@ public class FeedListFragment extends Fragment implements AdapterView.OnItemClic
                             doc = Jsoup.parse(result);
                         } catch (IllegalArgumentException ex) {
                             Log.e(TAG, result);
-                            Toast.makeText(getActivity(), "No se pudo obtener las noticias.  Intente mas tarde.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), getActivity().getString(R.string.fetch_news_error), Toast.LENGTH_LONG).show();
                             return;
                         }
                         Elements entries = doc.getElementsByTag("item");
-                        ContentValues values = new ContentValues();
                         for (org.jsoup.nodes.Element element : entries) {
                             String url = element.getElementsByTag("guid").text();
                             String category = element.getElementsByTag("category").text().replace("<![CDATA[", "").replace("]]>", "");
                             if (newsExist(url, category))
                                 continue;
-                            String title = element.getElementsByTag("title").text().replace("<![CDATA[", "").replace("]]>", "");
-                            String description = element.getElementsByTag("description").text().replace("<![CDATA[", "").replace("]]>", "");
-                            String pub_date = element.getElementsByTag("pubdate").text().replace("<![CDATA[", "").replace("]]>", "");
-                            Long pubDate = 0L;
-                            try {
-                                pubDate = DateUtils.parseDate(pub_date, formats).getTime();
-                            } catch (DateParseException ex) {
-                                ex.printStackTrace();
-                            }
-                            String image = element.getElementsByTag("enclosure").attr("url").replace("<![CDATA[", "").replace("]]>", "");
-                            values.clear();
-                            values.put(DBHelper.NEWS_CATEGORY, category);
-                            values.put(DBHelper.NEWS_TITLE, title);
-                            values.put(DBHelper.NEWS_URL, url);
-                            values.put(DBHelper.NEWS_DESCRIPTION, description);
-                            values.put(DBHelper.NEWS_PUB_DATE, pubDate);
-                            values.put(DBHelper.NEWS_IMAGE, image);
-                            values.put(DBHelper.IS_NEW, 1);
-
-                            db.insert(DBHelper.NEWS_TABLE, null, values);
+                            insertNews(element, url, category);
                         }
 
                         cursor.close();
@@ -127,6 +107,31 @@ public class FeedListFragment extends Fragment implements AdapterView.OnItemClic
                         adapter.changeCursor(cursor);
                     }
                 });
+    }
+
+    private void insertNews(Element element, String url, String category) {
+        ContentValues values = new ContentValues();
+        String title = element.getElementsByTag("title").text().replace("<![CDATA[", "").replace("]]>", "");
+        String description = element.getElementsByTag("description").text().replace("<![CDATA[", "").replace("]]>", "");
+        String pub_date = element.getElementsByTag("pubdate").text().replace("<![CDATA[", "").replace("]]>", "");
+        Long pubDate = 0L;
+        try {
+            pubDate = DateUtils.parseDate(pub_date, formats).getTime();
+        } catch (DateParseException ex) {
+            ex.printStackTrace();
+        }
+        String image = element.getElementsByTag("enclosure").attr("url").replace("<![CDATA[", "").replace("]]>", "");
+        values.clear();
+        values.put(DBHelper.NEWS_CATEGORY, category);
+        values.put(DBHelper.NEWS_TITLE, title);
+        values.put(DBHelper.NEWS_URL, url);
+        values.put(DBHelper.NEWS_DESCRIPTION, description);
+        values.put(DBHelper.NEWS_PUB_DATE, pubDate);
+        values.put(DBHelper.NEWS_IMAGE, image);
+        values.put(DBHelper.IS_NEW, true);
+        values.put(DBHelper.NEWS_IS_FAVORITE, false);
+
+        db.insert(DBHelper.NEWS_TABLE, null, values);
     }
 
     private boolean newsExist(String link, String category) {
@@ -272,10 +277,6 @@ public class FeedListFragment extends Fragment implements AdapterView.OnItemClic
         else
             categoryName = mItem.title;
 
-//        String sql = "SELECT DISTINCT * FROM " + DBHelper.NEWS_TABLE + " WHERE "
-//                + DBHelper.NEWS_CATEGORY + " LIKE ? "
-//                + "ORDER BY " + DBHelper.NEWS_PUB_DATE + " DESC";
-//        return db.rawQuery(sql, new String[]{"%" + title + "%"});
         return db.query(true, DBHelper.NEWS_TABLE, null, DBHelper.NEWS_CATEGORY + " like ?",
                 new String[]{"%" + categoryName + "%"}, null, null, DBHelper.NEWS_PUB_DATE + " DESC", null);
     }
