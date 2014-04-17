@@ -30,6 +30,7 @@ import com.koushikdutta.ion.Ion;
 import com.wmendez.newsreader.lib.R;
 import com.wmendez.newsreader.lib.adapters.FeedListAdapter;
 import com.wmendez.newsreader.lib.db.DBHelper;
+import com.wmendez.newsreader.lib.event.FavoriteChangedEvent;
 import com.wmendez.newsreader.lib.event.NewsItemSelectedEvent;
 import com.wmendez.newsreader.lib.helpers.Feeds;
 import com.wmendez.newsreader.lib.util.Utils;
@@ -177,6 +178,8 @@ public class FeedListFragment extends Fragment implements AdapterView.OnItemClic
             String uri = arguments.getString("uri");
             mItem = Feeds.ITEM_MAP.get(uri);
         }
+
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -264,6 +267,12 @@ public class FeedListFragment extends Fragment implements AdapterView.OnItemClic
 
     }
 
+    public void onEvent(FavoriteChangedEvent event) {
+        cursor.close();
+        cursor = getQuery();
+        adapter.changeCursor(cursor);
+    }
+
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -284,5 +293,11 @@ public class FeedListFragment extends Fragment implements AdapterView.OnItemClic
     @Override
     public void onShowcaseViewShow(ShowcaseView showcaseView) {
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

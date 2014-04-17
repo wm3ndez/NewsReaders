@@ -32,11 +32,14 @@ import com.koushikdutta.ion.Response;
 import com.squareup.picasso.Picasso;
 import com.wmendez.newsreader.lib.R;
 import com.wmendez.newsreader.lib.db.DBHelper;
+import com.wmendez.newsreader.lib.event.FavoriteChangedEvent;
 import com.wmendez.newsreader.lib.helpers.Entry;
 import com.wmendez.newsreader.lib.helpers.Feeds;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+
+import de.greenrobot.event.EventBus;
 
 public class NewsActivity extends Activity {
     private WebView webView;
@@ -205,6 +208,8 @@ public class NewsActivity extends Activity {
         } else {
             favoriteItem.setIcon(R.drawable.ic_action_heart);
         }
+
+        EventBus.getDefault().post(new FavoriteChangedEvent());
     }
 
     @Override
