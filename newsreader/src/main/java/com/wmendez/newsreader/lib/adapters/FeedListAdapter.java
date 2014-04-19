@@ -38,8 +38,7 @@ public class FeedListAdapter extends CursorAdapter {
         final Entry entry = getEntry(cursor);
         ImageView imageView = (ImageView) view.findViewById(R.id.news_image);
         ImageView favorite = (ImageView) view.findViewById(R.id.favorite_indicator);
-        if (entry.isFavorite)
-            favorite.setImageResource(R.drawable.ic_action_heart_red);
+        favorite.setImageResource(entry.isFavorite ? R.drawable.ic_action_heart_red : R.drawable.ic_action_heart_dark);
         favorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
