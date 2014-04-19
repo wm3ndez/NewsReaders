@@ -6,6 +6,7 @@ import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.widget.ListView;
 
+import com.wmendez.newsreader.lib.R;
 import com.wmendez.newsreader.lib.adapters.FeedCategoryListAdapter;
 import com.wmendez.newsreader.lib.helpers.Feeds;
 
@@ -63,7 +64,7 @@ public class FeedCategoryListFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setListAdapter( new FeedCategoryListAdapter(this, Feeds.ITEMS));
+        setListAdapter(new FeedCategoryListAdapter(this, Feeds.ITEMS));
     }
 
     @Override
@@ -123,9 +124,13 @@ public class FeedCategoryListFragment extends ListFragment {
     public void setActivateOnItemClick(boolean activateOnItemClick) {
         // When setting CHOICE_MODE_SINGLE, ListView will automatically
         // give items the 'activated' state when touched.
-        getListView().setChoiceMode(activateOnItemClick
-                ? ListView.CHOICE_MODE_SINGLE
-                : ListView.CHOICE_MODE_NONE);
+        ListView listView = getListView();
+        if (activateOnItemClick) {
+            listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+            listView.setSelector(R.drawable.category_list_selector);
+        } else {
+            listView.setChoiceMode(ListView.CHOICE_MODE_NONE);
+        }
     }
 
     private void setActivatedPosition(int position) {
