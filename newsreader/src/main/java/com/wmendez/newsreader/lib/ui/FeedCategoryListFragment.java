@@ -64,11 +64,6 @@ public class FeedCategoryListFragment extends ListFragment {
         super.onCreate(savedInstanceState);
 
         setListAdapter( new FeedCategoryListAdapter(this, Feeds.ITEMS));
-//        setListAdapter(new ArrayAdapter<Feeds.FeedItem>(
-//                getActivity(),
-//                android.R.layout.simple_list_item_activated_1,
-//                android.R.id.text1,
-//                Feeds.ITEMS));
     }
 
     @Override

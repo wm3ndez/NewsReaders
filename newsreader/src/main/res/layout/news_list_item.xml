@@ -31,16 +31,19 @@
             android:id="@+id/news_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:shadowColor="#000000"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="1"
             android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="#FFFFFF" />
+            android:textColor="#FFFFFFFF" />
 
         <TextView
             android:id="@+id/pub_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAllCaps="true"
             android:textAppearance="?android:textAppearanceSmall"
-            android:textColor="#FFFFFF" />
+            android:textColor="#FFFFFFFF" />
     </LinearLayout>
 
 
