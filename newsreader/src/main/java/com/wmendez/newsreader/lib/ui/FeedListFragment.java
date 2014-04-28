@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,7 +84,6 @@ public class FeedListFragment extends Fragment implements AdapterView.OnItemClic
                         try {
                             doc = Jsoup.parse(result);
                         } catch (IllegalArgumentException ex) {
-                            Log.e(TAG, result);
                             Toast.makeText(getActivity(), getActivity().getString(R.string.fetch_news_error), Toast.LENGTH_LONG).show();
                             return;
                         }
