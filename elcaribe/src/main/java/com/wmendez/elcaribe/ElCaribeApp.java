@@ -18,7 +18,7 @@ public class ElCaribeApp extends Application {
         Feeds.parser = new NewsHTMLParser() {
             @Override
             public String getHtml(Document doc) {
-                return doc.getElementById("newstext").html();
+                return doc.getElementsByClass("cuerpoNoticia").html();
             }
         };
     }
