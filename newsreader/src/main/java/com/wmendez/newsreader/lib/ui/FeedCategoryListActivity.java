@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
 import com.wmendez.newsreader.lib.R;
+import com.wmendez.newsreader.lib.event.CategoryItemSelectedEvent;
 import com.wmendez.newsreader.lib.event.NewsItemSelectedEvent;
 import com.wmendez.newsreader.lib.helpers.Feeds;
 
@@ -23,12 +24,8 @@ import de.greenrobot.event.EventBus;
  * {@link ItemListFragment} and the item details
  * (if present) is a {@link ItemDetailFragment}.
  * <p/>
- * This activity also implements the required
- * {@link ItemListFragment.Callbacks} interface
- * to listen for item selections.
  */
-public class FeedCategoryListActivity extends FragmentActivity
-        implements FeedCategoryListFragment.Callbacks {
+public class FeedCategoryListActivity extends FragmentActivity {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -59,8 +56,8 @@ public class FeedCategoryListActivity extends FragmentActivity
     }
 
 
-    @Override
-    public void onCategoryItemSelected(Feeds.FeedItem item) {
+    public void onEvent(CategoryItemSelectedEvent event) {
+        Feeds.FeedItem item = event.getItem();
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a

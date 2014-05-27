@@ -17,3 +17,8 @@
 #}
 
 -dontwarn com.squareup.okhttp.**
+
+
+-keepclassmembers class ** {
+    public void onEvent*(**);
+}
