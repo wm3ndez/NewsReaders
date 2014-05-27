@@ -24,7 +24,6 @@ dependencies {
         exclude group: 'com.google.android', module: 'support-v4' // already included below
     }
     compile 'com.koushikdutta.ion:ion:1.2.4'
-//    compile 'com.github.manuelpeinado.fadingactionbar:fadingactionbar:3.1.2'
     compile 'com.google.android.gms:play-services:4.+'
     compile project(':showcaseview')
     compile fileTree(dir: 'libs', include: ['*.jar'])
