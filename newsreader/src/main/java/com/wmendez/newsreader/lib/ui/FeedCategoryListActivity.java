@@ -50,8 +50,8 @@ public class FeedCategoryListActivity extends FragmentActivity {
             ((FeedCategoryListFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.item_list))
                     .setActivateOnItemClick(true);
-            EventBus.getDefault().register(this);
         }
+        EventBus.getDefault().register(this);
 
     }
 
