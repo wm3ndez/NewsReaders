@@ -74,7 +74,8 @@ public class FeedListFragment extends Fragment implements AdapterView.OnItemClic
     @Override
     public void onRefresh() {
 
-        Ion.with(getActivity(), mItem.uri)
+        final FragmentActivity activity = getActivity();
+        Ion.with(activity, mItem.uri)
                 .asString()
                 .setCallback(new FutureCallback<String>() {
                     @Override
@@ -84,7 +85,8 @@ public class FeedListFragment extends Fragment implements AdapterView.OnItemClic
                         try {
                             doc = Jsoup.parse(result);
                         } catch (IllegalArgumentException ex) {
-                            Toast.makeText(getActivity(), getActivity().getString(R.string.fetch_news_error), Toast.LENGTH_LONG).show();
+                            if (activity != null)
+                                Toast.makeText(activity, activity.getString(R.string.fetch_news_error), Toast.LENGTH_LONG).show();
                             return;
                         }
                         Elements entries = doc.getElementsByTag("item");
@@ -260,7 +262,9 @@ public class FeedListFragment extends Fragment implements AdapterView.OnItemClic
         adView.setAdSize(AdSize.BANNER);
         LinearLayout layout = (LinearLayout) view.findViewById(R.id.admob_view);
         layout.addView(adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
+        AdRequest.Builder builder = new AdRequest.Builder();
+        builder.addTestDevice(getString(R.string.test_device));
+        AdRequest adRequest = builder.build();
         adView.loadAd(adRequest);
 
     }

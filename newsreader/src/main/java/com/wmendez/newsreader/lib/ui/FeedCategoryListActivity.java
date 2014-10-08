@@ -3,6 +3,7 @@ package com.wmendez.newsreader.lib.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 
 import com.wmendez.newsreader.lib.R;
 import com.wmendez.newsreader.lib.event.CategoryItemSelectedEvent;
@@ -27,6 +28,7 @@ import de.greenrobot.event.EventBus;
  */
 public class FeedCategoryListActivity extends FragmentActivity {
 
+    private static final String TAG = FragmentActivity.class.getCanonicalName();
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
@@ -85,6 +87,10 @@ public class FeedCategoryListActivity extends FragmentActivity {
     }
 
     public void onEvent(NewsItemSelectedEvent event) {
+        //Do not open the News if it's One-Pane layout, because it was opened at FeedListActivity
+        if (!mTwoPane)
+            return;
+        Log.i(TAG, "Clicked!!!");
         Intent intent = new Intent(this, NewsActivity.class);
         intent.putExtra("news", event.getEntry());
         startActivity(intent);

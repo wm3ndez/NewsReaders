@@ -84,7 +84,9 @@ public class NewsActivity extends Activity {
         adView.setAdSize(AdSize.BANNER);
         LinearLayout layout = (LinearLayout) findViewById(R.id.admob_view);
         layout.addView(adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
+        AdRequest.Builder builder = new AdRequest.Builder();
+        builder.addTestDevice(getString(R.string.test_device));
+        AdRequest adRequest = builder.build();
         adView.loadAd(adRequest);
 
     }

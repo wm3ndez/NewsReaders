@@ -3,6 +3,7 @@ package com.wmendez.newsreader.lib.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.wmendez.newsreader.lib.R;
@@ -22,7 +23,7 @@ import de.greenrobot.event.EventBus;
  */
 public class FeedListActivity extends FragmentActivity {
 
-    private static final String TAG = FeedListActivity.class.getSimpleName();
+    private static final String TAG = FeedListActivity.class.getCanonicalName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +71,7 @@ public class FeedListActivity extends FragmentActivity {
     }
 
     public void onEvent(NewsItemSelectedEvent event) {
+        Log.i(TAG, "Clicked!!!");
         Intent intent = new Intent(this, NewsActivity.class);
         intent.putExtra("news", event.getEntry());
         startActivity(intent);
