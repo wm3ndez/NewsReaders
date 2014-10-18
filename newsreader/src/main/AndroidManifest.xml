@@ -15,7 +15,8 @@
         <activity
             android:name="com.wmendez.newsreader.lib.ui.NewsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_news" />
+            android:label="@string/title_activity_news"
+            android:theme="@style/AppTheme.OverlayActionBar"/>
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -26,12 +27,6 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
             android:theme="@android:style/Theme.Translucent"/>
 
-        <!--<provider-->
-            <!--android:name="com.wmendez.newsreader.lib.db.NewsContentProvider"-->
-            <!--android:authorities="com.wmendez.newsreader"-->
-            <!--android:enabled="true"-->
-            <!--android:exported="true" >-->
-        <!--</provider>-->
     </application>
 
 </manifest>

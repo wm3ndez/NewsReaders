@@ -1,15 +1,15 @@
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion "19.1.0"
+    compileSdkVersion 21
+    buildToolsVersion "21.0.0"
 
     def Properties versionProps = new Properties()
     versionProps.load(new FileInputStream(file('../version.properties')))
 
     defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 19
+        minSdkVersion 21
+        targetSdkVersion 21
         versionName versionProps['name']
         versionCode versionProps['code'].toInteger()
     }

@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/news_activity_padding"
     android:paddingRight="@dimen/news_activity_padding"
+
     tools:context="com.wmendez.newsreader.lib.ui.NewsActivity">
 
     <LinearLayout

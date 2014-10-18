@@ -4,6 +4,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.support.v7.graphics.Palette;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +18,7 @@ import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.wmendez.newsreader.lib.R;
 import com.wmendez.newsreader.lib.db.DBHelper;
@@ -36,8 +43,9 @@ public class FeedListAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         final Entry entry = getEntry(cursor);
-        ImageView imageView = (ImageView) view.findViewById(R.id.news_image);
+        final ImageView imageView = (ImageView) view.findViewById(R.id.news_image);
         ImageView favorite = (ImageView) view.findViewById(R.id.favorite_indicator);
+        final View ninfo = view.findViewById(R.id.news_info);
         favorite.setImageResource(entry.isFavorite ? R.drawable.ic_action_heart_red : R.drawable.ic_action_heart_dark);
         favorite.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,7 +55,18 @@ public class FeedListAdapter extends CursorAdapter {
         });
 
         if (!entry.image.equals("")) {
-            Picasso.with(mContext).load(entry.image).placeholder(R.drawable.ic_launcher).into(imageView);
+            Picasso.with(mContext).load(entry.image).placeholder(R.drawable.ic_launcher).into(imageView, new Callback() {
+                @Override
+                public void onSuccess() {
+                    Palette palette = Palette.generate(((BitmapDrawable) imageView.getDrawable()).getBitmap());
+                    ninfo.setBackgroundColor(palette.getMutedColor(Color.LTGRAY));
+                }
+
+                @Override
+                public void onError() {
+                }
+
+            });
         } else {
             Picasso.with(mContext).load(R.drawable.picture_not_available).into(imageView);
         }

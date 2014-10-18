@@ -25,7 +25,8 @@
             android:horizontalSpacing="2dp"
             android:numColumns="@integer/columns_count"
             android:orientation="vertical"
-            android:verticalSpacing="1dp" />
+            android:verticalSpacing="4dp"
+            android:padding="8dp"/>
     </android.support.v4.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateUtils;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.webkit.WebView;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
@@ -57,6 +59,7 @@ public class NewsActivity extends Activity {
 
         setContentView(R.layout.activity_news);
         getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.text_overlay));
 
         entry = getIntent().getParcelableExtra("news");
         setTitle(entry.title);
