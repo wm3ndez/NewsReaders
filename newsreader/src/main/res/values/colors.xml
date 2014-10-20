@@ -6,5 +6,6 @@
     <color name="primary_dark">#009688</color>
     <color name="primary_text">#FFFFFF</color>
     <color name="accent">#c6ff00</color>
+    <color name="translucent_actionbar_background">#cc009688</color>
 
 </resources>

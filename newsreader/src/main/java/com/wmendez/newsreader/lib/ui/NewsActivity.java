@@ -1,26 +1,23 @@
 package com.wmendez.newsreader.lib.ui;
 
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
-import android.os.Build;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.view.ViewCompat;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.graphics.Palette;
+import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.text.format.DateUtils;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.Window;
-import android.webkit.WebView;
-import android.widget.AbsListView;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ShareActionProvider;
 import android.widget.TextView;
 
@@ -31,55 +28,87 @@ import com.koushikdutta.async.future.Future;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.Response;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.wmendez.newsreader.lib.R;
 import com.wmendez.newsreader.lib.db.DBHelper;
 import com.wmendez.newsreader.lib.event.FavoriteChangedEvent;
 import com.wmendez.newsreader.lib.helpers.Entry;
 import com.wmendez.newsreader.lib.helpers.Feeds;
+import com.wmendez.newsreader.lib.ui.views.ObservableScrollView;
+import com.wmendez.newsreader.lib.util.UIUtils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import de.greenrobot.event.EventBus;
 
-public class NewsActivity extends Activity {
-    private WebView webView;
-    private ImageView imageView;
-    private View fakeHeader_V;
-    private ListView listview;
+public class NewsActivity extends ActionBarActivity implements ObservableScrollView.Callbacks {
+    private TextView mNewsContent;
+    private ImageView mImageView;
     private AdView adView;
     private Entry entry;
     private ShareActionProvider mShareActionProvider;
     private MenuItem favoriteItem;
+    private TextView newsTitle;
+    private TextView pubDate;
+    private ObservableScrollView mScrollView;
+    private int mImageHeightPixels = 0;
+    private View mPhotoViewContainer;
+
+    private View mHeader;
+    private Handler mHandler = new Handler();
+    private View mScrollViewChild;
+    private View mDetailsContainer;
+    private static final String TRANSITION_NAME_IMAGE = "image";
+    private int mHeaderHeightPixels;
+    private boolean mHasImage = false;
+    private float mMaxHeaderElevation;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_news);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.text_overlay));
 
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                toolbar.setTitle("");
+            }
+        });
+
+        mScrollView = (ObservableScrollView) findViewById(R.id.scrollview);
+        mScrollView.addCallbacks(this);
+
+
+        mScrollViewChild = findViewById(R.id.scroll_view_child);
+        mScrollViewChild.setVisibility(View.INVISIBLE);
+
+        mDetailsContainer = findViewById(R.id.details_container);
+        mPhotoViewContainer = findViewById(R.id.image_container);
         entry = getIntent().getParcelableExtra("news");
-        setTitle(entry.title);
 
-        listview = (ListView) findViewById(R.id.fullscreen_content);
-        webView = (WebView) LayoutInflater.from(this).inflate(R.layout.news_webview, null);
+        mHeader = findViewById(R.id.header_session);
+        mNewsContent = (TextView) findViewById(R.id.news_content);
 
-        imageView = (ImageView) findViewById(R.id.news_image);
-        fakeHeader_V = new View(this);
-        fakeHeader_V.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT));
+        mImageView = (ImageView) findViewById(R.id.news_image);
+        newsTitle = (TextView) findViewById(R.id.news_title);
+        newsTitle.setText(entry.title);
+        pubDate = (TextView) findViewById(R.id.pub_date);
+        pubDate.setText(DateUtils.getRelativeTimeSpanString(entry.pubDate));
 
-        listview.addHeaderView(fakeHeader_V, null, false);
-        listview.setAdapter(new MyAdapter());
+        ViewCompat.setTransitionName(mImageView, TRANSITION_NAME_IMAGE);
 
-
-        setNewsImage(entry);
-        setFadingAnimation();
+        mMaxHeaderElevation = getResources().getDimensionPixelSize(R.dimen.header_elevation);
         fetchNews(entry);
         setAdmob();
     }
+
 
     private void setAdmob() {
         adView = new AdView(this);
@@ -101,93 +130,83 @@ public class NewsActivity extends Activity {
                 .setCallback(new FutureCallback<Response<String>>() {
                     @Override
                     public void onCompleted(Exception e, Response<String> result) {
+                        String data;
                         if (e != null) {
-                            String data = getString(R.string.no_content) + "<p> " + entry.description + "</p>";
-                            webView.loadData(data, "text/html", "UTF-8");
+                            data = getString(R.string.no_content) + "<p> " + entry.description + "</p>";
                         } else {
                             Document doc = Jsoup.parse(result.getResult());
-                            webView.loadData(Feeds.parser.getHtml(doc), "text/html", "UTF-8");
+                            data = Feeds.parser.getHtml(doc);
                         }
-
+                        setNewsImage(entry);
+                        mNewsContent.setText(Html.fromHtml(data));
                     }
                 });
     }
 
     private void setNewsImage(Entry entry) {
-        if (!entry.image.equals(""))
-            Picasso.with(this).load(entry.image).error(R.drawable.picture_not_available).into(imageView);
-    }
-
-    class MyAdapter extends BaseAdapter {
-
-        @Override
-        public int getCount() {
-            return 2;
+        mScrollViewChild.setVisibility(View.VISIBLE);
+        if (entry.image.equals("")) {
+            setDefaultStyle();
+            return;
         }
-
-        @Override
-        public WebView getItem(int position) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            switch (position) {
-                case 0:
-                    View view = LayoutInflater.from(NewsActivity.this).inflate(R.layout.news_info, null);
-                    ((TextView) view.findViewById(R.id.news_title)).setText(entry.title);
-                    ((TextView) view.findViewById(R.id.pub_date)).setText(DateUtils.getRelativeTimeSpanString(entry.pubDate));
-                    return view;
-                default:
-                    return webView;
-
-            }
-        }
-    }
-
-    private void setFadingAnimation() {
-        //noinspection ConstantConditions
-        imageView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        Picasso.with(this).load(entry.image).error(R.drawable.picture_not_available).into(mImageView);
+        Picasso.with(this).load(entry.image).into(mImageView, new Callback() {
             @Override
-            public void onGlobalLayout() {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-                    //noinspection ConstantConditions
-                    imageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                else
-                    //noinspection ConstantConditions,deprecation
-                    imageView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                fakeHeader_V.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, imageView.getHeight()));
-            }
-        });
-
-
-        listview.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            public void onSuccess() {
+                Palette palette = Palette.generate(((BitmapDrawable) mImageView.getDrawable()).getBitmap());
+                int mutedColor = palette.getMutedColor(getResources().getColor(R.color.primary));
+                mHeader.setBackgroundColor(mutedColor);
+                getWindow().setStatusBarColor(mutedColor);
+                mPhotoViewContainer.setBackgroundColor(mutedColor);
+                int lightColor = palette.getLightVibrantColor(getResources().getColor(R.color.primary_text));
+                newsTitle.setTextColor(lightColor);
+                pubDate.setTextColor(lightColor);
+                mHasImage = true;
+                recomputePhotoAndScrollingMetrics();
             }
 
             @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if (totalItemCount > 0 && firstVisibleItem == 0) {
-                    final float max = fakeHeader_V.getHeight() / 4;
-                    final float delta = -fakeHeader_V.getTop();
-                    if (delta <= max) {
-                        final float progress = delta / max;
-                        imageView.setAlpha(1.0f - (0.6f * progress));
-                        imageView.setScaleX(1.0f - (0.1f * progress));
-                        imageView.setScaleY(1.0f - (0.1f * progress));
-                        imageView.setTranslationY(-delta / 3);
-                    }
-                }
+            public void onError() {
+                mImageView.setImageDrawable(getResources().getDrawable(R.drawable.picture_not_available));
+                setDefaultStyle();
             }
         });
 
     }
+
+    private void setDefaultStyle() {
+        mHasImage = false;
+        mHeader.setBackgroundColor(getResources().getColor(R.color.primary));
+        getWindow().setStatusBarColor(getResources().getColor(R.color.primary));
+        recomputePhotoAndScrollingMetrics();
+    }
+
+    private void recomputePhotoAndScrollingMetrics() {
+        mHeaderHeightPixels = mHeader.getHeight();
+
+        mImageHeightPixels = 0;
+        if (mHasImage) {
+            mImageHeightPixels = getResources().getDimensionPixelSize(R.dimen.news_image_size);
+            mImageHeightPixels = Math.min(mImageHeightPixels, mScrollView.getHeight() * 2 / 3);
+        }
+
+        ViewGroup.LayoutParams lp;
+        lp = mPhotoViewContainer.getLayoutParams();
+        if (lp.height != mImageHeightPixels) {
+            lp.height = mImageHeightPixels;
+            mPhotoViewContainer.setLayoutParams(lp);
+        }
+
+        ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams)
+                mDetailsContainer.getLayoutParams();
+        if (mlp.topMargin != mHeaderHeightPixels + mImageHeightPixels) {
+            mlp.topMargin = mHeaderHeightPixels + mImageHeightPixels;
+            mDetailsContainer.setLayoutParams(mlp);
+        }
+
+        onScrollChanged(0, 0); // trigger scroll handling
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -209,9 +228,9 @@ public class NewsActivity extends Activity {
         values.put(DBHelper.NEWS_IS_FAVORITE, entry.isFavorite);
         db.update(DBHelper.NEWS_TABLE, values, DBHelper.NEWS_URL + " = ? ", new String[]{entry.link});
         if (entry.isFavorite) {
-            favoriteItem.setIcon(R.drawable.ic_action_heart_red);
+            favoriteItem.setIcon(R.drawable.ic_favorite_grey);
         } else {
-            favoriteItem.setIcon(R.drawable.ic_action_heart);
+            favoriteItem.setIcon(R.drawable.ic_favorite_outline_grey);
         }
 
         EventBus.getDefault().post(new FavoriteChangedEvent());
@@ -221,16 +240,16 @@ public class NewsActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate menu resource file.
         getMenuInflater().inflate(R.menu.news_activity, menu);
-
-        // Locate MenuItem with ShareActionProvider
-        MenuItem item = menu.findItem(R.id.menu_item_share);
-        favoriteItem = menu.findItem(R.id.menu_item_favorite);
-        if (entry.isFavorite)
-            favoriteItem.setIcon(R.drawable.ic_action_heart_red);
-
-        // Fetch and store ShareActionProvider
-        mShareActionProvider = (ShareActionProvider) item.getActionProvider();
-        setShareIntent(createShareIntent());
+//
+//        // Locate MenuItem with ShareActionProvider
+//        MenuItemCompat item = menu.findItem(R.id.menu_item_share);
+//        favoriteItem = menu.findItem(R.id.menu_item_favorite);
+//        if (entry.isFavorite)
+//            favoriteItem.setIcon(R.drawable.ic_favorite_grey);
+//
+//        // Fetch and store ShareActionProvider
+//        mShareActionProvider = (ShareActionProvider) item.getActionProvider();
+//        setShareIntent(createShareIntent());
 
         // Return true to display menu
         return true;
@@ -254,4 +273,28 @@ public class NewsActivity extends Activity {
     }
 
 
+    @Override
+    public void onScrollChanged(int deltaX, int deltaY) {
+        // Reposition the header bar -- it's normally anchored to the top of the content,
+        // but locks to the top of the screen on scroll
+        int scrollY = mScrollView.getScrollY();
+
+        float gapFillProgress = 1;
+        if (mHasImage) {
+            mImageHeightPixels = getResources().getDimensionPixelSize(R.dimen.news_image_size);
+            gapFillProgress = Math.min(Math.max(UIUtils.getProgress(scrollY, 0, mImageHeightPixels), 0), 1);
+
+        } else {
+            mImageHeightPixels = 0;
+        }
+        float newTop = Math.max(mImageHeightPixels, scrollY);
+        mHeader.setTranslationY(newTop);
+
+
+        ViewCompat.setElevation(mHeader, gapFillProgress * mMaxHeaderElevation);
+//        ViewCompat.setElevation(mAddScheduleButton, gapFillProgress * mMaxHeaderElevation + mFABElevation);
+
+        // Move background photo (parallax effect)
+        mPhotoViewContainer.setTranslationY(scrollY * 0.5f);
+    }
 }

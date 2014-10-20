@@ -3,4 +3,10 @@
     <dimen name="news_image_size">200dp</dimen>
     <dimen name="default_padding">8dp</dimen>
     <dimen name="news_activity_padding">4dp</dimen>
+
+    <dimen name="keyline_1">16dp</dimen>
+    <dimen name="keyline_1_minus_8dp">8dp</dimen>
+    <dimen name="keyline_2">72dp</dimen>
+    <dimen name="keyline_2_minus_16dp">56dp</dimen>
+    <dimen name="header_elevation">4dp</dimen>
 </resources>

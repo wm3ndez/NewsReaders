@@ -46,7 +46,7 @@ public class FeedListAdapter extends CursorAdapter {
         final ImageView imageView = (ImageView) view.findViewById(R.id.news_image);
         ImageView favorite = (ImageView) view.findViewById(R.id.favorite_indicator);
         final View ninfo = view.findViewById(R.id.news_info);
-        favorite.setImageResource(entry.isFavorite ? R.drawable.ic_action_heart_red : R.drawable.ic_action_heart_dark);
+        favorite.setImageResource(entry.isFavorite ? R.drawable.ic_favorite_grey : R.drawable.ic_favorite_outline_grey);
         favorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,9 +96,9 @@ public class FeedListAdapter extends CursorAdapter {
         values.put(DBHelper.NEWS_IS_FAVORITE, entry.isFavorite);
         db.update(DBHelper.NEWS_TABLE, values, DBHelper.NEWS_URL + " = ? ", new String[]{entry.link});
         if (entry.isFavorite) {
-            ((ImageView) v).setImageResource(R.drawable.ic_action_heart_red);
+            ((ImageView) v).setImageResource(R.drawable.ic_favorite_grey);
         } else {
-            ((ImageView) v).setImageResource(R.drawable.ic_action_heart);
+            ((ImageView) v).setImageResource(R.drawable.ic_favorite_outline_grey);
         }
     }
 

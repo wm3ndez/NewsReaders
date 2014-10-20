@@ -1,30 +1,113 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="@dimen/news_activity_padding"
-    android:paddingRight="@dimen/news_activity_padding"
-
-    tools:context="com.wmendez.newsreader.lib.ui.NewsActivity">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/admob_view"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:orientation="vertical"
-        android:layout_alignParentBottom="true"/>
+        />
 
-    <ImageView
-        android:id="@+id/news_image"
+    <com.wmendez.newsreader.lib.ui.views.ObservableScrollView
+        android:id="@+id/scrollview"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/news_image_size"
-        android:scaleType="centerCrop" />
+        android:layout_height="wrap_content"
+        android:layout_above="@id/admob_view"
+        android:layout_alignParentTop="true"
+        android:background="#fff"
+        android:fillViewport="true"
+        android:overScrollMode="never">
+
+        <FrameLayout
+            android:id="@+id/scroll_view_child"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="false">
+
+            <!-- Background photo -->
+            <FrameLayout
+                android:id="@+id/image_container"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/news_image_size">
+
+                <ImageView
+                    android:id="@+id/news_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/news_image_size"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_launcher" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:id="@+id/details_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                android:clipToPadding="false"
+                android:orientation="vertical"
+                android:paddingEnd="@dimen/keyline_1"
+                android:paddingStart="@dimen/keyline_2"
+                android:paddingTop="16dp">
 
 
-    <ListView
-        android:id="@+id/fullscreen_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/admob_view" />
+                <TextView
+                    android:id="@+id/news_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/header_session"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:orientation="vertical"
+                android:paddingBottom="16dp">
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null" />
+
+                <!-- Session title -->
+                <TextView
+                    android:id="@+id/news_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginLeft="@dimen/keyline_2"
+                    android:layout_marginRight="@dimen/keyline_1"
+                    android:ellipsize="end"
+                    android:lineSpacingMultiplier="1.1"
+                    android:maxLines="3"
+                    android:text="News Title"
+                    android:textAlignment="viewStart"
+                    android:textAppearance="?android:textAppearanceMedium" />
+
+                <!-- Session subtitle -->
+                <TextView
+                    android:id="@+id/pub_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/keyline_2"
+                    android:layout_marginRight="@dimen/keyline_1"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:text="date"
+                    android:textAlignment="viewStart"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+
+    </com.wmendez.newsreader.lib.ui.views.ObservableScrollView>
 
 </RelativeLayout>

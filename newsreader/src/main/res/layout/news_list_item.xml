@@ -9,28 +9,35 @@
     android:layout_margin="16dp"
     card_view:cardElevation="6dp">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/news_image"
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="225dp"
-            android:scaleType="centerCrop" />
+            android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/favorite_indicator"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/ic_favorite_outline_grey" />
+            <ImageView
+                android:id="@+id/news_image"
+                android:layout_width="match_parent"
+                android:layout_height="225dp"
+                android:scaleType="centerCrop" />
+
+            <ImageView
+                android:id="@+id/favorite_indicator"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_favorite_outline_grey" />
+
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/news_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:orientation="vertical"
             android:padding="8dp"
             android:paddingTop="16dp">
@@ -53,7 +60,7 @@
                 android:textAppearance="?android:textAppearanceSmall"
                 android:textColor="#FFFFFFFF" />
         </LinearLayout>
+    </LinearLayout>
 
 
-    </RelativeLayout>
 </android.support.v7.widget.CardView>

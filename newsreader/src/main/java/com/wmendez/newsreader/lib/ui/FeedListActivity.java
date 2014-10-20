@@ -2,7 +2,7 @@ package com.wmendez.newsreader.lib.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.MenuItem;
 
@@ -21,7 +21,7 @@ import de.greenrobot.event.EventBus;
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link FeedListFragment}.
  */
-public class FeedListActivity extends FragmentActivity {
+public class FeedListActivity extends ActionBarActivity {
 
     private static final String TAG = FeedListActivity.class.getCanonicalName();
 
@@ -31,7 +31,7 @@ public class FeedListActivity extends FragmentActivity {
         setContentView(R.layout.activity_feed_list);
 
         // Show the Up button in the action bar.
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity

@@ -8,7 +8,7 @@
         android:title="@string/share_button" />
     <item
         android:id="@+id/menu_item_favorite"
-        android:icon="@drawable/ic_action_heart"
+        android:icon="@drawable/ic_favorite_outline_grey"
         android:showAsAction="always"
         android:title="@string/menu_title_favorite" />
 </menu>

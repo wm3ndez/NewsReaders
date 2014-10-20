@@ -2,7 +2,7 @@ package com.wmendez.newsreader.lib.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 
 import com.wmendez.newsreader.lib.R;
@@ -26,9 +26,9 @@ import de.greenrobot.event.EventBus;
  * (if present) is a {@link ItemDetailFragment}.
  * <p/>
  */
-public class FeedCategoryListActivity extends FragmentActivity {
+public class FeedCategoryListActivity extends ActionBarActivity {
 
-    private static final String TAG = FragmentActivity.class.getCanonicalName();
+    private static final String TAG = FeedCategoryListActivity.class.getCanonicalName();
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
