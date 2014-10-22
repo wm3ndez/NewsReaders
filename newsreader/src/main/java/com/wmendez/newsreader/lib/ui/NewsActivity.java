@@ -50,7 +50,6 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
     private ImageView mImageView;
     private AdView adView;
     private Entry entry;
-    private ActionProvider mShareActionProvider;
     private MenuItem favoriteItem;
     private TextView newsTitle;
     private TextView pubDate;
@@ -266,8 +265,6 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
         if (entry.isFavorite)
             favoriteItem.setIcon(R.drawable.ic_favorite_grey);
 
-        // Fetch and store ShareActionProvider
-        mShareActionProvider = MenuItemCompat.getActionProvider(item);
 //        Return true to display menu
         return true;
     }
