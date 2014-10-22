@@ -38,7 +38,7 @@ import com.wmendez.newsreader.lib.event.FavoriteChangedEvent;
 import com.wmendez.newsreader.lib.helpers.Entry;
 import com.wmendez.newsreader.lib.helpers.Feeds;
 import com.wmendez.newsreader.lib.ui.views.ObservableScrollView;
-import com.wmendez.newsreader.lib.util.UIUtils;
+import com.wmendez.newsreader.lib.util.Utils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -279,7 +279,7 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
         float gapFillProgress = 1;
         if (mHasImage) {
             mImageHeightPixels = getResources().getDimensionPixelSize(R.dimen.news_image_size);
-            gapFillProgress = Math.min(Math.max(UIUtils.getProgress(scrollY, 0, mImageHeightPixels), 0), 1);
+            gapFillProgress = Math.min(Math.max(Utils.getProgress(scrollY, 0, mImageHeightPixels), 0), 1);
 
         } else {
             mImageHeightPixels = 0;
