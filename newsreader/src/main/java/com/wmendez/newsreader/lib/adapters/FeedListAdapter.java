@@ -2,13 +2,11 @@ package com.wmendez.newsreader.lib.adapters;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.support.v7.graphics.Palette;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -23,6 +21,7 @@ import com.squareup.picasso.Picasso;
 import com.wmendez.newsreader.lib.R;
 import com.wmendez.newsreader.lib.db.DBHelper;
 import com.wmendez.newsreader.lib.helpers.Entry;
+import com.wmendez.newsreader.lib.util.Utils;
 
 
 public class FeedListAdapter extends CursorAdapter {
@@ -41,11 +40,11 @@ public class FeedListAdapter extends CursorAdapter {
     }
 
     @Override
-    public void bindView(View view, Context context, Cursor cursor) {
+    public void bindView(View view, final Context context, Cursor cursor) {
         final Entry entry = getEntry(cursor);
         final ImageView imageView = (ImageView) view.findViewById(R.id.news_image);
         ImageView favorite = (ImageView) view.findViewById(R.id.favorite_indicator);
-        final View ninfo = view.findViewById(R.id.news_info);
+//        final View ninfo = view.findViewById(R.id.news_info);
         favorite.setImageResource(entry.isFavorite ? R.drawable.ic_favorite_grey : R.drawable.ic_favorite_outline_grey);
         favorite.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,11 +54,13 @@ public class FeedListAdapter extends CursorAdapter {
         });
 
         if (!entry.image.equals("")) {
+            Picasso.with(mContext).load(entry.image).placeholder(R.drawable.ic_launcher).into(imageView);
+            /*
             Picasso.with(mContext).load(entry.image).placeholder(R.drawable.ic_launcher).into(imageView, new Callback() {
                 @Override
                 public void onSuccess() {
                     Palette palette = Palette.generate(((BitmapDrawable) imageView.getDrawable()).getBitmap());
-                    ninfo.setBackgroundColor(palette.getMutedColor(Color.LTGRAY));
+                    Utils.setTitleBackground(ninfo, palette.getMutedColor(Color.DKGRAY));
                 }
 
                 @Override
@@ -67,8 +68,10 @@ public class FeedListAdapter extends CursorAdapter {
                 }
 
             });
+            */
         } else {
             Picasso.with(mContext).load(R.drawable.picture_not_available).into(imageView);
+//            Utils.setTitleBackground(ninfo, context.getResources().getColor(R.color.accent));
         }
         ((TextView) view.findViewById(R.id.news_title)).setText(entry.title);
         ((TextView) view.findViewById(R.id.pub_date)).setText(DateUtils.getRelativeTimeSpanString(entry.pubDate));

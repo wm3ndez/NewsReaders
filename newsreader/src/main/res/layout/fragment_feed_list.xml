@@ -22,10 +22,11 @@
             android:id="@+id/feed_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:horizontalSpacing="8dp"
+            android:horizontalSpacing="4dp"
             android:numColumns="@integer/columns_count"
             android:orientation="vertical"
-            android:verticalSpacing="6dp" />
+            android:verticalSpacing="6dp"
+            android:padding="8dp"/>
     </android.support.v4.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

@@ -26,7 +26,7 @@
         android:name="com.wmendez.newsreader.lib.ui.FeedCategoryListFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="@integer/category_list_weight"
         tools:layout="@android:layout/list_content" />
 
     <FrameLayout

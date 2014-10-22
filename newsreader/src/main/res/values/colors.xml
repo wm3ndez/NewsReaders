@@ -7,5 +7,6 @@
     <color name="primary_text">#FFFFFF</color>
     <color name="accent">#c6ff00</color>
     <color name="translucent_actionbar_background">#cc009688</color>
+    <color name="photo_tint">#88101010</color>
 
 </resources>
