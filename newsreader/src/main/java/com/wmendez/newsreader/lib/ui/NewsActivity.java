@@ -4,11 +4,10 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ShareCompat;
-import android.support.v4.view.ActionProvider;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.graphics.Palette;
@@ -55,7 +54,7 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
     private TextView pubDate;
     private ObservableScrollView mScrollView;
     private int mImageHeightPixels = 0;
-    private View mPhotoViewContainer;
+    private View mImageViewContainer;
 
     private View mHeader;
     private Handler mHandler = new Handler();
@@ -91,7 +90,7 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
         mScrollViewChild.setVisibility(View.INVISIBLE);
 
         mDetailsContainer = findViewById(R.id.details_container);
-        mPhotoViewContainer = findViewById(R.id.image_container);
+        mImageViewContainer = findViewById(R.id.image_container);
         entry = getIntent().getParcelableExtra("news");
 
         mHeader = findViewById(R.id.header_session);
@@ -157,13 +156,13 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
                 Palette palette = Palette.generate(((BitmapDrawable) mImageView.getDrawable()).getBitmap());
                 int mutedColor = palette.getMutedColor(getResources().getColor(R.color.primary));
                 mHeader.setBackgroundColor(mutedColor);
-                getWindow().setStatusBarColor(mutedColor);
-                mPhotoViewContainer.setBackgroundColor(mutedColor);
+                setStatusBarColor(mutedColor);
+                mImageViewContainer.setBackgroundColor(mutedColor);
                 int lightColor = palette.getLightVibrantColor(getResources().getColor(R.color.primary_text));
                 newsTitle.setTextColor(lightColor);
                 pubDate.setTextColor(lightColor);
                 mHasImage = true;
-                recomputePhotoAndScrollingMetrics();
+                recomputeImageAndScrollingMetrics();
             }
 
             @Override
@@ -175,14 +174,20 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
 
     }
 
+    private void setStatusBarColor(int mutedColor) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setStatusBarColor(mutedColor);
+        }
+    }
+
     private void setDefaultStyle() {
         mHasImage = false;
         mHeader.setBackgroundColor(getResources().getColor(R.color.primary));
-        getWindow().setStatusBarColor(getResources().getColor(R.color.primary));
-        recomputePhotoAndScrollingMetrics();
+        setStatusBarColor(getResources().getColor(R.color.primary));
+        recomputeImageAndScrollingMetrics();
     }
 
-    private void recomputePhotoAndScrollingMetrics() {
+    private void recomputeImageAndScrollingMetrics() {
         mHeaderHeightPixels = mHeader.getHeight();
 
         mImageHeightPixels = 0;
@@ -192,10 +197,10 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
         }
 
         ViewGroup.LayoutParams lp;
-        lp = mPhotoViewContainer.getLayoutParams();
+        lp = mImageViewContainer.getLayoutParams();
         if (lp.height != mImageHeightPixels) {
             lp.height = mImageHeightPixels;
-            mPhotoViewContainer.setLayoutParams(lp);
+            mImageViewContainer.setLayoutParams(lp);
         }
 
         ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams)
@@ -259,8 +264,6 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
         // Inflate menu resource file.
         getMenuInflater().inflate(R.menu.news_activity, menu);
 
-        // Locate MenuItem with ShareActionProvider
-        MenuItem item = menu.findItem(R.id.menu_item_share);
         favoriteItem = menu.findItem(R.id.menu_item_favorite);
         if (entry.isFavorite)
             favoriteItem.setIcon(R.drawable.ic_favorite_grey);
@@ -275,23 +278,20 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
         // Reposition the header bar -- it's normally anchored to the top of the content,
         // but locks to the top of the screen on scroll
         int scrollY = mScrollView.getScrollY();
-
         float gapFillProgress = 1;
+
         if (mHasImage) {
             mImageHeightPixels = getResources().getDimensionPixelSize(R.dimen.news_image_size);
             gapFillProgress = Math.min(Math.max(Utils.getProgress(scrollY, 0, mImageHeightPixels), 0), 1);
-
         } else {
             mImageHeightPixels = 0;
         }
+
         float newTop = Math.max(mImageHeightPixels, scrollY);
         mHeader.setTranslationY(newTop);
-
-
         ViewCompat.setElevation(mHeader, gapFillProgress * mMaxHeaderElevation);
-//        ViewCompat.setElevation(mAddScheduleButton, gapFillProgress * mMaxHeaderElevation + mFABElevation);
 
         // Move background photo (parallax effect)
-        mPhotoViewContainer.setTranslationY(scrollY * 0.5f);
+        mImageViewContainer.setTranslationY(scrollY * 0.5f);
     }
 }
