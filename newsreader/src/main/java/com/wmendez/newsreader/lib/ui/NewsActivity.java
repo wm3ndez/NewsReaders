@@ -6,6 +6,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.ShareCompat;
+import android.support.v4.view.ActionProvider;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.graphics.Palette;
@@ -18,7 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ShareActionProvider;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
@@ -48,7 +50,7 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
     private ImageView mImageView;
     private AdView adView;
     private Entry entry;
-    private ShareActionProvider mShareActionProvider;
+    private ActionProvider mShareActionProvider;
     private MenuItem favoriteItem;
     private TextView newsTitle;
     private TextView pubDate;
@@ -211,14 +213,30 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+
         if (id == android.R.id.home) {
             onBackPressed();
             return true;
         } else if (id == R.id.menu_item_favorite) {
             setFavorite();
             return true;
+        } else if (id == R.id.menu_item_share) {
+            startShareActivity();
+            return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void startShareActivity() {
+        String textToShare = entry.title + " - " + entry.link;
+        ShareCompat.IntentBuilder builder = ShareCompat.IntentBuilder.from(this)
+                .setType("text/plain")
+                .setText(textToShare);
+        Intent intent = builder.getIntent();
+        intent.putExtra(Intent.EXTRA_SUBJECT, entry.title);
+        intent.putExtra(Intent.EXTRA_TEXT, textToShare);
+        startActivity(intent);
+
     }
 
     private void setFavorite() {
@@ -238,38 +256,20 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
         // Inflate menu resource file.
         getMenuInflater().inflate(R.menu.news_activity, menu);
-//
-//        // Locate MenuItem with ShareActionProvider
-//        MenuItemCompat item = menu.findItem(R.id.menu_item_share);
-//        favoriteItem = menu.findItem(R.id.menu_item_favorite);
-//        if (entry.isFavorite)
-//            favoriteItem.setIcon(R.drawable.ic_favorite_grey);
-//
-//        // Fetch and store ShareActionProvider
-//        mShareActionProvider = (ShareActionProvider) item.getActionProvider();
-//        setShareIntent(createShareIntent());
 
-        // Return true to display menu
+        // Locate MenuItem with ShareActionProvider
+        MenuItem item = menu.findItem(R.id.menu_item_share);
+        favoriteItem = menu.findItem(R.id.menu_item_favorite);
+        if (entry.isFavorite)
+            favoriteItem.setIcon(R.drawable.ic_favorite_grey);
+
+        // Fetch and store ShareActionProvider
+        mShareActionProvider = MenuItemCompat.getActionProvider(item);
+//        Return true to display menu
         return true;
-    }
-
-    public Intent createShareIntent() {
-        String textToShare = entry.title + " - " + entry.link;
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("text/plain");
-        shareIntent.putExtra(Intent.EXTRA_SUBJECT, entry.title);
-        shareIntent.putExtra(Intent.EXTRA_TEXT, textToShare);
-        return shareIntent;
-    }
-
-
-    // Call to update the share intent
-    private void setShareIntent(Intent shareIntent) {
-        if (mShareActionProvider != null) {
-            mShareActionProvider.setShareIntent(shareIntent);
-        }
     }
 
 
