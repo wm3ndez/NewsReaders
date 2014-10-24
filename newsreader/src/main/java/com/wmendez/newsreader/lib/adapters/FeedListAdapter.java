@@ -2,11 +2,12 @@ package com.wmendez.newsreader.lib.adapters;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.graphics.Palette;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -21,7 +22,6 @@ import com.squareup.picasso.Picasso;
 import com.wmendez.newsreader.lib.R;
 import com.wmendez.newsreader.lib.db.DBHelper;
 import com.wmendez.newsreader.lib.helpers.Entry;
-import com.wmendez.newsreader.lib.util.Utils;
 
 
 public class FeedListAdapter extends CursorAdapter {
@@ -42,27 +42,42 @@ public class FeedListAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, final Context context, Cursor cursor) {
         final Entry entry = getEntry(cursor);
-        ImageView imageView = (ImageView) view.findViewById(R.id.news_image);
+        final ImageView mImageView = (ImageView) view.findViewById(R.id.news_image);
         ImageView favorite = (ImageView) view.findViewById(R.id.favorite_indicator);
         if (entry.isFavorite) {
             favorite.setImageResource(R.drawable.ic_favorite_grey);
             favorite.setColorFilter(context.getResources().getColor(R.color.favorite_icon_active_tint));
         } else {
             favorite.setImageResource(R.drawable.ic_favorite_outline_grey);
-            favorite.setColorFilter(context.getResources().getColor(R.color.favorite_icon_tint));
+            favorite.setColorFilter(Color.WHITE);
         }
+        ViewCompat.setElevation(favorite, 5.0f);
         favorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setFavorite(entry, v);
             }
         });
+        final int primaryColor = context.getResources().getColor(R.color.primary);
 
         if (!entry.image.equals("")) {
-            Picasso.with(mContext).load(entry.image).placeholder(R.drawable.ic_launcher).into(imageView);
+            Picasso.with(mContext).load(entry.image).placeholder(R.drawable.ic_launcher).into(mImageView, new Callback() {
+                @Override
+                public void onSuccess() {
+                    Palette palette = Palette.generate(((BitmapDrawable) mImageView.getDrawable()).getBitmap());
+                    int mutedColor = palette.getMutedColor(primaryColor);
+                    mImageView.setColorFilter(mutedColor, PorterDuff.Mode.MULTIPLY);
+                }
+
+                @Override
+                public void onError() {
+                    mImageView.setColorFilter(primaryColor, PorterDuff.Mode.SRC_ATOP);
+                }
+            });
 
         } else {
-            Picasso.with(mContext).load(R.drawable.picture_not_available).into(imageView);
+            Picasso.with(mContext).load(R.drawable.picture_not_available).into(mImageView);
+            mImageView.setColorFilter(primaryColor, PorterDuff.Mode.SRC_ATOP);
         }
         ((TextView) view.findViewById(R.id.news_title)).setText(entry.title);
         ((TextView) view.findViewById(R.id.pub_date)).setText(DateUtils.getRelativeTimeSpanString(entry.pubDate));
@@ -91,8 +106,10 @@ public class FeedListAdapter extends CursorAdapter {
         db.update(DBHelper.NEWS_TABLE, values, DBHelper.NEWS_URL + " = ? ", new String[]{entry.link});
         if (entry.isFavorite) {
             ((ImageView) v).setImageResource(R.drawable.ic_favorite_grey);
+            ((ImageView) v).setColorFilter(mContext.getResources().getColor(R.color.favorite_icon_active_tint));
         } else {
             ((ImageView) v).setImageResource(R.drawable.ic_favorite_outline_grey);
+            ((ImageView) v).setColorFilter(Color.WHITE);
         }
     }
 

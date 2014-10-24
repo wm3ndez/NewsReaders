@@ -47,8 +47,8 @@
                 android:background="#fff"
                 android:clipToPadding="false"
                 android:orientation="vertical"
-                android:paddingEnd="@dimen/keyline_1"
-                android:paddingStart="@dimen/keyline_2"
+                android:paddingRight="@dimen/keyline_1"
+                android:paddingLeft="@dimen/keyline_2"
                 android:paddingTop="16dp">
 
 
@@ -87,7 +87,7 @@
                     android:lineSpacingMultiplier="1.1"
                     android:maxLines="3"
                     android:text="News Title"
-                    android:textAlignment="viewStart"
+                    android:layout_gravity="start"
                     android:textAppearance="?android:textAppearanceMedium" />
 
                 <!-- Session subtitle -->
@@ -100,7 +100,7 @@
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:text="date"
-                    android:textAlignment="viewStart"
+                    android:layout_gravity="start"
                     android:textSize="16sp" />
 
             </LinearLayout>

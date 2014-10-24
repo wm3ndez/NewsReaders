@@ -3,7 +3,10 @@ package com.wmendez.newsreader.lib.ui;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -249,13 +252,22 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
         ContentValues values = new ContentValues();
         values.put(DBHelper.NEWS_IS_FAVORITE, entry.isFavorite);
         db.update(DBHelper.NEWS_TABLE, values, DBHelper.NEWS_URL + " = ? ", new String[]{entry.link});
-        if (entry.isFavorite) {
-            favoriteItem.setIcon(R.drawable.ic_favorite_grey);
-        } else {
-            favoriteItem.setIcon(R.drawable.ic_favorite_outline_grey);
-        }
+        setFavoriteIconColorFilter();
+
 
         EventBus.getDefault().post(new FavoriteChangedEvent());
+    }
+
+    private void setFavoriteIconColorFilter() {
+        Drawable icon;
+        if (entry.isFavorite) {
+            icon = getResources().getDrawable(R.drawable.ic_favorite_grey);
+            icon.setColorFilter(getResources().getColor(R.color.favorite_icon_active_tint), PorterDuff.Mode.SRC_ATOP);
+        } else {
+            icon = getResources().getDrawable(R.drawable.ic_favorite_outline_grey);
+            icon.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+        }
+        favoriteItem.setIcon(icon);
     }
 
     @Override
@@ -265,9 +277,7 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
         getMenuInflater().inflate(R.menu.news_activity, menu);
 
         favoriteItem = menu.findItem(R.id.menu_item_favorite);
-        if (entry.isFavorite)
-            favoriteItem.setIcon(R.drawable.ic_favorite_grey);
-
+        setFavoriteIconColorFilter();
 //        Return true to display menu
         return true;
     }
