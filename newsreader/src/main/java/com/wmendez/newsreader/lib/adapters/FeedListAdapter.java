@@ -20,7 +20,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.wmendez.newsreader.lib.R;
-import com.wmendez.newsreader.lib.db.DBHelper;
+import com.wmendez.newsreader.lib.provider.NewsDatabase;
 import com.wmendez.newsreader.lib.helpers.Entry;
 
 
@@ -85,25 +85,25 @@ public class FeedListAdapter extends CursorAdapter {
     }
 
     private Entry getEntry(Cursor cursor) {
-        Long pubDate = cursor.getLong(cursor.getColumnIndex(DBHelper.NEWS_PUB_DATE));
+        Long pubDate = cursor.getLong(cursor.getColumnIndex(NewsDatabase.NEWS_PUB_DATE));
         return new Entry(
-                cursor.getString(cursor.getColumnIndex(DBHelper.NEWS_TITLE)),
-                cursor.getString(cursor.getColumnIndex(DBHelper.NEWS_URL)),
-                cursor.getString(cursor.getColumnIndex(DBHelper.NEWS_DESCRIPTION)),
-                cursor.getString(cursor.getColumnIndex(DBHelper.NEWS_CATEGORY)),
+                cursor.getString(cursor.getColumnIndex(NewsDatabase.NEWS_TITLE)),
+                cursor.getString(cursor.getColumnIndex(NewsDatabase.NEWS_URL)),
+                cursor.getString(cursor.getColumnIndex(NewsDatabase.NEWS_DESCRIPTION)),
+                cursor.getString(cursor.getColumnIndex(NewsDatabase.NEWS_CATEGORY)),
                 pubDate,
-                cursor.getString(cursor.getColumnIndex(DBHelper.NEWS_IMAGE)),
-                cursor.getInt(cursor.getColumnIndex(DBHelper.IS_NEW)) == 1,
-                cursor.getInt(cursor.getColumnIndex(DBHelper.NEWS_IS_FAVORITE)) == 1
+                cursor.getString(cursor.getColumnIndex(NewsDatabase.NEWS_IMAGE)),
+                cursor.getInt(cursor.getColumnIndex(NewsDatabase.IS_NEW)) == 1,
+                cursor.getInt(cursor.getColumnIndex(NewsDatabase.NEWS_IS_FAVORITE)) == 1
         );
     }
 
     private void setFavorite(Entry entry, View v) {
-        SQLiteDatabase db = DBHelper.getInstance(mContext).getWritableDatabase();
+        SQLiteDatabase db = NewsDatabase.getInstance(mContext).getWritableDatabase();
         entry.isFavorite = !entry.isFavorite;
         ContentValues values = new ContentValues();
-        values.put(DBHelper.NEWS_IS_FAVORITE, entry.isFavorite);
-        db.update(DBHelper.NEWS_TABLE, values, DBHelper.NEWS_URL + " = ? ", new String[]{entry.link});
+        values.put(NewsDatabase.NEWS_IS_FAVORITE, entry.isFavorite);
+        db.update(NewsDatabase.NEWS_TABLE, values, NewsDatabase.NEWS_URL + " = ? ", new String[]{entry.link});
         if (entry.isFavorite) {
             ((ImageView) v).setImageResource(R.drawable.ic_favorite_grey);
             ((ImageView) v).setColorFilter(mContext.getResources().getColor(R.color.favorite_icon_active_tint));

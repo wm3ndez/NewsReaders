@@ -28,7 +28,7 @@ import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.wmendez.newsreader.lib.R;
 import com.wmendez.newsreader.lib.adapters.FeedListAdapter;
-import com.wmendez.newsreader.lib.db.DBHelper;
+import com.wmendez.newsreader.lib.provider.NewsDatabase;
 import com.wmendez.newsreader.lib.event.FavoriteChangedEvent;
 import com.wmendez.newsreader.lib.event.NewsItemSelectedEvent;
 import com.wmendez.newsreader.lib.helpers.Feeds;
@@ -118,28 +118,28 @@ public class FeedListFragment extends Fragment implements AdapterView.OnItemClic
         }
         String image = element.getElementsByTag("enclosure").attr("url").replace("<![CDATA[", "").replace("]]>", "");
         values.clear();
-        values.put(DBHelper.NEWS_CATEGORY, category);
-        values.put(DBHelper.NEWS_TITLE, title);
-        values.put(DBHelper.NEWS_URL, url);
-        values.put(DBHelper.NEWS_DESCRIPTION, description);
-        values.put(DBHelper.NEWS_PUB_DATE, pubDate);
-        values.put(DBHelper.NEWS_IMAGE, image);
-        values.put(DBHelper.IS_NEW, true);
-        values.put(DBHelper.NEWS_IS_FAVORITE, false);
+        values.put(NewsDatabase.NEWS_CATEGORY, category);
+        values.put(NewsDatabase.NEWS_TITLE, title);
+        values.put(NewsDatabase.NEWS_URL, url);
+        values.put(NewsDatabase.NEWS_DESCRIPTION, description);
+        values.put(NewsDatabase.NEWS_PUB_DATE, pubDate);
+        values.put(NewsDatabase.NEWS_IMAGE, image);
+        values.put(NewsDatabase.IS_NEW, true);
+        values.put(NewsDatabase.NEWS_IS_FAVORITE, false);
 
-        db.insert(DBHelper.NEWS_TABLE, null, values);
+        db.insert(NewsDatabase.NEWS_TABLE, null, values);
     }
 
     private boolean newsExist(String link, String category) {
         Cursor c = db.rawQuery(
-                "select " + DBHelper.NEWS_URL + ", " + DBHelper.NEWS_CATEGORY + " from " + DBHelper.NEWS_TABLE
-                        + " where " + DBHelper.NEWS_URL + " = ?",
+                "select " + NewsDatabase.NEWS_URL + ", " + NewsDatabase.NEWS_CATEGORY + " from " + NewsDatabase.NEWS_TABLE
+                        + " where " + NewsDatabase.NEWS_URL + " = ?",
                 new String[]{link}
         );
         boolean exists = c.getCount() > 0;
         if (exists) {
             c.moveToFirst();
-            String categories = c.getString(c.getColumnIndex(DBHelper.NEWS_CATEGORY));
+            String categories = c.getString(c.getColumnIndex(NewsDatabase.NEWS_CATEGORY));
             String[] cats = categories.split("|");
             List<String> strings = Arrays.asList(cats);
             if (!strings.contains(category)) {
@@ -150,8 +150,8 @@ public class FeedListFragment extends Fragment implements AdapterView.OnItemClic
                 catList[strings.size()] = category;
                 String newCategories = Utils.join(catList, "|");
                 ContentValues values = new ContentValues();
-                values.put(DBHelper.NEWS_CATEGORY, newCategories);
-                db.update(DBHelper.NEWS_TABLE, values, DBHelper.NEWS_URL + " = ?", new String[]{link});
+                values.put(NewsDatabase.NEWS_CATEGORY, newCategories);
+                db.update(NewsDatabase.NEWS_TABLE, values, NewsDatabase.NEWS_URL + " = ?", new String[]{link});
             }
         }
         c.close();
@@ -202,7 +202,7 @@ public class FeedListFragment extends Fragment implements AdapterView.OnItemClic
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        db = DBHelper.getInstance(activity).getWritableDatabase();
+        db = NewsDatabase.getInstance(activity).getWritableDatabase();
         cursor = getQuery();
         if (cursor.getCount() == 0) {
             swipeLayout.setRefreshing(true);
@@ -252,8 +252,8 @@ public class FeedListFragment extends Fragment implements AdapterView.OnItemClic
         else
             categoryName = mItem.title;
 
-        return db.query(true, DBHelper.NEWS_TABLE, null, DBHelper.NEWS_CATEGORY + " like ?",
-                new String[]{"%" + categoryName + "%"}, null, null, DBHelper.NEWS_PUB_DATE + " DESC", null);
+        return db.query(true, NewsDatabase.NEWS_TABLE, null, NewsDatabase.NEWS_CATEGORY + " like ?",
+                new String[]{"%" + categoryName + "%"}, null, null, NewsDatabase.NEWS_PUB_DATE + " DESC", null);
     }
 
     private void setAdmob(View view) {

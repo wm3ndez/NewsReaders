@@ -35,7 +35,7 @@ import com.koushikdutta.ion.Response;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.wmendez.newsreader.lib.R;
-import com.wmendez.newsreader.lib.db.DBHelper;
+import com.wmendez.newsreader.lib.provider.NewsDatabase;
 import com.wmendez.newsreader.lib.event.FavoriteChangedEvent;
 import com.wmendez.newsreader.lib.helpers.Entry;
 import com.wmendez.newsreader.lib.helpers.Feeds;
@@ -247,11 +247,11 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
     }
 
     private void setFavorite() {
-        SQLiteDatabase db = DBHelper.getInstance(this).getWritableDatabase();
+        SQLiteDatabase db = NewsDatabase.getInstance(this).getWritableDatabase();
         entry.isFavorite = !entry.isFavorite;
         ContentValues values = new ContentValues();
-        values.put(DBHelper.NEWS_IS_FAVORITE, entry.isFavorite);
-        db.update(DBHelper.NEWS_TABLE, values, DBHelper.NEWS_URL + " = ? ", new String[]{entry.link});
+        values.put(NewsDatabase.NEWS_IS_FAVORITE, entry.isFavorite);
+        db.update(NewsDatabase.NEWS_TABLE, values, NewsDatabase.NEWS_URL + " = ? ", new String[]{entry.link});
         setFavoriteIconColorFilter();
 
 

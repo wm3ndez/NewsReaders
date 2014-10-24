@@ -1,16 +1,15 @@
-package com.wmendez.newsreader.lib.db;
+package com.wmendez.newsreader.lib.provider;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
-import android.util.Log;
 
-public class DBHelper extends SQLiteOpenHelper {
+public class NewsDatabase extends SQLiteOpenHelper {
     private static final String NAME = "newsreader.db";
     private static final int VERSION = 1;
-    private static DBHelper instance = null;
+    private static NewsDatabase instance = null;
     private Context context;
 
     public static final String NEWS_TABLE = "news";
@@ -29,14 +28,14 @@ public class DBHelper extends SQLiteOpenHelper {
                     + NEWS_PUB_DATE + " long, " + NEWS_IMAGE + " text, "
                     + NEWS_IS_FAVORITE + " integer, " + IS_NEW + " integer default 1)";
 
-    private DBHelper(Context context) {
+    private NewsDatabase(Context context) {
         super(context, NAME, null, VERSION);
         this.context = context;
     }
 
-    public static DBHelper getInstance(Context context) {
+    public static NewsDatabase getInstance(Context context) {
         if (instance == null)
-            instance = new DBHelper(context);
+            instance = new NewsDatabase(context);
         return instance;
     }
 
