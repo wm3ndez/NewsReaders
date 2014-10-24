@@ -42,10 +42,15 @@ public class FeedListAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, final Context context, Cursor cursor) {
         final Entry entry = getEntry(cursor);
-        final ImageView imageView = (ImageView) view.findViewById(R.id.news_image);
+        ImageView imageView = (ImageView) view.findViewById(R.id.news_image);
         ImageView favorite = (ImageView) view.findViewById(R.id.favorite_indicator);
-//        final View ninfo = view.findViewById(R.id.news_info);
-        favorite.setImageResource(entry.isFavorite ? R.drawable.ic_favorite_grey : R.drawable.ic_favorite_outline_grey);
+        if (entry.isFavorite) {
+            favorite.setImageResource(R.drawable.ic_favorite_grey);
+            favorite.setColorFilter(context.getResources().getColor(R.color.favorite_icon_active_tint));
+        } else {
+            favorite.setImageResource(R.drawable.ic_favorite_outline_grey);
+            favorite.setColorFilter(context.getResources().getColor(R.color.favorite_icon_tint));
+        }
         favorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,23 +60,9 @@ public class FeedListAdapter extends CursorAdapter {
 
         if (!entry.image.equals("")) {
             Picasso.with(mContext).load(entry.image).placeholder(R.drawable.ic_launcher).into(imageView);
-            /*
-            Picasso.with(mContext).load(entry.image).placeholder(R.drawable.ic_launcher).into(imageView, new Callback() {
-                @Override
-                public void onSuccess() {
-                    Palette palette = Palette.generate(((BitmapDrawable) imageView.getDrawable()).getBitmap());
-                    Utils.setTitleBackground(ninfo, palette.getMutedColor(Color.DKGRAY));
-                }
 
-                @Override
-                public void onError() {
-                }
-
-            });
-            */
         } else {
             Picasso.with(mContext).load(R.drawable.picture_not_available).into(imageView);
-//            Utils.setTitleBackground(ninfo, context.getResources().getColor(R.color.accent));
         }
         ((TextView) view.findViewById(R.id.news_title)).setText(entry.title);
         ((TextView) view.findViewById(R.id.pub_date)).setText(DateUtils.getRelativeTimeSpanString(entry.pubDate));
