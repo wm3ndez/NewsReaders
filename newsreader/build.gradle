@@ -1,20 +1,133 @@
-apply plugin: 'com.android.library'
+apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 21
     buildToolsVersion "21.0.2"
 
+    def Properties versionProps = new Properties()
+    versionProps.load(new FileInputStream(file('../version.properties')))
+
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 21
+        versionName versionProps['name']
+        versionCode versionProps['code'].toInteger()
     }
-    buildTypes {
-        release {
-            runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+
+    signingConfigs {
+        def Properties localProps = new Properties()
+        localProps.load(new FileInputStream(file('./local.properties')))
+        def Properties keyProps = new Properties()
+        assert localProps['keystore.props.file'];
+        keyProps.load(new FileInputStream(file(localProps['keystore.props.file'])))
+
+        diariolibre {
+            storeFile file(keyProps["store"])
+            keyAlias keyProps["alias.diariolibre"]
+            storePassword keyProps["storePass"]
+            keyPassword keyProps["pass"]
+        }
+        listindiario {
+            storeFile file(keyProps["store"])
+            keyAlias keyProps["alias.listindiario"]
+            storePassword keyProps["storePass"]
+            keyPassword keyProps["pass"]
+        }
+        elcaribe {
+            storeFile file(keyProps["store"])
+            keyAlias keyProps["alias.elcaribe"]
+            storePassword keyProps["storePass"]
+            keyPassword keyProps["pass"]
+        }
+        noticiassin {
+            storeFile file(keyProps["store"])
+            keyAlias keyProps["alias.noticiassin"]
+            storePassword keyProps["storePass"]
+            keyPassword keyProps["pass"]
+        }
+        elnacional {
+            storeFile file(keyProps["store"])
+            keyAlias keyProps["alias.elnacional"]
+            storePassword keyProps["storePass"]
+            keyPassword keyProps["pass"]
         }
     }
+
+
+    buildTypes {
+        release {
+            runProguard true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), file('proguard-rules.txt')
+//            signingConfig signingConfigs.release
+            debuggable false
+        }
+
+        debug {
+            debuggable true
+        }
+
+        publicBeta.initWith(buildTypes.release)
+        publicBeta {
+//            runProguard true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), file('proguard-rules.txt')
+            versionNameSuffix " " + versionProps['betaNumber']
+        }
+
+        publicDebug.initWith(buildTypes.publicBeta)
+        publicDebug {
+            debuggable true
+//            runProguard true
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), file('proguard-rules.txt')
+            versionNameSuffix " Debug " + versionProps['betaNumber']
+        }
+    }
+
+    productFlavors {
+        def diariolibreSigningConfig = signingConfigs.diariolibre
+        def listindiarioSigningConfig = signingConfigs.listindiario
+        def elcaribeSigningConfig = signingConfigs.elcaribe
+        def noticiassinSigningConfig = signingConfigs.noticiassin
+
+        diariolibre {
+            applicationId "com.wmendez.diariolibre"
+            manifestPlaceholders = [
+                    appName: ".App",
+                    mainActivity:"com.wmendez.diariolibre.MainActivity"
+            ]
+            signingConfig diariolibreSigningConfig
+
+        }
+
+        elcaribe {
+            applicationId "com.wmendez.elcaribe"
+            manifestPlaceholders = [
+                    appName: ".App",
+                    mainActivity:"com.wmendez.elcaribe.MainActivity"
+            ]
+            signingConfig elcaribeSigningConfig
+        }
+
+        listindiario {
+            applicationId "com.wmendez.listindiario"
+            manifestPlaceholders = [
+                    appName: ".App",
+                    mainActivity:"com.wmendez.listindiario.MainActivity"
+            ]
+            signingConfig listindiarioSigningConfig
+        }
+
+        noticiassin {
+            applicationId "com.wmendez.noticiassin"
+            manifestPlaceholders = [
+                    appName: ".App",
+                    mainActivity:"com.wmendez.noticiassin.MainActivity"
+            ]
+            signingConfig noticiassinSigningConfig
+        }
+
+    }
 }
+
 
 dependencies {
     compile 'com.android.support:support-v4:21.0.0'
