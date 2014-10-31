@@ -59,14 +59,22 @@ public class FeedListAdapter extends CursorAdapter {
             }
         });
         final int primaryColor = context.getResources().getColor(R.color.primary);
+        final View newsInfo = view.findViewById(R.id.news_info);
+        final TextView newsTitle = (TextView) view.findViewById(R.id.news_title);
+        final TextView pubDate = (TextView) view.findViewById(R.id.pub_date);
 
         if (!entry.image.equals("")) {
             Picasso.with(mContext).load(entry.image).placeholder(R.drawable.ic_launcher).into(mImageView, new Callback() {
                 @Override
                 public void onSuccess() {
                     Palette palette = Palette.generate(((BitmapDrawable) mImageView.getDrawable()).getBitmap());
-                    int mutedColor = palette.getMutedColor(primaryColor);
-                    mImageView.setColorFilter(mutedColor, PorterDuff.Mode.MULTIPLY);
+//                    int mutedColor = palette.getMutedColor(primaryColor);
+                    Palette.Swatch mutedSwatch = palette.getMutedSwatch();
+                    mImageView.setColorFilter(mutedSwatch.getRgb(), PorterDuff.Mode.MULTIPLY);
+                    newsInfo.setBackgroundColor(mutedSwatch.getRgb());
+                    newsTitle.setTextColor(mutedSwatch.getTitleTextColor());
+                    pubDate.setTextColor(mutedSwatch.getBodyTextColor());
+
                 }
 
                 @Override
@@ -79,8 +87,8 @@ public class FeedListAdapter extends CursorAdapter {
             Picasso.with(mContext).load(R.drawable.picture_not_available).into(mImageView);
             mImageView.setColorFilter(primaryColor, PorterDuff.Mode.SRC_ATOP);
         }
-        ((TextView) view.findViewById(R.id.news_title)).setText(entry.title);
-        ((TextView) view.findViewById(R.id.pub_date)).setText(DateUtils.getRelativeTimeSpanString(entry.pubDate));
+        newsTitle.setText(entry.title);
+        pubDate.setText(DateUtils.getRelativeTimeSpanString(entry.pubDate));
 
     }
 
