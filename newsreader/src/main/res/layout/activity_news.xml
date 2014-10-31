@@ -55,7 +55,10 @@
                 <TextView
                     android:id="@+id/news_content"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:textColor="#F000"
+                    />
 
 
             </LinearLayout>
@@ -75,7 +78,7 @@
                     android:layout_height="wrap_content"
                     android:background="@null" />
 
-                <!-- Session title -->
+                <!-- News title -->
                 <TextView
                     android:id="@+id/news_title"
                     android:layout_width="match_parent"
@@ -88,9 +91,9 @@
                     android:maxLines="3"
                     android:text="News Title"
                     android:layout_gravity="start"
-                    android:textAppearance="?android:textAppearanceMedium" />
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
-                <!-- Session subtitle -->
+                <!-- News subtitle -->
                 <TextView
                     android:id="@+id/pub_date"
                     android:layout_width="match_parent"
@@ -101,7 +104,9 @@
                     android:singleLine="true"
                     android:text="date"
                     android:layout_gravity="start"
-                    android:textSize="16sp" />
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                    />
+
 
             </LinearLayout>
 

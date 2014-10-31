@@ -63,7 +63,6 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
     private Handler mHandler = new Handler();
     private View mScrollViewChild;
     private View mDetailsContainer;
-    private static final String TRANSITION_NAME_IMAGE = "image";
     private int mHeaderHeightPixels;
     private boolean mHasImage = false;
     private float mMaxHeaderElevation;
@@ -77,6 +76,8 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        toolbar.getNavigationIcon().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
 
         mHandler.post(new Runnable() {
             @Override
@@ -105,7 +106,6 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
         pubDate = (TextView) findViewById(R.id.pub_date);
         pubDate.setText(DateUtils.getRelativeTimeSpanString(entry.pubDate));
 
-        ViewCompat.setTransitionName(mImageView, TRANSITION_NAME_IMAGE);
 
         mMaxHeaderElevation = getResources().getDimensionPixelSize(R.dimen.header_elevation);
         fetchNews(entry);
@@ -157,13 +157,12 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
             @Override
             public void onSuccess() {
                 Palette palette = Palette.generate(((BitmapDrawable) mImageView.getDrawable()).getBitmap());
-                int mutedColor = palette.getMutedColor(getResources().getColor(R.color.primary));
-                mHeader.setBackgroundColor(mutedColor);
-                setStatusBarColor(mutedColor);
-                mImageViewContainer.setBackgroundColor(mutedColor);
-                int lightColor = palette.getLightVibrantColor(getResources().getColor(R.color.primary_text));
-                newsTitle.setTextColor(lightColor);
-                pubDate.setTextColor(lightColor);
+                Palette.Swatch mutedSwatch = palette.getMutedSwatch();
+                mHeader.setBackgroundColor(mutedSwatch.getRgb());
+                setStatusBarColor(mutedSwatch.getRgb());
+                mImageViewContainer.setBackgroundColor(mutedSwatch.getRgb());
+                newsTitle.setTextColor(mutedSwatch.getTitleTextColor());
+                pubDate.setTextColor(mutedSwatch.getTitleTextColor());
                 mHasImage = true;
                 recomputeImageAndScrollingMetrics();
             }
