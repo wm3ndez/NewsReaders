@@ -93,6 +93,8 @@ public class FeedListFragment extends Fragment implements AdapterView.OnItemClic
                         for (org.jsoup.nodes.Element element : entries) {
                             String url = element.getElementsByTag("guid").text();
                             String category = element.getElementsByTag("category").text().replace("<![CDATA[", "").replace("]]>", "");
+                            if(category.equals(""))
+                                category = mItem.title;
                             if (newsExist(url, category))
                                 continue;
                             insertNews(element, url, category);

@@ -68,7 +68,6 @@ public class FeedListAdapter extends CursorAdapter {
                 @Override
                 public void onSuccess() {
                     Palette palette = Palette.generate(((BitmapDrawable) mImageView.getDrawable()).getBitmap());
-//                    int mutedColor = palette.getMutedColor(primaryColor);
                     Palette.Swatch mutedSwatch = palette.getMutedSwatch();
                     mImageView.setColorFilter(mutedSwatch.getRgb(), PorterDuff.Mode.MULTIPLY);
                     newsInfo.setBackgroundColor(mutedSwatch.getRgb());
