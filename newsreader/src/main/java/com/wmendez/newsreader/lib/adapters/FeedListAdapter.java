@@ -69,10 +69,14 @@ public class FeedListAdapter extends CursorAdapter {
                 public void onSuccess() {
                     Palette palette = Palette.generate(((BitmapDrawable) mImageView.getDrawable()).getBitmap());
                     Palette.Swatch mutedSwatch = palette.getMutedSwatch();
-                    mImageView.setColorFilter(mutedSwatch.getRgb(), PorterDuff.Mode.MULTIPLY);
-                    newsInfo.setBackgroundColor(mutedSwatch.getRgb());
-                    newsTitle.setTextColor(mutedSwatch.getTitleTextColor());
-                    pubDate.setTextColor(mutedSwatch.getBodyTextColor());
+                    try {
+                        mImageView.setColorFilter(mutedSwatch.getRgb(), PorterDuff.Mode.MULTIPLY);
+                        newsInfo.setBackgroundColor(mutedSwatch.getRgb());
+                        newsTitle.setTextColor(mutedSwatch.getTitleTextColor());
+                        pubDate.setTextColor(mutedSwatch.getBodyTextColor());
+                    } catch (NullPointerException ex) {
+                        ex.printStackTrace();
+                    }
 
                 }
 
