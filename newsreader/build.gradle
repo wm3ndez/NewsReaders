@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 21
-    buildToolsVersion "21.0.2"
+    buildToolsVersion "21.1.0"
 
     def Properties versionProps = new Properties()
     versionProps.load(new FileInputStream(file('../version.properties')))
@@ -56,10 +56,9 @@ android {
 
     buildTypes {
         release {
-            runProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), file('proguard-rules.txt')
             debuggable false
-            minifyEnabled true
+            minifyEnabled false
             shrinkResources true
         }
 

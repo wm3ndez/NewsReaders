@@ -17,6 +17,7 @@
 #}
 
 -dontwarn com.squareup.okhttp.**
+-dontwarn okio.**
 
 -keepclassmembers class ** {
     public void onEvent*(**);
