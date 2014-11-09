@@ -3,4 +3,8 @@
     <dimen name="news_image_size">240dp</dimen>
     <dimen name="default_padding">16dp</dimen>
     <dimen name="news_activity_padding">64dp</dimen>
+    <dimen name="news_item_padding">8dp</dimen>
+    <dimen name="news_item_vertical_spacing">6dp</dimen>
+    <dimen name="card_radius">2dp</dimen>
+    <dimen name="card_elevation">2dp</dimen>
 </resources>

@@ -9,4 +9,8 @@
     <dimen name="keyline_2">72dp</dimen>
     <dimen name="keyline_2_minus_16dp">56dp</dimen>
     <dimen name="header_elevation">4dp</dimen>
+    <dimen name="news_item_padding">0dp</dimen>
+    <dimen name="news_item_vertical_spacing">0dp</dimen>
+    <dimen name="card_radius">0dp</dimen>
+    <dimen name="card_elevation">0dp</dimen>
 </resources>
