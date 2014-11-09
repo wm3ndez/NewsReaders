@@ -11,6 +11,9 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -93,7 +96,7 @@ public class FeedListFragment extends Fragment implements AdapterView.OnItemClic
                         for (org.jsoup.nodes.Element element : entries) {
                             String url = element.getElementsByTag("guid").text();
                             String category = element.getElementsByTag("category").text().replace("<![CDATA[", "").replace("]]>", "");
-                            if(category.equals(""))
+                            if (category.equals(""))
                                 category = mItem.title;
                             if (newsExist(url, category))
                                 continue;
@@ -171,6 +174,7 @@ public class FeedListFragment extends Fragment implements AdapterView.OnItemClic
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
         Bundle arguments = getArguments();
         if (arguments.containsKey("uri")) {
@@ -199,7 +203,7 @@ public class FeedListFragment extends Fragment implements AdapterView.OnItemClic
 
         swipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
         swipeLayout.setOnRefreshListener(this);
-        swipeLayout.setColorScheme(android.R.color.holo_blue_bright,
+        swipeLayout.setColorSchemeColors(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
@@ -207,8 +211,7 @@ public class FeedListFragment extends Fragment implements AdapterView.OnItemClic
         db = NewsDatabase.getInstance(activity).getWritableDatabase();
         cursor = getQuery();
         if (cursor.getCount() == 0) {
-            swipeLayout.setRefreshing(true);
-            onRefresh();
+            refreshFeed();
         }
         adapter = new FeedListAdapter(activity, cursor, true);
         gridView = (GridView) rootView.findViewById(R.id.feed_list);
@@ -219,6 +222,11 @@ public class FeedListFragment extends Fragment implements AdapterView.OnItemClic
 
 
         return rootView;
+    }
+
+    private void refreshFeed() {
+        swipeLayout.setRefreshing(true);
+        onRefresh();
     }
 
     private void setShowCaseView(FragmentActivity activity) {
@@ -281,6 +289,25 @@ public class FeedListFragment extends Fragment implements AdapterView.OnItemClic
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         EventBus.getDefault().post(new NewsItemSelectedEvent(adapter.getEntry(position)));
+    }
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        // Inflate menu resource file.
+        inflater.inflate(R.menu.feed_list, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.menu_refresh_feed) {
+            refreshFeed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 
