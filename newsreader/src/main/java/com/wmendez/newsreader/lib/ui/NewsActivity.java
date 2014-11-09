@@ -28,10 +28,10 @@ import android.widget.TextView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
-import com.koushikdutta.async.future.Future;
-import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.ion.Ion;
-import com.koushikdutta.ion.Response;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+import com.squareup.okhttp.ResponseBody;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.wmendez.newsreader.lib.R;
@@ -44,6 +44,8 @@ import com.wmendez.newsreader.lib.util.Utils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+
+import java.io.IOException;
 
 import de.greenrobot.event.EventBus;
 
@@ -108,7 +110,13 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
 
 
         mMaxHeaderElevation = getResources().getDimensionPixelSize(R.dimen.header_elevation);
-        fetchNews(entry);
+        try {
+            fetchNews(entry);
+        } catch (IOException e) {
+            e.printStackTrace();
+            mNewsContent.setText(Html.fromHtml(
+                    getString(R.string.no_content) + "<p> " + entry.description + "</p>"));
+        }
         setAdmob();
     }
 
@@ -126,24 +134,34 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
 
     }
 
-    private Future<Response<String>> fetchNews(final Entry entry) {
-        return Ion.with(this, entry.link)
-                .asString()
-                .withResponse()
-                .setCallback(new FutureCallback<Response<String>>() {
+    private void fetchNews(final Entry entry) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+
+        final Request request = new Request.Builder()
+                .url(entry.link)
+                .build();
+
+        client.newCall(request).enqueue(new com.squareup.okhttp.Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                mNewsContent.setText(Html.fromHtml(
+                        getString(R.string.no_content) + "<p> " + entry.description + "</p>"));
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+                String html = response.body().string();
+                final Document doc = Jsoup.parse(html);
+                mHandler.post(new Runnable() {
                     @Override
-                    public void onCompleted(Exception e, Response<String> result) {
-                        String data;
-                        if (e != null) {
-                            data = getString(R.string.no_content) + "<p> " + entry.description + "</p>";
-                        } else {
-                            Document doc = Jsoup.parse(result.getResult());
-                            data = Feeds.parser.getHtml(doc);
-                        }
+                    public void run() {
                         setNewsImage(entry);
-                        mNewsContent.setText(Html.fromHtml(data));
+                        mNewsContent.setText(Html.fromHtml(Feeds.parser.getHtml(doc)));
                     }
                 });
+
+            }
+        });
     }
 
     private void setNewsImage(Entry entry) {
@@ -152,8 +170,7 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
             setDefaultStyle();
             return;
         }
-        Picasso.with(this).load(entry.image).error(R.drawable.picture_not_available).into(mImageView);
-        Picasso.with(this).load(entry.image).into(mImageView, new Callback() {
+        Picasso.with(this).load(entry.image).error(R.drawable.picture_not_available).into(mImageView, new Callback() {
             @Override
             public void onSuccess() {
                 Palette palette = Palette.generate(((BitmapDrawable) mImageView.getDrawable()).getBitmap());

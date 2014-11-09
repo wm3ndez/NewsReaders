@@ -6,9 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.Html;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,8 +29,9 @@ import com.espian.showcaseview.targets.Target;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
-import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.ion.Ion;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 import com.wmendez.newsreader.lib.R;
 import com.wmendez.newsreader.lib.adapters.FeedListAdapter;
 import com.wmendez.newsreader.lib.provider.NewsDatabase;
@@ -44,6 +47,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -60,6 +64,7 @@ public class FeedListFragment extends Fragment implements AdapterView.OnItemClic
     private Feeds.FeedItem mItem;
     private GridView gridView;
     private FeedListAdapter adapter;
+    Handler mHandler = new Handler();
 
 
     /**
@@ -77,37 +82,64 @@ public class FeedListFragment extends Fragment implements AdapterView.OnItemClic
     @Override
     public void onRefresh() {
 
-        final FragmentActivity activity = getActivity();
-        Ion.with(activity, mItem.uri)
-                .asString()
-                .setCallback(new FutureCallback<String>() {
-                    @Override
-                    public void onCompleted(Exception e, String result) {
-                        swipeLayout.setRefreshing(false);
-                        Document doc;
-                        try {
-                            doc = Jsoup.parse(result);
-                        } catch (IllegalArgumentException ex) {
-                            if (activity != null)
-                                Toast.makeText(activity, activity.getString(R.string.fetch_news_error), Toast.LENGTH_LONG).show();
-                            return;
-                        }
-                        Elements entries = doc.getElementsByTag("item");
-                        for (org.jsoup.nodes.Element element : entries) {
-                            String url = element.getElementsByTag("guid").text();
-                            String category = element.getElementsByTag("category").text().replace("<![CDATA[", "").replace("]]>", "");
-                            if (category.equals(""))
-                                category = mItem.title;
-                            if (newsExist(url, category))
-                                continue;
-                            insertNews(element, url, category);
-                        }
+        OkHttpClient client = new OkHttpClient();
 
+        final Request request = new Request.Builder()
+                .url(mItem.uri)
+                .build();
+
+
+        final FragmentActivity activity = getActivity();
+        client.newCall(request).enqueue(new com.squareup.okhttp.Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                stopRefreshing();
+            }
+
+            @Override
+            public void onResponse(Response response) throws IOException {
+                stopRefreshing();
+                Document doc;
+                try {
+                    doc = Jsoup.parse(response.body().string());
+                } catch (IllegalArgumentException ex) {
+                    if (activity != null)
+                        Toast.makeText(activity, activity.getString(R.string.fetch_news_error), Toast.LENGTH_LONG).show();
+                    return;
+                }
+                Elements entries = doc.getElementsByTag("item");
+                for (org.jsoup.nodes.Element element : entries) {
+                    String url = element.getElementsByTag("guid").text();
+                    String category = element.getElementsByTag("category").text().replace("<![CDATA[", "").replace("]]>", "");
+                    if (category.equals(""))
+                        category = mItem.title;
+                    if (newsExist(url, category))
+                        continue;
+                    insertNews(element, url, category);
+                }
+
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
                         cursor.close();
                         cursor = getQuery();
                         adapter.changeCursor(cursor);
+
                     }
                 });
+
+            }
+        });
+
+    }
+
+    private void stopRefreshing() {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                swipeLayout.setRefreshing(false);
+            }
+        });
     }
 
     private void insertNews(Element element, String url, String category) {
