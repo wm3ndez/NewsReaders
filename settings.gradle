@@ -1,2 +1,2 @@
 //include ':app', ':diariolibre', ':newsreader', ':noticiassin', ':elnacional', ':showcaseview', ':elcaribe'
-include ':newsreader', ':showcaseview'
+include ':newsreader'
