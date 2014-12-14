@@ -3,6 +3,11 @@
     package="com.wmendez.newsreader.lib" >
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!--<uses-permission android:name="android.permission.ACCOUNT_MANAGER" />-->
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
 
     <application
         android:allowBackup="true"
@@ -37,6 +42,45 @@
             android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
             android:theme="@android:style/Theme.Translucent"/>
+
+        <provider
+            android:name=".provider.Provider"
+            android:authorities="@string/account_type"
+            android:exported="false" />
+
+        <!-- This service implements our SyncAdapter. It needs to be exported, so that the system
+        sync framework can access it. -->
+        <service
+            android:name=".services.SyncService"
+            android:exported="true">
+            <!-- This intent filter is required. It allows the system to launch our sync service
+            as needed. -->
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+            <!-- This points to a required XML file which describes our SyncAdapter. -->
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/syncadapter" />
+        </service>
+
+        <!-- This implements the account we'll use as an attachment point for our SyncAdapter. Since
+        our SyncAdapter doesn't need to authenticate the current user (it just fetches a public RSS
+        feed), this account's implementation is largely empty.
+
+        It's also possible to attach a SyncAdapter to an existing account provided by another
+        package. In that case, this element could be omitted here. -->
+        <service android:name=".accounts.GenericAccountService">
+            <!-- Required filter used by the system to launch our account service. -->
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+            <!-- This points to an XMLf ile which describes our account service. -->
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service>
+
 
     </application>
 

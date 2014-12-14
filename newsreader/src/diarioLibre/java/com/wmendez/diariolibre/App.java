@@ -2,6 +2,7 @@ package com.wmendez.diariolibre;
 
 import android.app.Application;
 
+import com.wmendez.newsreader.lib.accounts.AccountUtils;
 import com.wmendez.newsreader.lib.helpers.Feeds;
 import com.wmendez.newsreader.lib.util.NewsHTMLParser;
 
@@ -13,6 +14,8 @@ public class App extends Application {
 
     @Override
     public void onCreate() {
+        if (!AccountUtils.accountExists(getApplicationContext()))
+            AccountUtils.createAccount(getApplicationContext());
 //        addItem(new Feeds.FeedItem("Portada", "http://www.diariolibre.com/rss/diariolibre/", com.wmendez.newsreader.lib.R.drawable.ic_action_web_site));
 //        addItem(new Feeds.FeedItem("Cinema", "http://www.diariolibre.com/rss/?id=72", com.wmendez.newsreader.lib.R.drawable.ic_action_web_site));
         addItem(new Feeds.FeedItem("Noticias", "http://www.diariolibre.com/rss/noticias/", com.wmendez.newsreader.lib.R.drawable.ic_action_web_site));

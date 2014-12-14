@@ -1,8 +1,11 @@
 package com.wmendez.newsreader.lib.helpers;
 
 
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.wmendez.newsreader.lib.provider.Contract;
 
 public class Entry implements Parcelable {
     public String title;
@@ -60,6 +63,20 @@ public class Entry implements Parcelable {
         image = in.readString();
         isNew = in.readByte() != 0;
         isFavorite = in.readByte() != 0;
+    }
+
+    public static Entry fromCursor(Cursor cursor) {
+        return new Entry(
+                cursor.getString(cursor.getColumnIndex(Contract.NewsTable.COLUMN_NAME_TITLE)),
+                cursor.getString(cursor.getColumnIndex(Contract.NewsTable.COLUMN_NAME_URL)),
+                cursor.getString(cursor.getColumnIndex(Contract.NewsTable.COLUMN_NAME_DESCRIPTION)),
+                cursor.getString(cursor.getColumnIndex(Contract.NewsTable.COLUMN_NAME_CATEGORY)),
+                cursor.getLong(cursor.getColumnIndex(Contract.NewsTable.COLUMN_NAME_PUB_DATE)),
+                cursor.getString(cursor.getColumnIndex(Contract.NewsTable.COLUMN_NAME_IMAGE)),
+                cursor.getInt(cursor.getColumnIndex(Contract.NewsTable.COLUMN_NAME_IS_NEW)) == 1,
+                cursor.getInt(cursor.getColumnIndex(Contract.NewsTable.COLUMN_NAME_FAVORITE)) == 1
+        );
+
     }
 
 }

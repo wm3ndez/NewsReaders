@@ -2,7 +2,6 @@ package com.wmendez.newsreader.lib.ui;
 
 import android.content.ContentValues;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
@@ -31,14 +30,13 @@ import com.google.android.gms.ads.AdView;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
-import com.squareup.okhttp.ResponseBody;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.wmendez.newsreader.lib.R;
-import com.wmendez.newsreader.lib.provider.NewsDatabase;
 import com.wmendez.newsreader.lib.event.FavoriteChangedEvent;
 import com.wmendez.newsreader.lib.helpers.Entry;
 import com.wmendez.newsreader.lib.helpers.Feeds;
+import com.wmendez.newsreader.lib.provider.Contract;
 import com.wmendez.newsreader.lib.ui.views.ObservableScrollView;
 import com.wmendez.newsreader.lib.util.Utils;
 
@@ -263,11 +261,14 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
     }
 
     private void setFavorite() {
-        SQLiteDatabase db = NewsDatabase.getInstance(this).getWritableDatabase();
         entry.isFavorite = !entry.isFavorite;
         ContentValues values = new ContentValues();
-        values.put(NewsDatabase.NEWS_IS_FAVORITE, entry.isFavorite);
-        db.update(NewsDatabase.NEWS_TABLE, values, NewsDatabase.NEWS_URL + " = ? ", new String[]{entry.link});
+        values.put(Contract.NewsTable.COLUMN_NAME_FAVORITE, entry.isFavorite);
+        getContentResolver().update(Contract.NewsTable.CONTENT_URI,
+                values,
+                Contract.NewsTable.COLUMN_NAME_URL + " = ? ",
+                new String[]{entry.link}
+        );
         setFavoriteIconColorFilter();
 
 

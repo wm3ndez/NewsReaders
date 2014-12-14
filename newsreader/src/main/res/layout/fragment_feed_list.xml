@@ -18,15 +18,15 @@
         android:layout_height="match_parent"
         android:layout_above="@id/admob_view">
 
-        <GridView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/feed_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:horizontalSpacing="4dp"
             android:numColumns="@integer/columns_count"
             android:orientation="vertical"
-            android:verticalSpacing="@dimen/news_item_vertical_spacing"
-            android:padding="@dimen/news_item_padding"/>
+            android:padding="@dimen/news_item_padding"
+            android:verticalSpacing="@dimen/news_item_vertical_spacing" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

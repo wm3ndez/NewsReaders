@@ -44,22 +44,6 @@ public class Utils {
         return (value - min) / (float) (max - min);
     }
 
-    public static GradientDrawable getTitleBackground(int bottomColor) {
-        GradientDrawable gradient = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP,
-                new int[]{bottomColor, Color.parseColor("#8FAAAAAA")});
-        gradient.setShape(GradientDrawable.LINEAR_GRADIENT);
-        gradient.setCornerRadius(0);
-        return gradient;
-    }
 
-    public static void setTitleBackground(View ninfo, int mutedColor) {
-        ninfo.setBackgroundColor(mutedColor);
-        /*
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            ninfo.setBackground(getTitleBackground(mutedColor));
-        } else {
-            ninfo.setBackgroundColor(mutedColor);
-        }
-        */
-    }
+
 }
