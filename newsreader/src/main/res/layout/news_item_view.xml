@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:id="@+id/news_image"
+        android:layout_width="match_parent"
+        android:layout_height="225dp"
+        android:scaleType="centerCrop" />
+
+    <ImageView
+        android:id="@+id/favorite_indicator"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentRight="true"
+        android:layout_margin="8dp"
+        android:padding="2dp"
+        android:src="@drawable/ic_favorite_outline_grey" />
+
+    <View
+        android:id="@+id/news_info"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/accent" />
+
+    <TextView
+        android:id="@+id/news_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="2"
+        android:padding="8dp"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="1"
+        android:text="Date"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textColor="@color/primary_dark"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/pub_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:paddingTop="0dp"
+        android:text="Date"
+        android:textColor="@color/primary"
+        android:textSize="12sp" />
+
+
+</merge>
