@@ -8,8 +8,8 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -113,7 +113,8 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
         }
         adapter = new FeedListAdapter(activity, cursor);
         gridView = (RecyclerView) rootView.findViewById(R.id.feed_list);
-        gridView.setLayoutManager(new GridLayoutManager(activity, 1));
+        final int spanCount = activity.getResources().getInteger(R.integer.columns_count);
+        gridView.setLayoutManager(new StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL));
         gridView.setAdapter(adapter);
 
 

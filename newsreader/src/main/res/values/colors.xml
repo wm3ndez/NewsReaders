@@ -9,7 +9,8 @@
     <color name="accent">#c6ff00</color>
     <color name="translucent_actionbar_background">#cc009688</color>
     <color name="photo_tint">#88101010</color>
-    <color name="favorite_icon_tint">#888</color>
+    <color name="favorite_icon_tint">@color/gray</color>
     <color name="favorite_icon_active_tint">#d01716</color>
+    <color name="gray">#888</color>
 
 </resources>

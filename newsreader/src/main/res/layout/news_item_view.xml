@@ -23,31 +23,41 @@
         android:id="@+id/news_info"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/accent" />
+        android:background="@color/gray" />
 
     <TextView
         android:id="@+id/news_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxLines="2"
         android:padding="8dp"
+        android:paddingBottom="0dp"
         android:shadowDx="1"
         android:shadowDy="1"
         android:shadowRadius="1"
-        android:text="Date"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
-        android:textColor="@color/primary_dark"
+        android:textColor="@color/primary_text"
         android:textSize="16sp" />
 
     <TextView
         android:id="@+id/pub_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:paddingTop="0dp"
-        android:text="Date"
-        android:textColor="@color/primary"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:textColor="@color/primary_text"
         android:textSize="12sp" />
 
-
+    <TextView
+        android:id="@+id/summary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:paddingTop="0dp"
+        android:shadowRadius="1"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        android:textColor="@color/primary_text"
+        android:textSize="14sp"
+        android:maxLines="6"
+        android:visibility="gone"
+        />
 </merge>
