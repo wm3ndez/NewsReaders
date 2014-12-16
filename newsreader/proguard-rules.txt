@@ -16,9 +16,28 @@
 #   public *;
 #}
 
--dontwarn com.squareup.okhttp.**
--dontwarn okio.**
-
 -keepclassmembers class ** {
     public void onEvent*(**);
 }
+
+
+-keep class !android.support.v7.internal.view.menu.**,** {*;}
+
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class com.squareup.okhttp.** { *; }
+-keep interface com.squareup.okhttp.** { *; }
+-dontwarn com.squareup.okhttp.**
+-dontwarn okio.**
+
+-dontwarn rx.**
+-dontwarn retrofit.**
+-keep class retrofit.** { *; }
+-keepclasseswithmembers class * {
+    @retrofit.http.* <methods>;
+}
+
+
+-dontwarn butterknife.internal.**
+-keep class **$$ViewInjector { *; }
+-keepnames class * { @butterknife.InjectView *;}
