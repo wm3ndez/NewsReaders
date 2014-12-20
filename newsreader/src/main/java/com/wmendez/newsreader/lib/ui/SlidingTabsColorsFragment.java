@@ -105,7 +105,7 @@ public class SlidingTabsColorsFragment extends Fragment {
         for (Feeds.FeedItem item : Feeds.ITEMS) {
             mTabs.add(new PagerItem(
                     item,
-                    Color.WHITE, // Indicator color
+                    getResources().getColor(R.color.accent), // Indicator color
                     Color.WHITE // Divider color
             ));
         }
