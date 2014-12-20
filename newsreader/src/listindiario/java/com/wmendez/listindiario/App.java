@@ -16,18 +16,18 @@ public class App extends Application {
 
     @Override
     public void onCreate() {
-        addItem(new Feeds.FeedItem("Portada", "http://listin.com.do/rss/portada/", com.wmendez.newsreader.lib.R.drawable.ic_action_web_site));
-        addItem(new Feeds.FeedItem("El Norte", "http://listin.com.do/rss/elnorte/", com.wmendez.newsreader.lib.R.drawable.ic_action_web_site));
-        addItem(new Feeds.FeedItem("Economía & Negocios", "http://listin.com.do/rss/economia/", com.wmendez.newsreader.lib.R.drawable.ic_action_web_site));
-        addItem(new Feeds.FeedItem("Editorial", "http://listin.com.do/rss/editorial/", com.wmendez.newsreader.lib.R.drawable.ic_action_web_site));
-        addItem(new Feeds.FeedItem("Puntos de vista", "http://listin.com.do/rss/opinion/", com.wmendez.newsreader.lib.R.drawable.ic_action_web_site));
-        addItem(new Feeds.FeedItem("Ventana", "http://listin.com.do/rss/ventana/", com.wmendez.newsreader.lib.R.drawable.ic_action_web_site));
-        addItem(new Feeds.FeedItem("La República", "http://listin.com.do/rss/larepublica/", com.wmendez.newsreader.lib.R.drawable.ic_action_web_site));
-        addItem(new Feeds.FeedItem("Las Mundiales", "http://listin.com.do/rss/lasmundiales/", com.wmendez.newsreader.lib.R.drawable.ic_action_web_site));
-        addItem(new Feeds.FeedItem("La Vida", "http://listin.com.do/rss/lavida/", com.wmendez.newsreader.lib.R.drawable.ic_action_web_site));
-        addItem(new Feeds.FeedItem("El Deporte", "http://listin.com.do/rss/eldeporte/", com.wmendez.newsreader.lib.R.drawable.ic_action_web_site));
-        addItem(new Feeds.FeedItem("Entretenimiento", "http://listin.com.do/rss/entretenimiento/", com.wmendez.newsreader.lib.R.drawable.ic_action_web_site));
-        addItem(new Feeds.FeedItem("Las Sociales", "http://listin.com.do/rss/sociales/", com.wmendez.newsreader.lib.R.drawable.ic_action_web_site));
+        addItem(new Feeds.FeedItem("Portada", "http://listin.com.do/rss/portada/"));
+        addItem(new Feeds.FeedItem("El Norte", "http://listin.com.do/rss/elnorte/"));
+        addItem(new Feeds.FeedItem("Economía & Negocios", "http://listin.com.do/rss/economia/"));
+        addItem(new Feeds.FeedItem("Editorial", "http://listin.com.do/rss/editorial/"));
+        addItem(new Feeds.FeedItem("Puntos de vista", "http://listin.com.do/rss/opinion/"));
+        addItem(new Feeds.FeedItem("Ventana", "http://listin.com.do/rss/ventana/"));
+        addItem(new Feeds.FeedItem("La República", "http://listin.com.do/rss/larepublica/"));
+        addItem(new Feeds.FeedItem("Las Mundiales", "http://listin.com.do/rss/lasmundiales/"));
+        addItem(new Feeds.FeedItem("La Vida", "http://listin.com.do/rss/lavida/"));
+        addItem(new Feeds.FeedItem("El Deporte", "http://listin.com.do/rss/eldeporte/"));
+        addItem(new Feeds.FeedItem("Entretenimiento", "http://listin.com.do/rss/entretenimiento/"));
+        addItem(new Feeds.FeedItem("Las Sociales", "http://listin.com.do/rss/sociales/"));
 
         Feeds.parser = new NewsHTMLParser() {
             @Override

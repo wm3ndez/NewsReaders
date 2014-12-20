@@ -61,7 +61,6 @@ public class SlidingTabsColorsFragment extends Fragment {
             Bundle arguments = new Bundle();
             arguments.putString("title", mItem.title);
             arguments.putString("uri", mItem.uri);
-            arguments.putInt("resource", mItem.resource);
             FeedListFragment fragment = new FeedListFragment();
             fragment.setArguments(arguments);
             return fragment;

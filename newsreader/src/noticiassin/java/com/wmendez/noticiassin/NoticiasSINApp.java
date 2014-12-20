@@ -12,7 +12,7 @@ import static com.wmendez.newsreader.lib.helpers.Feeds.addItem;
 public class NoticiasSINApp extends Application {
     @Override
     public void onCreate() {
-        addItem(new Feeds.FeedItem("Noticias SIN", "http://feeds.feedburner.com/noticiassin1?format=xml", com.wmendez.newsreader.lib.R.drawable.ic_action_web_site));
+        addItem(new Feeds.FeedItem("Noticias SIN", "http://feeds.feedburner.com/noticiassin1?format=xml"));
 
         Feeds.parser = new NewsHTMLParser() {
             @Override

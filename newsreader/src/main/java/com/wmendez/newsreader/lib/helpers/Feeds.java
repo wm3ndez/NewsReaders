@@ -24,12 +24,10 @@ public class Feeds {
     public static class FeedItem {
         public String title;
         public String uri;
-        public int resource;
 
-        public FeedItem(String title, String uri, int resource) {
+        public FeedItem(String title, String uri) {
             this.title = title;
             this.uri = uri;
-            this.resource = resource;
         }
 
         @Override

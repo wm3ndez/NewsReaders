@@ -14,7 +14,6 @@ public class MainActivity extends FeedListActivity {
             Intent intent = new Intent();
             intent.putExtra("title", "Noticias SIN");
             intent.putExtra("uri", "http://feeds.feedburner.com/noticiassin1?format=xml");
-            intent.putExtra("resource", com.wmendez.newsreader.lib.R.drawable.ic_action_web_site);
             setIntent(intent);
         }
         super.onCreate(savedInstanceState);
