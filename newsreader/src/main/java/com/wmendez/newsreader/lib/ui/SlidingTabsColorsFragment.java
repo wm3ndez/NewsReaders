@@ -26,7 +26,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.wmendez.newsreader.lib.R;
-import com.wmendez.newsreader.lib.helpers.Feeds;
 import com.wmendez.newsreader.lib.ui.views.SlidingTabLayout;
 
 import java.util.ArrayList;
@@ -45,10 +44,10 @@ public class SlidingTabsColorsFragment extends Fragment {
     static class PagerItem {
         private final int mIndicatorColor;
         private final int mDividerColor;
-        private final Feeds.FeedItem mItem;
+        private final String mCategory;
 
-        PagerItem(Feeds.FeedItem item, int indicatorColor, int dividerColor) {
-            mItem = item;
+        PagerItem(String category, int indicatorColor, int dividerColor) {
+            mCategory = category;
             mIndicatorColor = indicatorColor;
             mDividerColor = dividerColor;
 
@@ -59,8 +58,7 @@ public class SlidingTabsColorsFragment extends Fragment {
          */
         Fragment createFragment() {
             Bundle arguments = new Bundle();
-            arguments.putString("title", mItem.title);
-            arguments.putString("uri", mItem.uri);
+            arguments.putString("category", mCategory);
             FeedListFragment fragment = new FeedListFragment();
             fragment.setArguments(arguments);
             return fragment;
@@ -71,7 +69,7 @@ public class SlidingTabsColorsFragment extends Fragment {
          * {@link android.support.v4.view.PagerAdapter#getPageTitle(int)}
          */
         CharSequence getTitle() {
-            return mItem.title;
+            return mCategory;
         }
 
         /**
@@ -102,9 +100,9 @@ public class SlidingTabsColorsFragment extends Fragment {
          * color, which are used by {@link SlidingTabLayout}.
          */
 
-        for (Feeds.FeedItem item : Feeds.ITEMS) {
+        for (String category : getResources().getStringArray(R.array.categories)) {
             mTabs.add(new PagerItem(
-                    item,
+                    category,
                     getResources().getColor(R.color.accent), // Indicator color
                     Color.WHITE // Divider color
             ));

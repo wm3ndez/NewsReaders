@@ -28,19 +28,12 @@ import com.wmendez.newsreader.lib.adapters.RecyclerItemClickListener;
 import com.wmendez.newsreader.lib.event.FavoriteChangedEvent;
 import com.wmendez.newsreader.lib.event.NewsItemSelectedEvent;
 import com.wmendez.newsreader.lib.event.SyncEndedEvent;
-import com.wmendez.newsreader.lib.helpers.Feeds;
 import com.wmendez.newsreader.lib.provider.Contract;
 
 import de.greenrobot.event.EventBus;
 
-/**
- * A fragment representing a single Feed detail screen.
- * This fragment is either contained in a {@link FeedCategoryListActivity}
- * in two-pane mode (on tablets) or a {@link FeedListActivity}
- * on handsets.
- */
+
 public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
-    private Feeds.FeedItem mItem;
     private RecyclerView gridView;
     private FeedListAdapter adapter;
     Handler mHandler = new Handler();
@@ -52,6 +45,7 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
     private SwipeRefreshLayout swipeLayout;
     private Cursor cursor;
     private ContentResolver contentResolver;
+    private String category = "";
 
     @Override
     public void onRefresh() {
@@ -81,12 +75,8 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
         setHasOptionsMenu(true);
 
         Bundle arguments = getArguments();
-        if (arguments.containsKey("uri")) {
-            // Load the dummy resource specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load resource from a resource provider.
-            String uri = arguments.getString("uri");
-            mItem = Feeds.ITEM_MAP.get(uri);
+        if (arguments.containsKey("category")) {
+            category = arguments.getString("category");
         }
 
         EventBus.getDefault().register(this);
@@ -137,17 +127,11 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     private Cursor getQuery() {
-        String categoryName;
-        if (Feeds.ITEMS.size() == 1)
-            categoryName = "";
-        else
-            categoryName = mItem.title;
-
         return contentResolver.query(
                 Contract.NewsTable.CONTENT_URI,
                 null,
                 Contract.NewsTable.COLUMN_NAME_CATEGORY + " like ?",
-                new String[]{"%" + categoryName + "%"},
+                new String[]{"%" + category + "%"},
                 Contract.NewsTable.DEFAULT_SORTING
         );
     }

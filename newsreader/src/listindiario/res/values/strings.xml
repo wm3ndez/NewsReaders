@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Listin Diario</string>
+    <string name="account_type">com.wmendez.listindiario.syncadapter</string>
+
+    <string-array name="categories">
+        <item>Portada</item>
+        <item>El Norte</item>
+        <item>Economía &amp; Negocios</item>
+        <item>Editorial</item>
+        <item>Puntos de vista</item>
+        <item>Ventana</item>
+        <item>La República</item>
+        <item>Las Mundiales</item>
+        <item>La Vida</item>
+        <item>El Deporte</item>
+        <item>Entretenimiento</item>
+        <item>Las Sociales</item>
+    </string-array>
+
 </resources>

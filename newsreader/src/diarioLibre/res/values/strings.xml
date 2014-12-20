@@ -1,4 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Diario Libre</string>
+    <string name="account_type">com.wmendez.diariolibre.syncadapter</string>
+
+    <string-array name="categories">
+        <item>Noticias</item>
+        <item>Economía</item>
+        <item>Actualidad</item>
+        <item>Revista</item>
+        <item>Deportes</item>
+        <item>Opinión</item>
+        <item>Ecos</item>
+        <item>Lecturas</item>
+        <item>DL English</item>
+        <item>DL Educación</item>
+        <item>Tecnología</item>
+        <item>Espacios</item>
+        <item>Habitat</item>
+        <item>Fotonoticias</item>
+    </string-array>
 </resources>

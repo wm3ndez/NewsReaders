@@ -11,6 +11,8 @@
     <string name="no_content"><![CDATA[<h3>Resumen...</h3>]]></string>
     <string name="fetch_news_error">No se pudo obtener las noticias.  Intente mas tarde.</string>
 
-    <string name="account_type">com.wmendez.diariolibre.syncadapter</string>
+    <string name="account_type"/>
+    <string name="account_authority">@string/account_type</string>
+    <string-array name="categories"/>
 
 </resources>

@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">El Caribe - No Oficial</string>
-
+    <string name="account_type">com.wmendez.elcaribe.syncadapter</string>
+    <string-array name="categories">
+        <item>Portada</item>
+        <item>Panorama</item>
+        <item>Deportes</item>
+        <item>Gente</item>
+        <item>Opiniones</item>
+    </string-array>
 </resources>

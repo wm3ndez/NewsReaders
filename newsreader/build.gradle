@@ -83,7 +83,6 @@ android {
         def diariolibreSigningConfig = signingConfigs.diariolibre
         def listindiarioSigningConfig = signingConfigs.listindiario
         def elcaribeSigningConfig = signingConfigs.elcaribe
-        def noticiassinSigningConfig = signingConfigs.noticiassin
 
         diariolibre {
             applicationId "com.wmendez.diariolibre"
@@ -111,15 +110,6 @@ android {
                     mainActivity:"com.wmendez.listindiario.MainActivity"
             ]
             signingConfig listindiarioSigningConfig
-        }
-
-        noticiassin {
-            applicationId "com.wmendez.noticiassin"
-            manifestPlaceholders = [
-                    appName: ".App",
-                    mainActivity:"com.wmendez.noticiassin.MainActivity"
-            ]
-            signingConfig noticiassinSigningConfig
         }
 
     }

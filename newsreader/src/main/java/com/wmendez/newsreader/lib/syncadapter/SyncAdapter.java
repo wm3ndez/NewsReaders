@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.squareup.okhttp.OkHttpClient;
+import com.wmendez.newsreader.lib.BuildConfig;
 import com.wmendez.newsreader.lib.event.SyncEndedEvent;
 import com.wmendez.newsreader.lib.helpers.Entry;
 import com.wmendez.newsreader.lib.net.NewsAPI;
@@ -134,7 +135,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         Long datetime = PrefUtils.getLastSync(mContext);
 
         try {
-            List<Entry> entryList = api.newsList("diariolibre", datetime);
+            List<Entry> entryList = api.newsList(BuildConfig.FLAVOR, datetime);
             for (Entry entry : entryList) {
                 insertEntry(entry);
             }
