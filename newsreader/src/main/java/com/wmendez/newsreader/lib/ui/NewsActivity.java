@@ -20,7 +20,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -45,33 +44,48 @@ import org.jsoup.nodes.Document;
 
 import java.io.IOException;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import de.greenrobot.event.EventBus;
+import it.subito.masaccio.MasaccioImageView;
 
 public class NewsActivity extends ActionBarActivity implements ObservableScrollView.Callbacks {
-    private TextView mNewsContent;
-    private ImageView mImageView;
-    private AdView adView;
-    private Entry entry;
-    private MenuItem favoriteItem;
-    private TextView newsTitle;
-    private TextView pubDate;
-    private ObservableScrollView mScrollView;
-    private int mImageHeightPixels = 0;
-    private View mImageViewContainer;
 
-    private View mHeader;
-    private Handler mHandler = new Handler();
-    private View mScrollViewChild;
-    private View mDetailsContainer;
+    private AdView adView;
+    @InjectView(R.id.news_content)
+    TextView mNewsContent;
+    @InjectView(R.id.news_image)
+    MasaccioImageView mImageView;
+    @InjectView(R.id.news_title)
+    TextView newsTitle;
+    @InjectView(R.id.pub_date)
+    TextView pubDate;
+    @InjectView(R.id.scrollview)
+    ObservableScrollView mScrollView;
+    @InjectView(R.id.image_container)
+    View mImageViewContainer;
+    @InjectView(R.id.scroll_view_child)
+    View mScrollViewChild;
+    @InjectView(R.id.details_container)
+    View mDetailsContainer;
+    @InjectView(R.id.header_session)
+    View mHeader;
+
     private int mHeaderHeightPixels;
     private boolean mHasImage = false;
     private float mMaxHeaderElevation;
+    private int mImageHeightPixels = 0;
+    private Handler mHandler = new Handler();
+
+    private Entry entry;
+    private MenuItem favoriteItem;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
+        ButterKnife.inject(this);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -86,24 +100,12 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
             }
         });
 
-        mScrollView = (ObservableScrollView) findViewById(R.id.scrollview);
         mScrollView.addCallbacks(this);
 
-
-        mScrollViewChild = findViewById(R.id.scroll_view_child);
         mScrollViewChild.setVisibility(View.INVISIBLE);
 
-        mDetailsContainer = findViewById(R.id.details_container);
-        mImageViewContainer = findViewById(R.id.image_container);
         entry = getIntent().getParcelableExtra("news");
-
-        mHeader = findViewById(R.id.header_session);
-        mNewsContent = (TextView) findViewById(R.id.news_content);
-
-        mImageView = (ImageView) findViewById(R.id.news_image);
-        newsTitle = (TextView) findViewById(R.id.news_title);
         newsTitle.setText(entry.title);
-        pubDate = (TextView) findViewById(R.id.pub_date);
         pubDate.setText(DateUtils.getRelativeTimeSpanString(entry.pubDate));
 
 
