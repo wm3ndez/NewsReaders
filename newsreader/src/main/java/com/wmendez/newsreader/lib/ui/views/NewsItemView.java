@@ -41,11 +41,12 @@ import com.wmendez.newsreader.lib.provider.Contract;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import it.subito.masaccio.MasaccioImageView;
 
 public class NewsItemView extends ViewGroup {
 
     @InjectView(R.id.news_image)
-    ImageView image;
+    MasaccioImageView image;
     @InjectView(R.id.favorite_indicator)
     ImageView favorite;
     @InjectView(R.id.news_title)
