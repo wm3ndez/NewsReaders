@@ -17,11 +17,8 @@ import butterknife.InjectView;
 
 public class FeedListAdapter extends CursorRecyclerViewAdapter<FeedListAdapter.ViewHolder> {
 
-    private final Context context;
-
     public FeedListAdapter(Context context, Cursor cursor) {
         super(context, cursor);
-        this.context = context;
     }
 
     @Override
@@ -42,7 +39,6 @@ public class FeedListAdapter extends CursorRecyclerViewAdapter<FeedListAdapter.V
 
     }
 
-
     public class ViewHolder extends RecyclerView.ViewHolder {
         @InjectView(R.id.news_item_view)
         NewsItemView newsItemView;
@@ -52,6 +48,5 @@ public class FeedListAdapter extends CursorRecyclerViewAdapter<FeedListAdapter.V
             super(itemView);
             ButterKnife.inject(this, itemView);
         }
-
     }
 }

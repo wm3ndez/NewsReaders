@@ -11,6 +11,6 @@
     <dimen name="header_elevation">4dp</dimen>
     <dimen name="news_item_padding">0dp</dimen>
     <dimen name="news_item_vertical_spacing">0dp</dimen>
-    <dimen name="card_radius">0dp</dimen>
+    <dimen name="card_radius">2dp</dimen>
     <dimen name="card_elevation">2dp</dimen>
 </resources>
