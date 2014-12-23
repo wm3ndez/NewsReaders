@@ -6,9 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginTop="8dp"
+    android:translationZ="@dimen/card_translation"
     card_view:cardCornerRadius="@dimen/card_radius"
-    card_view:cardElevation="@dimen/card_elevation"
-    android:layout_marginTop="2dp">
+    card_view:cardElevation="@dimen/card_elevation">
 
     <com.wmendez.newsreader.lib.ui.views.NewsItemView
         android:id="@+id/news_item_view"

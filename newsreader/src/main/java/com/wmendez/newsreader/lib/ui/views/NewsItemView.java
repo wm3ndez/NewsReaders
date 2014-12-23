@@ -147,23 +147,31 @@ public class NewsItemView extends ViewGroup {
         if (image.getVisibility() == VISIBLE) {
             layoutView(image, paddingLeft, currentTop, image.getMeasuredWidth(), image.getMeasuredHeight());
             currentTop += getHeightWithMargins(image);
-        }
 
-//        int favoritePosition = getWidthWithMargins(image) + paddingLeft + getPaddingRight() - getWidthWithMargins(favorite);
-//        layoutView(favorite, favoritePosition, 80, newsInfo.getMeasuredWidth(), title.getMeasuredHeight() + pubDate.getMeasuredHeight());
-        if (summary.getVisibility() == VISIBLE)
-            layoutView(newsInfo, paddingLeft, currentTop, newsInfo.getMeasuredWidth(), title.getMeasuredHeight() + pubDate.getMeasuredHeight() + summary.getMeasuredHeight());
-        else
-            layoutView(newsInfo, paddingLeft, currentTop, newsInfo.getMeasuredWidth(), title.getMeasuredHeight() + pubDate.getMeasuredHeight());
+            // int favoritePosition = getWidthWithMargins(image) + paddingLeft + getPaddingRight() - 80;
+            // layoutView(favorite, favoritePosition, 16, newsInfo.getMeasuredWidth(), title.getMeasuredHeight() + pubDate.getMeasuredHeight());
 
-        layoutView(title, paddingLeft, currentTop, title.getMeasuredWidth(), title.getMeasuredHeight());
-        currentTop += getHeightWithMargins(title);
+            layoutView(newsInfo, paddingLeft, currentTop, newsInfo.getMeasuredWidth(),
+                    getHeightWithMargins(title) + getHeightWithMargins(pubDate));
+            layoutView(title, paddingLeft, currentTop, title.getMeasuredWidth(), title.getMeasuredHeight());
+            currentTop += getHeightWithMargins(title);
 
-        layoutView(pubDate, paddingLeft, currentTop, pubDate.getMeasuredWidth(), pubDate.getMeasuredHeight());
-        currentTop += getHeightWithMargins(pubDate);
-        if (summary.getVisibility() == VISIBLE)
+            layoutView(pubDate, paddingLeft, currentTop, pubDate.getMeasuredWidth(), pubDate.getMeasuredHeight());
+
+        } else {
+            // int favoritePosition = getWidthWithMargins(image) + paddingLeft + getPaddingRight() - getWidthWithMargins(favorite);
+            // layoutView(favorite, favoritePosition, 16, newsInfo.getMeasuredWidth(), title.getMeasuredHeight() + pubDate.getMeasuredHeight());
+            layoutView(newsInfo, paddingLeft, currentTop, newsInfo.getMeasuredWidth(),
+                    getHeightWithMargins(title) + getHeightWithMargins(pubDate) + getHeightWithMargins(summary));
+
+            layoutView(title, paddingLeft, currentTop, title.getMeasuredWidth(), title.getMeasuredHeight());
+            currentTop += getHeightWithMargins(title);
+
+            layoutView(pubDate, paddingLeft, currentTop, pubDate.getMeasuredWidth(), pubDate.getMeasuredHeight());
+            currentTop += getHeightWithMargins(pubDate);
+
             layoutView(summary, paddingLeft, currentTop, summary.getMeasuredWidth(), summary.getMeasuredHeight());
-
+        }
 
     }
 

@@ -14,7 +14,6 @@
         android:id="@+id/favorite_indicator"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_alignParentRight="true"
         android:layout_margin="8dp"
         android:padding="2dp"
         android:src="@drawable/ic_favorite_outline_grey" />
@@ -29,6 +28,7 @@
         android:id="@+id/news_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
         android:padding="8dp"
         android:paddingBottom="0dp"
         android:shadowDx="1"
@@ -42,22 +42,26 @@
         android:id="@+id/pub_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="0dp"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
+        android:paddingTop="0dp"
         android:textColor="@color/primary_text"
-        android:textSize="12sp" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/summary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="0dp"
+        android:maxLines="6"
         android:padding="8dp"
         android:paddingTop="0dp"
         android:shadowRadius="1"
         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
         android:textColor="@color/primary_text"
         android:textSize="14sp"
-        android:maxLines="6"
-        android:visibility="gone"
-        />
+        android:visibility="gone" />
 </merge>
