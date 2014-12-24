@@ -100,7 +100,7 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
         cursor = getQuery();
         if (cursor.getCount() == 0) refreshFeed();
 
-        adapter = new FeedListAdapter(activity, cursor);
+        adapter = new FeedListAdapter(cursor);
         final int spanCount = activity.getResources().getInteger(R.integer.columns_count);
         gridView.setLayoutManager(new StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL));
         gridView.setAdapter(adapter);

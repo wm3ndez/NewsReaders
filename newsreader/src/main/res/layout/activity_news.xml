@@ -36,7 +36,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/news_image_size"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/ic_launcher" />
+                    android:src="@drawable/ic_launcher"
+                    android:visibility="gone" />
             </FrameLayout>
 
             <LinearLayout
@@ -58,13 +59,21 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                     android:textColor="@color/primary_text" />
 
-
             </LinearLayout>
+
+            <ProgressBar xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/progressbar"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+
 
             <LinearLayout
                 android:id="@+id/header_session"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/primary"
                 android:clipChildren="false"
                 android:clipToPadding="false"
                 android:orientation="vertical"

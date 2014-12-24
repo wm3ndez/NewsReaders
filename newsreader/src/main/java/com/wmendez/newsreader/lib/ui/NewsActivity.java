@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
@@ -63,12 +64,14 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
     ObservableScrollView mScrollView;
     @InjectView(R.id.image_container)
     View mImageViewContainer;
-    @InjectView(R.id.scroll_view_child)
-    View mScrollViewChild;
     @InjectView(R.id.details_container)
     View mDetailsContainer;
     @InjectView(R.id.header_session)
     View mHeader;
+    @InjectView(R.id.toolbar)
+    Toolbar toolbar;
+    @InjectView(R.id.progressbar)
+    ProgressBar progressBar;
 
     private boolean mHasImage = false;
     private float mMaxHeaderElevation;
@@ -85,22 +88,9 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
         setContentView(R.layout.activity_news);
         ButterKnife.inject(this);
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        toolbar.getNavigationIcon().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
-
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                toolbar.setTitle("");
-            }
-        });
+        setUpToolbar();
 
         mScrollView.addCallbacks(this);
-
-        mScrollViewChild.setVisibility(View.INVISIBLE);
 
         entry = getIntent().getParcelableExtra("news");
         newsTitle.setText(entry.title);
@@ -116,6 +106,18 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
                     getString(R.string.no_content) + "<p> " + entry.description + "</p>"));
         }
         setAdmob();
+    }
+
+    private void setUpToolbar() {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.getNavigationIcon().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                toolbar.setTitle("");
+            }
+        });
     }
 
 
@@ -142,28 +144,31 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
         client.newCall(request).enqueue(new com.squareup.okhttp.Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
-                mNewsContent.setText(Html.fromHtml(
-                        getString(R.string.no_content) + "<p> " + entry.description + "</p>"));
+                setNewsContent(getString(R.string.no_content) + "<p> " + entry.description + "</p>");
             }
 
             @Override
             public void onResponse(Response response) throws IOException {
                 String html = response.body().string();
                 final Document doc = Jsoup.parse(html);
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        setNewsImage(entry);
-                        mNewsContent.setText(Html.fromHtml(Feeds.parser.getHtml(doc, entry.description)));
-                    }
-                });
+                setNewsContent(Html.fromHtml(Feeds.parser.getHtml(doc, entry.description)).toString());
 
             }
         });
     }
 
+    private void setNewsContent(final String html) {
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                setNewsImage(entry);
+                progressBar.setVisibility(View.GONE);
+                mNewsContent.setText(Html.fromHtml(html));
+            }
+        });
+    }
+
     private void setNewsImage(Entry entry) {
-        mScrollViewChild.setVisibility(View.VISIBLE);
         if (entry.image.equals("")) {
             setDefaultStyle();
             return;
@@ -171,6 +176,7 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
         Picasso.with(this).load(entry.image).error(R.drawable.picture_not_available).into(mImageView, new Callback() {
             @Override
             public void onSuccess() {
+                mImageView.setVisibility(View.VISIBLE);
                 Palette palette = Palette.generate(((BitmapDrawable) mImageView.getDrawable()).getBitmap());
                 Palette.Swatch mutedSwatch = palette.getMutedSwatch();
                 mHeader.setBackgroundColor(mutedSwatch.getRgb());
@@ -184,7 +190,6 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
 
             @Override
             public void onError() {
-                mImageView.setImageDrawable(getResources().getDrawable(R.drawable.picture_not_available));
                 setDefaultStyle();
             }
         });

@@ -1,6 +1,5 @@
 package com.wmendez.newsreader.lib.adapters;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,8 +16,8 @@ import butterknife.InjectView;
 
 public class FeedListAdapter extends CursorRecyclerViewAdapter<FeedListAdapter.ViewHolder> {
 
-    public FeedListAdapter(Context context, Cursor cursor) {
-        super(context, cursor);
+    public FeedListAdapter(Cursor cursor) {
+        super(cursor);
     }
 
     @Override
