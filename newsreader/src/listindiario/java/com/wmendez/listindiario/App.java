@@ -16,7 +16,7 @@ public class App extends NewsApp {
 
         Feeds.parser = new NewsHTMLParser() {
             @Override
-            public String getHtml(Document doc) {
+            public String getHtml(Document doc, String description) {
                 Element articleBody = doc.getElementById("ArticleBody");
                 if (articleBody == null) {
                     //Is mobile version

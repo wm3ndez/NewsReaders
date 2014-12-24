@@ -6,6 +6,8 @@ import com.wmendez.newsreader.lib.util.NewsHTMLParser;
 
 import org.jsoup.nodes.Document;
 
+import java.lang.String;
+
 public class App extends NewsApp {
 
     @Override
@@ -14,7 +16,7 @@ public class App extends NewsApp {
 
         Feeds.parser = new NewsHTMLParser() {
             @Override
-            public String getHtml(Document doc) {
+            public String getHtml(Document doc, String description) {
                 return doc.getElementsByClass("cuerpoNoticia").html();
             }
         };

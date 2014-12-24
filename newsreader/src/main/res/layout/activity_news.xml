@@ -7,8 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:orientation="vertical"
-        />
+        android:orientation="vertical" />
 
     <com.wmendez.newsreader.lib.ui.views.ObservableScrollView
         android:id="@+id/scrollview"
@@ -47,8 +46,8 @@
                 android:background="#fff"
                 android:clipToPadding="false"
                 android:orientation="vertical"
-                android:paddingRight="@dimen/keyline_1"
                 android:paddingLeft="@dimen/keyline_2"
+                android:paddingRight="@dimen/keyline_1"
                 android:paddingTop="16dp">
 
 
@@ -57,8 +56,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                    android:textColor="#F000"
-                    />
+                    android:textColor="@color/primary_text" />
 
 
             </LinearLayout>
@@ -83,29 +81,28 @@
                     android:id="@+id/news_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="start"
                     android:layout_marginBottom="0dp"
                     android:layout_marginLeft="@dimen/keyline_2"
                     android:layout_marginRight="@dimen/keyline_1"
                     android:ellipsize="end"
                     android:lineSpacingMultiplier="1.1"
                     android:maxLines="3"
-                    android:text="News Title"
-                    android:layout_gravity="start"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    android:textColor="@color/primary_text" />
 
                 <!-- News subtitle -->
                 <TextView
                     android:id="@+id/pub_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="start"
                     android:layout_marginLeft="@dimen/keyline_2"
                     android:layout_marginRight="@dimen/keyline_1"
                     android:ellipsize="end"
                     android:singleLine="true"
-                    android:text="date"
-                    android:layout_gravity="start"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                    />
+                    android:textColor="@color/secondary_text" />
 
 
             </LinearLayout>

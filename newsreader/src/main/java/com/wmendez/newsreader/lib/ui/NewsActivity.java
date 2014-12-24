@@ -51,7 +51,6 @@ import it.subito.masaccio.MasaccioImageView;
 
 public class NewsActivity extends ActionBarActivity implements ObservableScrollView.Callbacks {
 
-    private AdView adView;
     @InjectView(R.id.news_content)
     TextView mNewsContent;
     @InjectView(R.id.news_image)
@@ -71,7 +70,6 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
     @InjectView(R.id.header_session)
     View mHeader;
 
-    private int mHeaderHeightPixels;
     private boolean mHasImage = false;
     private float mMaxHeaderElevation;
     private int mImageHeightPixels = 0;
@@ -122,7 +120,7 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
 
 
     private void setAdmob() {
-        adView = new AdView(this);
+        AdView adView = new AdView(this);
         adView.setAdUnitId(getString(R.string.admob_id));
         adView.setAdSize(AdSize.BANNER);
         LinearLayout layout = (LinearLayout) findViewById(R.id.admob_view);
@@ -156,7 +154,7 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
                     @Override
                     public void run() {
                         setNewsImage(entry);
-                        mNewsContent.setText(Html.fromHtml(Feeds.parser.getHtml(doc)));
+                        mNewsContent.setText(Html.fromHtml(Feeds.parser.getHtml(doc, entry.description)));
                     }
                 });
 
@@ -207,7 +205,7 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
     }
 
     private void recomputeImageAndScrollingMetrics() {
-        mHeaderHeightPixels = mHeader.getHeight();
+        int mHeaderHeightPixels = mHeader.getHeight();
 
         mImageHeightPixels = 0;
         if (mHasImage) {

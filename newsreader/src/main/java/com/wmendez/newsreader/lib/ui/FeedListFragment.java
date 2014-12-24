@@ -30,19 +30,19 @@ import com.wmendez.newsreader.lib.event.NewsItemSelectedEvent;
 import com.wmendez.newsreader.lib.event.SyncEndedEvent;
 import com.wmendez.newsreader.lib.provider.Contract;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import de.greenrobot.event.EventBus;
 
 
 public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
-    private RecyclerView gridView;
+    @InjectView(R.id.swipe_container)
+    SwipeRefreshLayout swipeLayout;
+    @InjectView(R.id.feed_list)
+    RecyclerView gridView;
+
     private FeedListAdapter adapter;
     Handler mHandler = new Handler();
-
-
-    /**
-     * The current activated item position. Only used on tablets.
-     */
-    private SwipeRefreshLayout swipeLayout;
     private Cursor cursor;
     private ContentResolver contentResolver;
     private String category = "";
@@ -87,8 +87,8 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
         FragmentActivity activity = getActivity();
         contentResolver = activity.getContentResolver();
         View rootView = inflater.inflate(R.layout.fragment_feed_list, container, false);
+        ButterKnife.inject(this, rootView);
 
-        swipeLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_container);
         swipeLayout.setOnRefreshListener(this);
         swipeLayout.setColorSchemeResources(
                 android.R.color.holo_blue_bright,
@@ -98,11 +98,9 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
         );
 
         cursor = getQuery();
-        if (cursor.getCount() == 0) {
-            refreshFeed();
-        }
+        if (cursor.getCount() == 0) refreshFeed();
+
         adapter = new FeedListAdapter(activity, cursor);
-        gridView = (RecyclerView) rootView.findViewById(R.id.feed_list);
         final int spanCount = activity.getResources().getInteger(R.integer.columns_count);
         gridView.setLayoutManager(new StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL));
         gridView.setAdapter(adapter);
@@ -116,7 +114,6 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
         }));
 
         setAdmob(rootView);
-
 
         return rootView;
     }

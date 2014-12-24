@@ -2,7 +2,6 @@ package com.wmendez.diariolibre;
 
 import android.app.Application;
 
-import com.wmendez.newsreader.lib.accounts.AccountUtils;
 import com.wmendez.newsreader.lib.helpers.Feeds;
 import com.wmendez.newsreader.lib.util.NewsHTMLParser;
 
@@ -16,12 +15,12 @@ public class App extends Application {
 
         Feeds.parser = new NewsHTMLParser() {
             @Override
-            public String getHtml(Document doc) {
+            public String getHtml(Document doc, String description) {
                 try {
                     return doc.getElementById("newstext").html();
                 } catch (NullPointerException e) {
                     //No News
-                    return "<h4 style='text-align:center;'>Oh oh! Esta noticia no existe.</h4>";
+                    return description;
                 }
             }
         };
