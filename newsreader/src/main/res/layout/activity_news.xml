@@ -38,7 +38,15 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_launcher"
                     android:visibility="gone" />
+
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#20000000" />
             </FrameLayout>
+
 
             <LinearLayout
                 android:id="@+id/details_container"
@@ -78,12 +86,6 @@
                 android:clipToPadding="false"
                 android:orientation="vertical"
                 android:paddingBottom="16dp">
-
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@null" />
 
                 <!-- News title -->
                 <TextView

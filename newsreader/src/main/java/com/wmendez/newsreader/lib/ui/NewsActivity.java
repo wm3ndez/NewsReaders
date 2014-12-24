@@ -151,7 +151,7 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
             public void onResponse(Response response) throws IOException {
                 String html = response.body().string();
                 final Document doc = Jsoup.parse(html);
-                setNewsContent(Html.fromHtml(Feeds.parser.getHtml(doc, entry.description)).toString());
+                setNewsContent(Feeds.parser.getHtml(doc, entry.description));
 
             }
         });
