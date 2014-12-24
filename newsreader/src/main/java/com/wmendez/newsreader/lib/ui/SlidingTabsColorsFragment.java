@@ -104,7 +104,7 @@ public class SlidingTabsColorsFragment extends Fragment {
             mTabs.add(new PagerItem(
                     category,
                     getResources().getColor(R.color.accent), // Indicator color
-                    Color.WHITE // Divider color
+                    Color.TRANSPARENT // Divider color
             ));
         }
     }
