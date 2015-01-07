@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="news_image_size">200dp</dimen>
+    <dimen name="news_image_size">260dp</dimen>
     <dimen name="default_padding">8dp</dimen>
     <dimen name="news_activity_padding">4dp</dimen>
 
