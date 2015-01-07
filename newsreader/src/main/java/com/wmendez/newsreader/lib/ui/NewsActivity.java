@@ -179,9 +179,14 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
                 mImageView.setVisibility(View.VISIBLE);
                 Palette palette = Palette.generate(((BitmapDrawable) mImageView.getDrawable()).getBitmap());
                 Palette.Swatch mutedSwatch = palette.getMutedSwatch();
-                mHeader.setBackgroundColor(mutedSwatch.getRgb());
-                setStatusBarColor(mutedSwatch.getRgb());
-                mImageViewContainer.setBackgroundColor(mutedSwatch.getRgb());
+                try {
+                    mHeader.setBackgroundColor(mutedSwatch.getRgb());
+                    setStatusBarColor(mutedSwatch.getRgb());
+                    mImageViewContainer.setBackgroundColor(mutedSwatch.getRgb());
+                }catch (NullPointerException ex){
+                    setDefaultStyle();
+                    return;
+                }
                 newsTitle.setTextColor(mutedSwatch.getTitleTextColor());
                 pubDate.setTextColor(mutedSwatch.getTitleTextColor());
                 mHasImage = true;
