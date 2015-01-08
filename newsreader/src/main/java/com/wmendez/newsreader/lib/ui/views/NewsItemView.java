@@ -55,8 +55,6 @@ public class NewsItemView extends ViewGroup {
     TextView summary;
     @InjectView(R.id.pub_date)
     TextView pubDate;
-    @InjectView(R.id.news_info)
-    View newsInfo;
 
     Context mContext;
     private Entry mEntry;
@@ -123,7 +121,6 @@ public class NewsItemView extends ViewGroup {
         }
 
         measureChildWithMargins(favorite, widthMeasureSpec, 0, heightMeasureSpec, 0);
-        measureChildWithMargins(newsInfo, widthMeasureSpec, 0, heightMeasureSpec, heightUsed);
 
         measureChildWithMargins(title, widthMeasureSpec, 0, heightMeasureSpec, heightUsed);
         heightUsed += getMeasuredHeightWithMargins(title);
@@ -152,19 +149,12 @@ public class NewsItemView extends ViewGroup {
             // int favoritePosition = getWidthWithMargins(image) + paddingLeft + getPaddingRight() - 80;
             // layoutView(favorite, favoritePosition, 16, newsInfo.getMeasuredWidth(), title.getMeasuredHeight() + pubDate.getMeasuredHeight());
 
-            layoutView(newsInfo, paddingLeft, currentTop, newsInfo.getMeasuredWidth(),
-                    getHeightWithMargins(title) + getHeightWithMargins(pubDate));
             layoutView(title, paddingLeft, currentTop, title.getMeasuredWidth(), title.getMeasuredHeight());
             currentTop += getHeightWithMargins(title);
 
             layoutView(pubDate, paddingLeft, currentTop, pubDate.getMeasuredWidth(), pubDate.getMeasuredHeight());
 
         } else {
-            // int favoritePosition = getWidthWithMargins(image) + paddingLeft + getPaddingRight() - getWidthWithMargins(favorite);
-            // layoutView(favorite, favoritePosition, 16, newsInfo.getMeasuredWidth(), title.getMeasuredHeight() + pubDate.getMeasuredHeight());
-            layoutView(newsInfo, paddingLeft, currentTop, newsInfo.getMeasuredWidth(),
-                    getHeightWithMargins(title) + getHeightWithMargins(pubDate) + getHeightWithMargins(summary));
-
             layoutView(title, paddingLeft, currentTop, title.getMeasuredWidth(), title.getMeasuredHeight());
             currentTop += getHeightWithMargins(title);
 
@@ -229,7 +219,7 @@ public class NewsItemView extends ViewGroup {
                 Palette palette = Palette.generate(((BitmapDrawable) image.getDrawable()).getBitmap());
                 Palette.Swatch mutedSwatch = palette.getMutedSwatch();
                 try {
-                    newsInfo.setBackgroundColor(mutedSwatch.getRgb());
+                    setBackgroundColor(mutedSwatch.getRgb());
                     int titleTextColor = mutedSwatch.getTitleTextColor();
                     title.setTextColor(titleTextColor);
                     pubDate.setTextColor(titleTextColor);

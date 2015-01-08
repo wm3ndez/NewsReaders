@@ -22,12 +22,6 @@
         android:padding="2dp"
         android:src="@drawable/ic_favorite_outline_grey" />
 
-    <View
-        android:id="@+id/news_info"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@color/gray" />
-
     <TextView
         android:id="@+id/news_title"
         android:layout_width="match_parent"
