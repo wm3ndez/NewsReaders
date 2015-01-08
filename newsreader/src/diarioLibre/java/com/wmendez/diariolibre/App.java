@@ -1,13 +1,12 @@
 package com.wmendez.diariolibre;
 
-import android.app.Application;
-
+import com.wmendez.newsreader.lib.NewsApp;
 import com.wmendez.newsreader.lib.helpers.Feeds;
 import com.wmendez.newsreader.lib.util.NewsHTMLParser;
 
 import org.jsoup.nodes.Document;
 
-public class App extends Application {
+public class App extends NewsApp {
 
     @Override
     public void onCreate() {
