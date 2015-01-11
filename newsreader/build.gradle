@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 21
@@ -87,8 +88,8 @@ android {
         diariolibre {
             applicationId "com.wmendez.diariolibre"
             manifestPlaceholders = [
-                    appName: ".App",
-                    mainActivity:"com.wmendez.diariolibre.MainActivity"
+                    appName     : ".App",
+                    mainActivity: "com.wmendez.diariolibre.MainActivity"
             ]
             signingConfig diariolibreSigningConfig
 
@@ -97,8 +98,8 @@ android {
         elcaribe {
             applicationId "com.wmendez.elcaribe"
             manifestPlaceholders = [
-                    appName: ".App",
-                    mainActivity:"com.wmendez.elcaribe.MainActivity"
+                    appName     : ".App",
+                    mainActivity: "com.wmendez.elcaribe.MainActivity"
             ]
             signingConfig elcaribeSigningConfig
         }
@@ -106,15 +107,18 @@ android {
         listindiario {
             applicationId "com.wmendez.listindiario"
             manifestPlaceholders = [
-                    appName: ".App",
-                    mainActivity:"com.wmendez.listindiario.MainActivity"
+                    appName     : ".App",
+                    mainActivity: "com.wmendez.listindiario.MainActivity"
             ]
             signingConfig listindiarioSigningConfig
         }
 
     }
 }
-
+repositories {
+    mavenCentral()
+    maven { url 'https://maven.fabric.io/public' }
+}
 
 dependencies {
     compile 'com.android.support:support-v4:21.0.3'
@@ -133,5 +137,8 @@ dependencies {
     compile 'com.squareup.retrofit:retrofit:1.8.0'
     compile 'com.jakewharton:butterknife:5.1.2'
     compile 'it.subito:masaccio-library:1.0.0'
+    compile('com.crashlytics.sdk.android:crashlytics:2.2.0@aar') {
+        transitive = true;
+    }
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }

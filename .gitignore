@@ -10,3 +10,4 @@ build/
 *.class
 gradle-wrapper.jar
 strings_private.xml
+crashlytics*properties
