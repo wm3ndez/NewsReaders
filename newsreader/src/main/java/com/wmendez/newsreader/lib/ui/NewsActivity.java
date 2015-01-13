@@ -96,7 +96,6 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
         newsTitle.setText(entry.title);
         pubDate.setText(DateUtils.getRelativeTimeSpanString(entry.pubDate));
 
-
         mMaxHeaderElevation = getResources().getDimensionPixelSize(R.dimen.header_elevation);
         try {
             fetchNews(entry);
@@ -111,13 +110,15 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
     private void setUpToolbar() {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.getNavigationIcon().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                toolbar.setTitle("");
-            }
-        });
+        if (toolbar != null) {
+            toolbar.getNavigationIcon().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    toolbar.setTitle("");
+                }
+            });
+        }
     }
 
 
@@ -136,25 +137,8 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
 
     private void fetchNews(final Entry entry) throws IOException {
         OkHttpClient client = new OkHttpClient();
-
-        final Request request = new Request.Builder()
-                .url(entry.link)
-                .build();
-
-        client.newCall(request).enqueue(new com.squareup.okhttp.Callback() {
-            @Override
-            public void onFailure(Request request, IOException e) {
-                setNewsContent(getString(R.string.no_content) + "<p> " + entry.description + "</p>");
-            }
-
-            @Override
-            public void onResponse(Response response) throws IOException {
-                String html = response.body().string();
-                final Document doc = Jsoup.parse(html);
-                setNewsContent(Feeds.parser.getHtml(doc, entry.description));
-
-            }
-        });
+        final Request request = new Request.Builder().url(entry.link).build();
+        client.newCall(request).enqueue(new FetchNewsCallback());
     }
 
     private void setNewsContent(final String html) {
@@ -163,7 +147,10 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
             public void run() {
                 setNewsImage(entry);
                 progressBar.setVisibility(View.GONE);
-                mNewsContent.setText(Html.fromHtml(html));
+                if (html != null)
+                    mNewsContent.setText(Html.fromHtml(html));
+                else
+                    setNewsContent(getString(R.string.no_content) + "<p> " + entry.description + "</p>");
             }
         });
     }
@@ -183,7 +170,7 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
                     mHeader.setBackgroundColor(mutedSwatch.getRgb());
                     setStatusBarColor(mutedSwatch.getRgb());
                     mImageViewContainer.setBackgroundColor(mutedSwatch.getRgb());
-                }catch (NullPointerException ex){
+                } catch (NullPointerException ex) {
                     setDefaultStyle();
                     return;
                 }
@@ -331,4 +318,21 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
         // Move background photo (parallax effect)
         mImageViewContainer.setTranslationY(scrollY * 0.5f);
     }
+
+    class FetchNewsCallback implements com.squareup.okhttp.Callback {
+
+        @Override
+        public void onFailure(Request request, IOException e) {
+            setNewsContent(getString(R.string.no_content) + "<p> " + entry.description + "</p>");
+        }
+
+        @Override
+        public void onResponse(Response response) throws IOException {
+            String html = response.body().string();
+            final Document doc = Jsoup.parse(html);
+            setNewsContent(Feeds.parser.getHtml(doc, entry.description));
+
+        }
+    }
+
 }
