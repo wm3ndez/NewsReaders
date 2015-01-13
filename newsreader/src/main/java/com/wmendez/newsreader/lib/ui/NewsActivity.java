@@ -88,7 +88,8 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
         setContentView(R.layout.activity_news);
         ButterKnife.inject(this);
 
-        setUpToolbar();
+        if (toolbar != null)
+            setUpToolbar();
 
         mScrollView.addCallbacks(this);
 
@@ -110,17 +111,14 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
     private void setUpToolbar() {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        if (toolbar != null) {
-            toolbar.getNavigationIcon().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    toolbar.setTitle("");
-                }
-            });
-        }
+        toolbar.getNavigationIcon().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                toolbar.setTitle("");
+            }
+        });
     }
-
 
     private void setAdmob() {
         AdView adView = new AdView(this);
