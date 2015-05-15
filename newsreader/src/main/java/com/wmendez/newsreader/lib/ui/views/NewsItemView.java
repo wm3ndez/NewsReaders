@@ -18,6 +18,7 @@ package com.wmendez.newsreader.lib.ui.views;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
@@ -177,18 +178,12 @@ public class NewsItemView extends ViewGroup {
     }
 
 
-    public void reDraw() {
-        requestLayout();
-        invalidate();
-    }
-
     public void setContent(final Entry entry) {
         mEntry = entry;
 
         if (mEntry.image.equals("")) {
             image.setVisibility(GONE);
             summary.setVisibility(VISIBLE);
-            reDraw();
         } else {
             image.setVisibility(VISIBLE);
             summary.setVisibility(GONE);
@@ -213,7 +208,7 @@ public class NewsItemView extends ViewGroup {
     }
 
     private void fetchImage() {
-        Picasso.with(mContext).load(mEntry.image).placeholder(R.drawable.ic_launcher).into(image, new Callback() {
+        Picasso.with(mContext).load(mEntry.image).config(Bitmap.Config.RGB_565).placeholder(R.drawable.ic_launcher).into(image, new Callback() {
             @Override
             public void onSuccess() {
                 Palette palette = Palette.generate(((BitmapDrawable) image.getDrawable()).getBitmap());
@@ -234,7 +229,6 @@ public class NewsItemView extends ViewGroup {
             public void onError() {
                 image.setVisibility(GONE);
                 summary.setVisibility(VISIBLE);
-                reDraw();
             }
         });
     }
