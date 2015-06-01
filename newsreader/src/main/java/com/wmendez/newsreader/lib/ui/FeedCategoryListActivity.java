@@ -3,7 +3,7 @@ package com.wmendez.newsreader.lib.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.wmendez.newsreader.lib.R;
@@ -19,7 +19,7 @@ import de.greenrobot.event.EventBus;
  * {@link com.wmendez.newsreader.lib.ui.FeedListFragment}.
  * <p/>
  */
-public class FeedCategoryListActivity extends ActionBarActivity {
+public class FeedCategoryListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
