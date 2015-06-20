@@ -1,17 +1,17 @@
 package com.wmendez.newsreader.lib.ui;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ShareCompat;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -20,37 +20,31 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
 import com.wmendez.newsreader.lib.R;
 import com.wmendez.newsreader.lib.event.FavoriteChangedEvent;
 import com.wmendez.newsreader.lib.helpers.Entry;
-import com.wmendez.newsreader.lib.helpers.Feeds;
 import com.wmendez.newsreader.lib.provider.Contract;
 import com.wmendez.newsreader.lib.ui.views.ObservableScrollView;
 import com.wmendez.newsreader.lib.util.Utils;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-
-import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import de.greenrobot.event.EventBus;
 import it.subito.masaccio.MasaccioImageView;
 
-public class NewsActivity extends ActionBarActivity implements ObservableScrollView.Callbacks {
+public class NewsActivity extends AppCompatActivity implements ObservableScrollView.Callbacks {
 
     @InjectView(R.id.news_content)
     TextView mNewsContent;
@@ -77,7 +71,7 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
     private float mMaxHeaderElevation;
     private int mImageHeightPixels = 0;
     private Handler mHandler = new Handler();
-
+    private Interpolator mInterpolator;
     private Entry entry;
     private MenuItem favoriteItem;
 
@@ -88,25 +82,35 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
         setContentView(R.layout.activity_news);
         ButterKnife.inject(this);
 
-        if (toolbar != null)
-            setUpToolbar();
-
-        mScrollView.addCallbacks(this);
+        mInterpolator = AnimationUtils.loadInterpolator(this, android.R.interpolator.fast_out_slow_in);
 
         entry = getIntent().getParcelableExtra("news");
+        populate();
+
+        if (toolbar != null)
+            setUpToolbar();
+        setAdmob();
+    }
+
+
+    public static Intent getStartIntent(Context context, Entry entry) {
+        Intent starter = new Intent(context, NewsActivity.class);
+        starter.putExtra("news", entry);
+        return starter;
+    }
+
+    public void populate() {
+        mScrollView.addCallbacks(this);
+
         newsTitle.setText(entry.title);
         pubDate.setText(DateUtils.getRelativeTimeSpanString(entry.pubDate));
 
         mMaxHeaderElevation = getResources().getDimensionPixelSize(R.dimen.header_elevation);
-        try {
-            fetchNews(entry);
-        } catch (IOException e) {
-            e.printStackTrace();
-            mNewsContent.setText(Html.fromHtml(
-                    getString(R.string.no_content) + "<p> " + entry.description + "</p>"));
-        }
-        setAdmob();
+        mNewsContent.setText(Html.fromHtml(getString(R.string.no_content) + "<p> " + entry.description + "</p>"));
+        setNewsImage();
+
     }
+
 
     private void setUpToolbar() {
         setSupportActionBar(toolbar);
@@ -133,63 +137,58 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
 
     }
 
-    private void fetchNews(final Entry entry) throws IOException {
-        OkHttpClient client = new OkHttpClient();
-        final Request request = new Request.Builder().url(entry.link).build();
-        client.newCall(request).enqueue(new FetchNewsCallback());
-    }
 
-    private void setNewsContent(final String html) {
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                setNewsImage(entry);
-                progressBar.setVisibility(View.GONE);
-                if (html != null)
-                    mNewsContent.setText(Html.fromHtml(html));
-                else
-                    setNewsContent(getString(R.string.no_content) + "<p> " + entry.description + "</p>");
-            }
-        });
-    }
-
-    private void setNewsImage(Entry entry) {
+    private void setNewsImage() {
         if (entry.image.equals("")) {
             setDefaultStyle();
             return;
         }
-        Picasso.with(this).load(entry.image).error(R.drawable.picture_not_available).into(mImageView, new Callback() {
-            @Override
-            public void onSuccess() {
-                mImageView.setVisibility(View.VISIBLE);
-                Palette palette = Palette.generate(((BitmapDrawable) mImageView.getDrawable()).getBitmap());
-                Palette.Swatch mutedSwatch = palette.getMutedSwatch();
-                try {
-                    mHeader.setBackgroundColor(mutedSwatch.getRgb());
-                    setStatusBarColor(mutedSwatch.getRgb());
-                    mImageViewContainer.setBackgroundColor(mutedSwatch.getRgb());
-                } catch (NullPointerException ex) {
-                    setDefaultStyle();
-                    return;
-                }
-                newsTitle.setTextColor(mutedSwatch.getTitleTextColor());
-                pubDate.setTextColor(mutedSwatch.getTitleTextColor());
-                mHasImage = true;
-                recomputeImageAndScrollingMetrics();
-            }
 
-            @Override
-            public void onError() {
-                setDefaultStyle();
-            }
-        });
+        mImageView.setVisibility(View.VISIBLE);
+
+        Glide.with(this)
+                .load(entry.image)
+                .asBitmap()
+                .into(new BitmapImageViewTarget(mImageView) {
+                    @Override
+                    public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
+                        super.onResourceReady(bitmap, anim);
+
+                        mImageView.setScaleX(0);
+                        mImageView.setScaleY(0);
+                        mImageView.animate().scaleX(1).scaleY(1).setInterpolator(mInterpolator).setStartDelay(300);
+
+                        Palette.Builder builder = new Palette.Builder(bitmap);
+                        builder.generate(new Palette.PaletteAsyncListener() {
+                            @Override
+                            public void onGenerated(Palette palette) {
+                                Palette.Swatch mutedSwatch = palette.getMutedSwatch();
+                                try {
+                                    mHeader.setBackgroundColor(mutedSwatch.getRgb());
+                                    setStatusBarColor(mutedSwatch.getRgb());
+                                    mImageViewContainer.setBackgroundColor(mutedSwatch.getRgb());
+                                } catch (NullPointerException ex) {
+                                    setDefaultStyle();
+                                    return;
+                                }
+                                newsTitle.setTextColor(mutedSwatch.getTitleTextColor());
+                                pubDate.setTextColor(mutedSwatch.getTitleTextColor());
+                                mHasImage = true;
+                                recomputeImageAndScrollingMetrics();
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                        setDefaultStyle();
+                    }
+                });
 
     }
 
     private void setStatusBarColor(int mutedColor) {
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setStatusBarColor(mutedColor);
-        }
+        getWindow().setStatusBarColor(mutedColor);
     }
 
     private void setDefaultStyle() {
@@ -231,7 +230,7 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
-            onBackPressed();
+            finishAfterTransition();
             return true;
         } else if (id == R.id.menu_item_favorite) {
             setFavorite();
@@ -315,22 +314,6 @@ public class NewsActivity extends ActionBarActivity implements ObservableScrollV
 
         // Move background photo (parallax effect)
         mImageViewContainer.setTranslationY(scrollY * 0.5f);
-    }
-
-    class FetchNewsCallback implements com.squareup.okhttp.Callback {
-
-        @Override
-        public void onFailure(Request request, IOException e) {
-            setNewsContent(getString(R.string.no_content) + "<p> " + entry.description + "</p>");
-        }
-
-        @Override
-        public void onResponse(Response response) throws IOException {
-            String html = response.body().string();
-            final Document doc = Jsoup.parse(html);
-            setNewsContent(Feeds.parser.getHtml(doc, entry.description));
-
-        }
     }
 
 }

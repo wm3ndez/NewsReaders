@@ -1,6 +1,7 @@
 package com.wmendez.newsreader.lib.ui;
 
 import android.accounts.Account;
+import android.app.ActivityOptions;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,9 +28,12 @@ import com.wmendez.newsreader.lib.R;
 import com.wmendez.newsreader.lib.adapters.FeedListAdapter;
 import com.wmendez.newsreader.lib.adapters.RecyclerItemClickListener;
 import com.wmendez.newsreader.lib.event.FavoriteChangedEvent;
-import com.wmendez.newsreader.lib.event.NewsItemSelectedEvent;
 import com.wmendez.newsreader.lib.event.SyncEndedEvent;
+import com.wmendez.newsreader.lib.helpers.Entry;
 import com.wmendez.newsreader.lib.provider.Contract;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -46,6 +51,7 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
     private Cursor cursor;
     private ContentResolver contentResolver;
     private String category = "";
+    private FragmentActivity activity;
 
     @Override
     public void onRefresh() {
@@ -84,11 +90,16 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        FragmentActivity activity = getActivity();
+        activity = getActivity();
         contentResolver = activity.getContentResolver();
         View rootView = inflater.inflate(R.layout.fragment_feed_list, container, false);
         ButterKnife.inject(this, rootView);
 
+        return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         swipeLayout.setOnRefreshListener(this);
         swipeLayout.setColorSchemeResources(
                 android.R.color.holo_blue_bright,
@@ -97,6 +108,20 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
                 android.R.color.holo_red_light
         );
 
+        setUpGridView();
+        setAdmob(view);
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    private void setUpGridView() {
+        gridView.addOnItemTouchListener(new RecyclerItemClickListener(activity, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+//                EventBus.getDefault().post(new NewsItemSelectedEvent(adapter.getEntry(position)));
+                startNewsActivityWithTransition(view.findViewById(R.id.news_title), adapter.getEntry(position));
+            }
+        }));
+
         cursor = getQuery();
         if (cursor.getCount() == 0) refreshFeed();
 
@@ -104,19 +129,37 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
         final int spanCount = activity.getResources().getInteger(R.integer.columns_count);
         gridView.setLayoutManager(new StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL));
         gridView.setAdapter(adapter);
-
-
-        gridView.addOnItemTouchListener(new RecyclerItemClickListener(activity, new RecyclerItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                EventBus.getDefault().post(new NewsItemSelectedEvent(adapter.getEntry(position)));
-            }
-        }));
-
-        setAdmob(rootView);
-
-        return rootView;
     }
+
+    private void startNewsActivityWithTransition(View toolbar, Entry entry) {
+
+        // Avoid system UI glitches as described here:
+        // https://plus.google.com/+AlexLockwood/posts/RPtwZ5nNebb
+        View decor = activity.getWindow().getDecorView();
+        View statusBar = decor.findViewById(android.R.id.statusBarBackground);
+        View navBar = decor.findViewById(android.R.id.navigationBarBackground);
+
+        // Create pair of transition participants.
+        List<Pair> participants = new ArrayList<>(3);
+        participants.add(new Pair<>(toolbar, activity.getString(R.string.transition_toolbar)));
+        addNonNullViewToTransitionParticipants(statusBar, participants);
+        addNonNullViewToTransitionParticipants(navBar, participants);
+        @SuppressWarnings("unchecked")
+        ActivityOptions sceneTransitionAnimation = ActivityOptions
+                .makeSceneTransitionAnimation(activity, participants.toArray(new Pair[participants.size()]));
+
+        // Starts the activity with the participants, animating from one to the other.
+        final Bundle transitionBundle = sceneTransitionAnimation.toBundle();
+        activity.startActivity(NewsActivity.getStartIntent(activity, entry), transitionBundle);
+    }
+
+    private void addNonNullViewToTransitionParticipants(View view, List<Pair> participants) {
+        if (view == null) {
+            return;
+        }
+        participants.add(new Pair<>(view, view.getTransitionName()));
+    }
+
 
     private void refreshFeed() {
         swipeLayout.setRefreshing(true);

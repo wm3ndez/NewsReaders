@@ -1,6 +1,6 @@
 package com.wmendez.diariolibre;
 
-import com.squareup.leakcanary.LeakCanary;
+//import com.squareup.leakcanary.LeakCanary;
 import com.wmendez.newsreader.lib.NewsApp;
 import com.wmendez.newsreader.lib.helpers.Feeds;
 import com.wmendez.newsreader.lib.util.NewsHTMLParser;
@@ -25,7 +25,7 @@ public class App extends NewsApp {
             }
         };
 
-        LeakCanary.install(this);
+//        LeakCanary.install(this);
     }
 
 }

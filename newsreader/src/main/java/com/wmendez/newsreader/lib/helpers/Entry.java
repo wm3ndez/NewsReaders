@@ -8,6 +8,7 @@ import android.os.Parcelable;
 import com.wmendez.newsreader.lib.provider.Contract;
 
 public class Entry implements Parcelable {
+    public static final String TAG = "Entry";
     public String title;
     public String link;
     public String description;

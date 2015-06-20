@@ -20,7 +20,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.graphics.Palette;
@@ -33,8 +33,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.wmendez.newsreader.lib.R;
 import com.wmendez.newsreader.lib.helpers.Entry;
 import com.wmendez.newsreader.lib.provider.Contract;
@@ -208,29 +209,39 @@ public class NewsItemView extends ViewGroup {
     }
 
     private void fetchImage() {
-        Picasso.with(mContext).load(mEntry.image).config(Bitmap.Config.RGB_565).placeholder(R.drawable.ic_launcher).into(image, new Callback() {
-            @Override
-            public void onSuccess() {
-                Palette palette = Palette.generate(((BitmapDrawable) image.getDrawable()).getBitmap());
-                Palette.Swatch mutedSwatch = palette.getMutedSwatch();
-                try {
-                    setBackgroundColor(mutedSwatch.getRgb());
-                    int titleTextColor = mutedSwatch.getTitleTextColor();
-                    title.setTextColor(titleTextColor);
-                    pubDate.setTextColor(titleTextColor);
-                    summary.setTextColor(titleTextColor);
-                } catch (NullPointerException ex) {
-                    ex.printStackTrace();
-                }
+        Glide.with(getContext())
+                .load(mEntry.image)
+                .asBitmap()
+                .into(new BitmapImageViewTarget(image) {
+                    @Override
+                    public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
+                        super.onResourceReady(bitmap, anim);
+                        Palette.Builder builder = new Palette.Builder(bitmap);
+                        builder.generate(new Palette.PaletteAsyncListener() {
+                            @Override
+                            public void onGenerated(Palette palette) {
+                                Palette.Swatch mutedSwatch = palette.getMutedSwatch();
+                                try {
+                                    setBackgroundColor(mutedSwatch.getRgb());
+                                    int titleTextColor = mutedSwatch.getTitleTextColor();
+                                    title.setTextColor(titleTextColor);
+                                    pubDate.setTextColor(titleTextColor);
+                                    summary.setTextColor(titleTextColor);
+                                } catch (NullPointerException ex) {
+                                    ex.printStackTrace();
+                                }
+                            }
+                        });
+                    }
 
-            }
+                    @Override
+                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                        image.setVisibility(GONE);
+                        summary.setVisibility(VISIBLE);
+                    }
 
-            @Override
-            public void onError() {
-                image.setVisibility(GONE);
-                summary.setVisibility(VISIBLE);
-            }
-        });
+                });
+
     }
 
     @OnClick(R.id.favorite_indicator)
