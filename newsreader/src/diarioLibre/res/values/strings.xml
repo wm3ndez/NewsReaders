@@ -6,17 +6,17 @@
     <string-array name="categories">
         <item>Noticias</item>
         <item>Economía</item>
-        <item>Actualidad</item>
+        <!--<item>Actualidad</item>-->
         <item>Revista</item>
         <item>Deportes</item>
         <item>Opinión</item>
         <item>Ecos</item>
-        <item>Lecturas</item>
-        <item>DL English</item>
-        <item>DL Educación</item>
+        <!--<item>Lecturas</item>-->
+        <!--<item>DL English</item>-->
+        <!--<item>DL Educación</item>-->
         <item>Tecnología</item>
-        <item>Espacios</item>
-        <item>Habitat</item>
-        <item>Fotonoticias</item>
+        <!--<item>Espacios</item>-->
+        <!--<item>Habitat</item>-->
+        <!--<item>Fotonoticias</item>-->
     </string-array>
 </resources>

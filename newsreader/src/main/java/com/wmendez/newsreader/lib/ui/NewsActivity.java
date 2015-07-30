@@ -64,8 +64,6 @@ public class NewsActivity extends AppCompatActivity implements ObservableScrollV
     View mHeader;
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
-    @InjectView(R.id.progressbar)
-    ProgressBar progressBar;
 
     private boolean mHasImage = false;
     private float mMaxHeaderElevation;
@@ -106,7 +104,7 @@ public class NewsActivity extends AppCompatActivity implements ObservableScrollV
         pubDate.setText(DateUtils.getRelativeTimeSpanString(entry.pubDate));
 
         mMaxHeaderElevation = getResources().getDimensionPixelSize(R.dimen.header_elevation);
-        mNewsContent.setText(Html.fromHtml(getString(R.string.no_content) + "<p> " + entry.description + "</p>"));
+        mNewsContent.setText(Html.fromHtml(entry.description));
         setNewsImage();
 
     }
