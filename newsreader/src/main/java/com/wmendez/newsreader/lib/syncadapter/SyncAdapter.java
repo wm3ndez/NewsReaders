@@ -13,7 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.squareup.okhttp.OkHttpClient;
-import com.wmendez.newsreader.lib.BuildConfig;
+import com.wmendez.diariolibre.BuildConfig;
 import com.wmendez.newsreader.lib.event.SyncEndedEvent;
 import com.wmendez.newsreader.lib.helpers.Entry;
 import com.wmendez.newsreader.lib.net.NewsAPI;
@@ -83,6 +83,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         api = new RestAdapter.Builder()
                 .setClient(getUnsafeOkHttpClient())
                 .setEndpoint(NewsAPI.getAPIUrl(mContext))
+                .setLogLevel(RestAdapter.LogLevel.FULL)
                 .build()
                 .create(NewsAPI.API.class);
     }
@@ -135,12 +136,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         Long datetime = PrefUtils.getLastSync(mContext);
 
         try {
-            List<Entry> entryList = api.newsList(BuildConfig.FLAVOR, datetime);
+            List<Entry> entryList = api.newsList("diariolibre", datetime);
             for (Entry entry : entryList) {
                 insertEntry(entry);
             }
             PrefUtils.setLastSync(mContext, new Date().getTime());
         } catch (RetrofitError retrofitError) {
+            Log.e(TAG, "Network synchronization complete", retrofitError);
         }
         EventBus.getDefault().post(new SyncEndedEvent());
         Log.i(TAG, "Network synchronization complete");

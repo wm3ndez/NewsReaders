@@ -11,8 +11,49 @@
     <string name="no_content"><![CDATA[<h3>Resumen...</h3>]]></string>
     <string name="fetch_news_error">No se pudo obtener las noticias.  Intente mas tarde.</string>
 
-    <string name="account_type"/>
+    <string name="account_type">com.wmendez.diariolibre.syncadapter</string>
     <string name="account_authority">@string/account_type</string>
-    <string-array name="categories"/>
+    <string-array name="categories" />
+
+
+    <string-array name="categories_diario_libre">
+        <item>Noticias</item>
+        <item>Economía</item>
+        <!--<item>Actualidad</item>-->
+        <item>Revista</item>
+        <item>Deportes</item>
+        <item>Opinión</item>
+        <item>Ecos</item>
+        <!--<item>Lecturas</item>-->
+        <!--<item>DL English</item>-->
+        <!--<item>DL Educación</item>-->
+        <item>Tecnología</item>
+        <!--<item>Espacios</item>-->
+        <!--<item>Habitat</item>-->
+        <!--<item>Fotonoticias</item>-->
+    </string-array>
+
+    <string-array name="categories_el_caribe">
+        <item>Portada</item>
+        <item>Panorama</item>
+        <item>Deportes</item>
+        <item>Gente</item>
+        <item>Opiniones</item>
+    </string-array>
+
+    <string-array name="categories_listindiario">
+        <item>Portada</item>
+        <item>El Norte</item>
+        <item>Economía &amp; Negocios</item>
+        <item>Editorial</item>
+        <item>Puntos de vista</item>
+        <item>Ventana</item>
+        <item>La República</item>
+        <item>Las Mundiales</item>
+        <item>La Vida</item>
+        <item>El Deporte</item>
+        <item>Entretenimiento</item>
+        <item>Las Sociales</item>
+    </string-array>
 
 </resources>

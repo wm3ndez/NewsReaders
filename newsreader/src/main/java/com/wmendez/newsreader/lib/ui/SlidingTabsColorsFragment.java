@@ -25,7 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.wmendez.newsreader.lib.R;
+import com.wmendez.diariolibre.R;
 import com.wmendez.newsreader.lib.ui.views.SlidingTabLayout;
 
 import java.util.ArrayList;
@@ -100,7 +100,7 @@ public class SlidingTabsColorsFragment extends Fragment {
          * color, which are used by {@link SlidingTabLayout}.
          */
 
-        for (String category : getResources().getStringArray(R.array.categories)) {
+        for (String category : getResources().getStringArray(R.array.categories_diario_libre)) {
             mTabs.add(new PagerItem(
                     category,
                     getResources().getColor(R.color.accent), // Indicator color

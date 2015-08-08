@@ -1,6 +1,7 @@
 package com.wmendez.listindiario;
 
-import com.wmendez.newsreader.lib.NewsApp;
+import android.app.Application;
+
 import com.wmendez.newsreader.lib.helpers.Feeds;
 import com.wmendez.newsreader.lib.util.NewsHTMLParser;
 
@@ -8,7 +9,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 
-public class App extends NewsApp {
+public class App extends Application {
 
     @Override
     public void onCreate() {

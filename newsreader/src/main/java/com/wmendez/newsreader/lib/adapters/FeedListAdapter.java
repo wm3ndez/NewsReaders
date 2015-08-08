@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.wmendez.newsreader.lib.R;
+import com.wmendez.diariolibre.R;
 import com.wmendez.newsreader.lib.helpers.Entry;
 import com.wmendez.newsreader.lib.ui.views.NewsItemView;
 

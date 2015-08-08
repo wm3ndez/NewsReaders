@@ -2,7 +2,7 @@ package com.wmendez.newsreader.lib.net;
 
 import android.content.Context;
 
-import com.wmendez.newsreader.lib.R;
+import com.wmendez.diariolibre.R;
 import com.wmendez.newsreader.lib.helpers.Entry;
 
 import java.util.List;

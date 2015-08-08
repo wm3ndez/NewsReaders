@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-import com.wmendez.newsreader.lib.R;
+import com.wmendez.diariolibre.R;
 import com.wmendez.newsreader.lib.event.NewsItemSelectedEvent;
 
 import de.greenrobot.event.EventBus;
@@ -28,6 +28,8 @@ public class FeedCategoryListActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
 
         if (savedInstanceState == null) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

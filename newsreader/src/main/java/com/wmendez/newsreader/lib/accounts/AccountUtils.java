@@ -6,7 +6,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.wmendez.newsreader.lib.Constants;
+import com.wmendez.diariolibre.Constants;
 
 public class AccountUtils {
 

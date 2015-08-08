@@ -4,7 +4,7 @@ import android.content.ContentResolver;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import com.wmendez.newsreader.lib.Constants;
+import com.wmendez.diariolibre.Constants;
 
 
 public class Contract {
