@@ -1,9 +1,9 @@
 package com.wmendez.diariolibre;
 
-import com.squareup.leakcanary.LeakCanary;
 import android.app.Application;
 
 import com.crashlytics.android.Crashlytics;
+import com.squareup.leakcanary.LeakCanary;
 import com.wmendez.newsreader.lib.accounts.AccountUtils;
 import com.wmendez.newsreader.lib.helpers.Feeds;
 import com.wmendez.newsreader.lib.util.NewsHTMLParser;

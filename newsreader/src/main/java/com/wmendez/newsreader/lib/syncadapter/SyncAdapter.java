@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.squareup.okhttp.OkHttpClient;
-import com.wmendez.diariolibre.BuildConfig;
 import com.wmendez.newsreader.lib.event.SyncEndedEvent;
 import com.wmendez.newsreader.lib.helpers.Entry;
 import com.wmendez.newsreader.lib.net.NewsAPI;
@@ -136,13 +135,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         Long datetime = PrefUtils.getLastSync(mContext);
 
         try {
-            List<Entry> entryList = api.newsList("diariolibre", datetime);
-            for (Entry entry : entryList) {
-                insertEntry(entry);
+            List<Entry> entryList = api.newsList(datetime);
+            for (int i = 0; i < entryList.size(); i++) {
+                insertEntry(entryList.get(i));
             }
             PrefUtils.setLastSync(mContext, new Date().getTime());
         } catch (RetrofitError retrofitError) {
-            Log.e(TAG, "Network synchronization complete", retrofitError);
+            Log.e(TAG, "Error syncing", retrofitError);
         }
         EventBus.getDefault().post(new SyncEndedEvent());
         Log.i(TAG, "Network synchronization complete");
@@ -155,6 +154,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         ContentValues values = new ContentValues();
         values.clear();
+        values.put(Contract.NewsTable.COLUMN_NAME_NEWSPAPER, entry.diary);
         values.put(Contract.NewsTable.COLUMN_NAME_CATEGORY, entry.category);
         values.put(Contract.NewsTable.COLUMN_NAME_TITLE, entry.title);
         values.put(Contract.NewsTable.COLUMN_NAME_URL, entry.link);

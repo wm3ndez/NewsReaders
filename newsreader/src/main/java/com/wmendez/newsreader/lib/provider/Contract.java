@@ -49,6 +49,7 @@ public class Contract {
          */
         public static final String TABLE_NAME = "news";
 
+        public static final String COLUMN_NAME_NEWSPAPER = "newspaper";
         public static final String COLUMN_NAME_CATEGORY = "category";
         public static final String COLUMN_NAME_URL = "url";
         public static final String COLUMN_NAME_TITLE = "title";

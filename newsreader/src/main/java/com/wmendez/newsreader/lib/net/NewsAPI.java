@@ -25,5 +25,8 @@ public class NewsAPI {
 
         @GET("/news/?format=json")
         List<Entry> newsList(@Query("diary") String diary, @Query("last_updated") Long last_updated);
+
+        @GET("/news/?format=json")
+        List<Entry> newsList(@Query("last_updated") Long last_updated);
     }
 }

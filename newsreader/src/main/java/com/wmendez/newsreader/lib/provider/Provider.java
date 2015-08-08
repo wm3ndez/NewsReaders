@@ -235,7 +235,7 @@ public class Provider extends ContentProvider {
         /**
          * Schema version.
          */
-        public static final int DATABASE_VERSION = 2;
+        public static final int DATABASE_VERSION = 3;
         /**
          * Filename for SQLite file.
          */
@@ -252,6 +252,7 @@ public class Provider extends ContentProvider {
         private static final String SQL_CREATE_NEWS =
                 "CREATE TABLE " + Contract.NewsTable.TABLE_NAME + " (" +
                         Contract.NewsTable._ID + " INTEGER PRIMARY KEY," +
+                        Contract.NewsTable.COLUMN_NAME_NEWSPAPER + TYPE_TEXT + COMMA_SEP +
                         Contract.NewsTable.COLUMN_NAME_CATEGORY + TYPE_TEXT + COMMA_SEP +
                         Contract.NewsTable.COLUMN_NAME_URL + TYPE_TEXT + COMMA_SEP +
                         Contract.NewsTable.COLUMN_NAME_TITLE + TYPE_TEXT + COMMA_SEP +
@@ -276,7 +277,7 @@ public class Provider extends ContentProvider {
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             // Delete database and build again.
-            if (newVersion == 2) {
+            if (newVersion > 1) {
                 db.execSQL(SQL_DELETE_NEWS);
                 onCreate(db);
             }

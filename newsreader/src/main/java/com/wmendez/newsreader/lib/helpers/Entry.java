@@ -9,6 +9,7 @@ import com.wmendez.newsreader.lib.provider.Contract;
 
 public class Entry implements Parcelable {
     public static final String TAG = "Entry";
+    public String diary;
     public String title;
     public String link;
     public String description;
@@ -18,7 +19,8 @@ public class Entry implements Parcelable {
     public boolean isNew;
     public boolean isFavorite = false;
 
-    public Entry(String title, String link, String description, String category, long pubDate, String image, boolean isNew, boolean isFavorite) {
+    public Entry(String diary, String title, String link, String description, String category, long pubDate, String image, boolean isNew, boolean isFavorite) {
+        this.diary = diary;
         this.title = title;
         this.link = link;
         this.description = description;
@@ -35,6 +37,7 @@ public class Entry implements Parcelable {
     }
 
     public void writeToParcel(Parcel out, int flags) {
+        out.writeString(diary);
         out.writeString(title);
         out.writeString(link);
         out.writeString(description);
@@ -56,6 +59,7 @@ public class Entry implements Parcelable {
     };
 
     private Entry(Parcel in) {
+        diary = in.readString();
         title = in.readString();
         link = in.readString();
         description = in.readString();
@@ -68,6 +72,7 @@ public class Entry implements Parcelable {
 
     public static Entry fromCursor(Cursor cursor) {
         return new Entry(
+                cursor.getString(cursor.getColumnIndex(Contract.NewsTable.COLUMN_NAME_NEWSPAPER)),
                 cursor.getString(cursor.getColumnIndex(Contract.NewsTable.COLUMN_NAME_TITLE)),
                 cursor.getString(cursor.getColumnIndex(Contract.NewsTable.COLUMN_NAME_URL)),
                 cursor.getString(cursor.getColumnIndex(Contract.NewsTable.COLUMN_NAME_DESCRIPTION)),

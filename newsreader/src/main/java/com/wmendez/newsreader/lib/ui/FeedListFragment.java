@@ -52,6 +52,7 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
     private ContentResolver contentResolver;
     private String category = "";
     private FragmentActivity activity;
+    private String newspaper = "";
 
     @Override
     public void onRefresh() {
@@ -83,6 +84,8 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
         Bundle arguments = getArguments();
         if (arguments.containsKey("category")) {
             category = arguments.getString("category");
+//            diary = arguments.getString("diary");
+            newspaper = "diariolibre";
         }
 
         EventBus.getDefault().register(this);
@@ -167,13 +170,14 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     private Cursor getQuery() {
-        return contentResolver.query(
+        Cursor query = contentResolver.query(
                 Contract.NewsTable.CONTENT_URI,
                 null,
-                Contract.NewsTable.COLUMN_NAME_CATEGORY + " like ?",
-                new String[]{"%" + category + "%"},
+                Contract.NewsTable.COLUMN_NAME_CATEGORY + " LIKE ? AND " + Contract.NewsTable.COLUMN_NAME_NEWSPAPER + " = ? ",
+                new String[]{"%" + category + "%", newspaper},
                 Contract.NewsTable.DEFAULT_SORTING
         );
+        return query;
     }
 
     private void setAdmob(View view) {
