@@ -5,9 +5,16 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.wmendez.diariolibre.R;
 import com.wmendez.newsreader.lib.event.NewsItemSelectedEvent;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import de.greenrobot.event.EventBus;
 
@@ -21,19 +28,34 @@ import de.greenrobot.event.EventBus;
  */
 public class FeedCategoryListActivity extends AppCompatActivity {
 
+    SlidingTabsColorsFragment fragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Spinner spinner = (Spinner) findViewById(R.id.spinner_nav);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        String[] regionsArray = getResources().getStringArray(R.array.newspapers);
+        ArrayList<String> newspapers = new ArrayList<>(Arrays.asList(regionsArray));
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, newspapers);
+        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        spinner.setAdapter(adapter);
+
+        spinner.setOnItemSelectedListener(new NewsPaperSelected());
 
 
         if (savedInstanceState == null) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            SlidingTabsColorsFragment fragment = new SlidingTabsColorsFragment();
+            fragment = new SlidingTabsColorsFragment();
+            Bundle arguments = new Bundle();
+            arguments.putString("newspaper", "diariolibre");
+            fragment.setArguments(arguments);
             transaction.replace(R.id.content_fragment, fragment);
             transaction.commit();
         }
@@ -54,4 +76,38 @@ public class FeedCategoryListActivity extends AppCompatActivity {
         EventBus.getDefault().unregister(this);
     }
 
+    private class NewsPaperSelected implements AdapterView.OnItemSelectedListener {
+
+
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            if (fragment == null)
+                return;
+            Bundle arguments = new Bundle();
+
+            switch (i) {
+                case 0:
+                    arguments.putString("newspaper", "diariolibre");
+                    break;
+                case 1:
+                    arguments.putString("newspaper", "elcaribe");
+                    break;
+                case 2:
+                    arguments.putString("newspaper", "listindiario");
+                    break;
+            }
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            fragment = new SlidingTabsColorsFragment();
+            fragment.setArguments(arguments);
+            transaction.replace(R.id.content_fragment, fragment);
+            transaction.commit();
+
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
+        }
+    }
 }

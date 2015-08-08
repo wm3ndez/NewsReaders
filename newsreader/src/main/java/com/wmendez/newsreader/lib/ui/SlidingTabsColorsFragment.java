@@ -37,6 +37,9 @@ import java.util.List;
  * when scrolling.
  */
 public class SlidingTabsColorsFragment extends Fragment {
+
+    private static String newspaper;
+
     /**
      * This class represents a tab to be displayed by {@link ViewPager} and it's associated
      * {@link SlidingTabLayout}.
@@ -59,6 +62,7 @@ public class SlidingTabsColorsFragment extends Fragment {
         Fragment createFragment() {
             Bundle arguments = new Bundle();
             arguments.putString("category", mCategory);
+            arguments.putString("newspaper", newspaper);
             FeedListFragment fragment = new FeedListFragment();
             fragment.setArguments(arguments);
             return fragment;
@@ -100,7 +104,22 @@ public class SlidingTabsColorsFragment extends Fragment {
          * color, which are used by {@link SlidingTabLayout}.
          */
 
-        for (String category : getResources().getStringArray(R.array.categories_diario_libre)) {
+        Bundle arguments = getArguments();
+        if (arguments.containsKey("newspaper")) {
+            newspaper = arguments.getString("newspaper", "diariolibre");
+        } else {
+            newspaper = "diariolibre";
+        }
+
+        String[] stringArray;
+        if (newspaper.equals("diariolibre"))
+            stringArray = getResources().getStringArray(R.array.categories_diario_libre);
+        else if (newspaper.equals("elcaribe"))
+            stringArray = getResources().getStringArray(R.array.categories_el_caribe);
+        else
+            stringArray = getResources().getStringArray(R.array.categories_listindiario);
+
+        for (String category : stringArray) {
             mTabs.add(new PagerItem(
                     category,
                     getResources().getColor(R.color.accent), // Indicator color
@@ -155,7 +174,11 @@ public class SlidingTabsColorsFragment extends Fragment {
 
             @Override
             public int getDividerColor(int position) {
-                return mTabs.get(position).getDividerColor();
+                try {
+                    return mTabs.get(position).getDividerColor();
+                } catch (Exception e) {
+                    return 0;
+                }
             }
         });
     }

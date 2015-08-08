@@ -84,8 +84,7 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
         Bundle arguments = getArguments();
         if (arguments.containsKey("category")) {
             category = arguments.getString("category");
-//            diary = arguments.getString("diary");
-            newspaper = "diariolibre";
+            newspaper = arguments.getString("newspaper");
         }
 
         EventBus.getDefault().register(this);

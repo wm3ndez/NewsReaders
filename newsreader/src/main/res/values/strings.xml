@@ -13,8 +13,13 @@
 
     <string name="account_type">com.wmendez.diariolibre.syncadapter</string>
     <string name="account_authority">@string/account_type</string>
-    <string-array name="categories" />
 
+
+    <string-array name="newspapers">
+        <item>Diario Libre</item>
+        <item>El Caribe</item>
+        <item>Listin Diario</item>
+    </string-array>
 
     <string-array name="categories_diario_libre">
         <item>Noticias</item>

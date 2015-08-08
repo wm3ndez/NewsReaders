@@ -2,11 +2,14 @@
 
     <color name="black_overlay">#66000000</color>
 
-    <color name="primary">#26A69A</color>
-    <color name="primary_dark">#009688</color>
-    <color name="primary_text">#FFFFFF</color>
-    <color name="secondary_text">#80FFFFFF</color>
-    <color name="accent">#c6ff00</color>
+    <color name="primary">#3F51B5</color>
+    <color name="primary_dark">#303F9F</color>
+    <color name="primary_light">#C5CAE9</color>
+    <color name="accent">#FF5252</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#727272</color>
+    <color name="icons">#FFFFFF</color>
+    <color name="divider">#B6B6B6</color>
     <color name="translucent_actionbar_background">#cc009688</color>
     <color name="photo_tint">#88101010</color>
     <color name="favorite_icon_tint">@color/gray</color>
