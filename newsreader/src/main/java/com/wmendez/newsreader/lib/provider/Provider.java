@@ -235,7 +235,7 @@ public class Provider extends ContentProvider {
         /**
          * Schema version.
          */
-        public static final int DATABASE_VERSION = 3;
+        public static final int DATABASE_VERSION = 4;
         /**
          * Filename for SQLite file.
          */
@@ -257,9 +257,9 @@ public class Provider extends ContentProvider {
                         Contract.NewsTable.COLUMN_NAME_URL + TYPE_TEXT + COMMA_SEP +
                         Contract.NewsTable.COLUMN_NAME_TITLE + TYPE_TEXT + COMMA_SEP +
                         Contract.NewsTable.COLUMN_NAME_IMAGE + TYPE_TEXT + COMMA_SEP +
+                        Contract.NewsTable.COLUMN_NAME_THUMBNAIL + TYPE_TEXT + COMMA_SEP +
                         Contract.NewsTable.COLUMN_NAME_DESCRIPTION + TYPE_TEXT + COMMA_SEP +
                         Contract.NewsTable.COLUMN_NAME_PUB_DATE + TYPE_LONG + COMMA_SEP +
-                        Contract.NewsTable.COLUMN_NAME_FAVORITE + TYPE_INTEGER + COMMA_SEP +
                         Contract.NewsTable.COLUMN_NAME_IS_NEW + TYPE_INTEGER + " default 1)";
 
 

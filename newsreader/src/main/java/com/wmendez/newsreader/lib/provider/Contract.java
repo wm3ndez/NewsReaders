@@ -57,6 +57,7 @@ public class Contract {
         public static final String COLUMN_NAME_DESCRIPTION = "description";
         public static final String COLUMN_NAME_PUB_DATE = "pub_date";
         public static final String COLUMN_NAME_FAVORITE = "favorite";
+        public static final String COLUMN_NAME_THUMBNAIL = "thumbnail";
         public static final String COLUMN_NAME_IS_NEW = "is_new";
 
         public static final String DEFAULT_SORTING = COLUMN_NAME_PUB_DATE + " DESC";

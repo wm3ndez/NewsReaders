@@ -15,9 +15,10 @@ public class Entry implements Parcelable {
     public String category;
     public long pubDate;
     public String image;
+    public String thumb;
     public boolean isNew;
 
-    public Entry(String diary, String title, String link, String description, String category, long pubDate, String image, boolean isNew) {
+    public Entry(String diary, String title, String link, String description, String category, long pubDate, String image, String thumb, boolean isNew) {
         this.diary = diary;
         this.title = title;
         this.link = link;
@@ -25,6 +26,7 @@ public class Entry implements Parcelable {
         this.category = category;
         this.image = image;
         this.pubDate = pubDate;
+        this.thumb = thumb;
         this.isNew = isNew;
     }
 
@@ -41,6 +43,7 @@ public class Entry implements Parcelable {
         out.writeString(category);
         out.writeLong(pubDate);
         out.writeString(image);
+        out.writeString(thumb);
         out.writeByte((byte) (isNew ? 1 : 0));
     }
 
@@ -62,6 +65,7 @@ public class Entry implements Parcelable {
         category = in.readString();
         pubDate = in.readLong();
         image = in.readString();
+        thumb = in.readString();
         isNew = in.readByte() != 0;
     }
 
@@ -74,6 +78,7 @@ public class Entry implements Parcelable {
                 cursor.getString(cursor.getColumnIndex(Contract.NewsTable.COLUMN_NAME_CATEGORY)),
                 cursor.getLong(cursor.getColumnIndex(Contract.NewsTable.COLUMN_NAME_PUB_DATE)),
                 cursor.getString(cursor.getColumnIndex(Contract.NewsTable.COLUMN_NAME_IMAGE)),
+                cursor.getString(cursor.getColumnIndex(Contract.NewsTable.COLUMN_NAME_THUMBNAIL)),
                 cursor.getInt(cursor.getColumnIndex(Contract.NewsTable.COLUMN_NAME_IS_NEW)) == 1
         );
 

@@ -3,6 +3,7 @@ package com.wmendez.diariolibre;
 import android.app.Application;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.ads.AdRequest;
 import com.squareup.leakcanary.LeakCanary;
 import com.wmendez.newsreader.lib.accounts.AccountUtils;
 import com.wmendez.newsreader.lib.helpers.Feeds;

@@ -161,8 +161,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         values.put(Contract.NewsTable.COLUMN_NAME_DESCRIPTION, entry.description);
         values.put(Contract.NewsTable.COLUMN_NAME_PUB_DATE, entry.pubDate);
         values.put(Contract.NewsTable.COLUMN_NAME_IMAGE, entry.image);
+        values.put(Contract.NewsTable.COLUMN_NAME_THUMBNAIL, entry.thumb);
         values.put(Contract.NewsTable.COLUMN_NAME_IS_NEW, true);
-        values.put(Contract.NewsTable.COLUMN_NAME_FAVORITE, false);
         mContentResolver.insert(Contract.NewsTable.CONTENT_URI, values);
     }
 

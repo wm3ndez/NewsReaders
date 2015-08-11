@@ -24,6 +24,7 @@ import android.support.v7.graphics.Palette;
 import android.text.Html;
 import android.text.format.DateUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -172,8 +173,9 @@ public class NewsItemView extends ViewGroup {
         mEntry = entry;
         title.setText(mEntry.title);
         pubDate.setText(DateUtils.getRelativeTimeSpanString(mEntry.pubDate));
+        Log.i("NewsItemView", entry.thumb);
 
-        if (mEntry.image.equals("")) {
+        if (mEntry.image.equals("") && mEntry.thumb.equals("")) {
             image.setVisibility(GONE);
             summary.setText(Html.fromHtml(mEntry.description));
             summary.setVisibility(VISIBLE);
@@ -185,8 +187,18 @@ public class NewsItemView extends ViewGroup {
     }
 
     private void fetchImage() {
+        String imageUrl;
+        final boolean loadFull = mEntry.thumb.equals("");
+
+        if (loadFull)
+            imageUrl = mEntry.image;
+        else {
+            imageUrl = (mContext.getResources().getString(R.string.api_url) + mEntry.thumb).replace("https", "http");
+        }
+
+
         Glide.with(getContext())
-                .load(mEntry.image)
+                .load(imageUrl)
                 .asBitmap()
                 .into(new BitmapImageViewTarget(image) {
                     @Override
@@ -208,12 +220,19 @@ public class NewsItemView extends ViewGroup {
                                 }
                             }
                         });
+
+                        if (!loadFull) {
+                            Glide.with(getContext()).load(mEntry.image).into(image);
+                        }
+
                     }
 
                     @Override
                     public void onLoadFailed(Exception e, Drawable errorDrawable) {
                         image.setVisibility(GONE);
                         summary.setVisibility(VISIBLE);
+                        if (!loadFull)
+                            Glide.with(getContext()).load(mEntry.image).into(image);
                     }
 
                 });
