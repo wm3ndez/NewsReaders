@@ -8,7 +8,6 @@ import android.os.Parcelable;
 import com.wmendez.newsreader.lib.provider.Contract;
 
 public class Entry implements Parcelable {
-    public static final String TAG = "Entry";
     public String diary;
     public String title;
     public String link;
@@ -17,9 +16,8 @@ public class Entry implements Parcelable {
     public long pubDate;
     public String image;
     public boolean isNew;
-    public boolean isFavorite = false;
 
-    public Entry(String diary, String title, String link, String description, String category, long pubDate, String image, boolean isNew, boolean isFavorite) {
+    public Entry(String diary, String title, String link, String description, String category, long pubDate, String image, boolean isNew) {
         this.diary = diary;
         this.title = title;
         this.link = link;
@@ -28,7 +26,6 @@ public class Entry implements Parcelable {
         this.image = image;
         this.pubDate = pubDate;
         this.isNew = isNew;
-        this.isFavorite = isFavorite;
     }
 
 
@@ -45,7 +42,6 @@ public class Entry implements Parcelable {
         out.writeLong(pubDate);
         out.writeString(image);
         out.writeByte((byte) (isNew ? 1 : 0));
-        out.writeByte((byte) (isFavorite ? 1 : 0));
     }
 
     public static final Creator<Entry> CREATOR = new Creator<Entry>() {
@@ -67,7 +63,6 @@ public class Entry implements Parcelable {
         pubDate = in.readLong();
         image = in.readString();
         isNew = in.readByte() != 0;
-        isFavorite = in.readByte() != 0;
     }
 
     public static Entry fromCursor(Cursor cursor) {
@@ -79,8 +74,7 @@ public class Entry implements Parcelable {
                 cursor.getString(cursor.getColumnIndex(Contract.NewsTable.COLUMN_NAME_CATEGORY)),
                 cursor.getLong(cursor.getColumnIndex(Contract.NewsTable.COLUMN_NAME_PUB_DATE)),
                 cursor.getString(cursor.getColumnIndex(Contract.NewsTable.COLUMN_NAME_IMAGE)),
-                cursor.getInt(cursor.getColumnIndex(Contract.NewsTable.COLUMN_NAME_IS_NEW)) == 1,
-                cursor.getInt(cursor.getColumnIndex(Contract.NewsTable.COLUMN_NAME_FAVORITE)) == 1
+                cursor.getInt(cursor.getColumnIndex(Contract.NewsTable.COLUMN_NAME_IS_NEW)) == 1
         );
 
     }

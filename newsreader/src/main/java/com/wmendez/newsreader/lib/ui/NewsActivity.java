@@ -1,6 +1,5 @@
 package com.wmendez.newsreader.lib.ui;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -23,7 +22,6 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -33,15 +31,12 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.wmendez.diariolibre.R;
-import com.wmendez.newsreader.lib.event.FavoriteChangedEvent;
 import com.wmendez.newsreader.lib.helpers.Entry;
-import com.wmendez.newsreader.lib.provider.Contract;
 import com.wmendez.newsreader.lib.ui.views.ObservableScrollView;
 import com.wmendez.newsreader.lib.util.Utils;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import de.greenrobot.event.EventBus;
 import it.subito.masaccio.MasaccioImageView;
 
 public class NewsActivity extends AppCompatActivity implements ObservableScrollView.Callbacks {
@@ -230,9 +225,6 @@ public class NewsActivity extends AppCompatActivity implements ObservableScrollV
         if (id == android.R.id.home) {
             finishAfterTransition();
             return true;
-        } else if (id == R.id.menu_item_favorite) {
-            setFavorite();
-            return true;
         } else if (id == R.id.menu_item_share) {
             startShareActivity();
             return true;
@@ -252,42 +244,12 @@ public class NewsActivity extends AppCompatActivity implements ObservableScrollV
 
     }
 
-    private void setFavorite() {
-        entry.isFavorite = !entry.isFavorite;
-        ContentValues values = new ContentValues();
-        values.put(Contract.NewsTable.COLUMN_NAME_FAVORITE, entry.isFavorite);
-        getContentResolver().update(Contract.NewsTable.CONTENT_URI,
-                values,
-                Contract.NewsTable.COLUMN_NAME_URL + " = ? ",
-                new String[]{entry.link}
-        );
-        setFavoriteIconColorFilter();
-
-
-        EventBus.getDefault().post(new FavoriteChangedEvent());
-    }
-
-    private void setFavoriteIconColorFilter() {
-        Drawable icon;
-        if (entry.isFavorite) {
-            icon = getResources().getDrawable(R.drawable.ic_favorite_grey);
-            icon.setColorFilter(getResources().getColor(R.color.favorite_icon_active_tint), PorterDuff.Mode.SRC_ATOP);
-        } else {
-            icon = getResources().getDrawable(R.drawable.ic_favorite_outline_grey);
-            icon.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
-        }
-        favoriteItem.setIcon(icon);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         // Inflate menu resource file.
         getMenuInflater().inflate(R.menu.news_activity, menu);
-
-        favoriteItem = menu.findItem(R.id.menu_item_favorite);
-        setFavoriteIconColorFilter();
-//        Return true to display menu
         return true;
     }
 

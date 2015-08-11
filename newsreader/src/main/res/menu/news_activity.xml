@@ -9,10 +9,4 @@
         android:title="@string/share_button"
         android:icon="@drawable/ic_action_share"
         app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/menu_item_favorite"
-        android:icon="@drawable/ic_favorite_outline_grey"
-        android:orderInCategory="1"
-        android:title="@string/menu_title_favorite"
-        app:showAsAction="ifRoom" />
 </menu>

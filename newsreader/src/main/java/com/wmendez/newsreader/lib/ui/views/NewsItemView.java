@@ -16,13 +16,10 @@ package com.wmendez.newsreader.lib.ui.views;
  * limitations under the License.
  */
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.graphics.Palette;
 import android.text.Html;
 import android.text.format.DateUtils;
@@ -38,19 +35,14 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.wmendez.diariolibre.R;
 import com.wmendez.newsreader.lib.helpers.Entry;
-import com.wmendez.newsreader.lib.provider.Contract;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
-import it.subito.masaccio.MasaccioImageView;
 
 public class NewsItemView extends ViewGroup {
 
     @InjectView(R.id.news_image)
-    MasaccioImageView image;
-    @InjectView(R.id.favorite_indicator)
-    ImageView favorite;
+    ImageView image;
     @InjectView(R.id.news_title)
     TextView title;
     @InjectView(R.id.summary)
@@ -73,7 +65,6 @@ public class NewsItemView extends ViewGroup {
         mHandler = new Handler();
         LayoutInflater.from(context).inflate(R.layout.news_item_view, this, true);
         ButterKnife.inject(this);
-
     }
 
 
@@ -121,8 +112,6 @@ public class NewsItemView extends ViewGroup {
             measureChildWithMargins(image, widthMeasureSpec, 0, heightMeasureSpec, 0);
             heightUsed += getMeasuredHeightWithMargins(image);
         }
-
-        measureChildWithMargins(favorite, widthMeasureSpec, 0, heightMeasureSpec, 0);
 
         measureChildWithMargins(title, widthMeasureSpec, 0, heightMeasureSpec, heightUsed);
         heightUsed += getMeasuredHeightWithMargins(title);
@@ -181,31 +170,18 @@ public class NewsItemView extends ViewGroup {
 
     public void setContent(final Entry entry) {
         mEntry = entry;
+        title.setText(mEntry.title);
+        pubDate.setText(DateUtils.getRelativeTimeSpanString(mEntry.pubDate));
 
         if (mEntry.image.equals("")) {
             image.setVisibility(GONE);
+            summary.setText(Html.fromHtml(mEntry.description));
             summary.setVisibility(VISIBLE);
         } else {
             image.setVisibility(VISIBLE);
             summary.setVisibility(GONE);
             fetchImage();
         }
-
-        title.setText(mEntry.title);
-        pubDate.setText(DateUtils.getRelativeTimeSpanString(mEntry.pubDate));
-
-        summary.setText(Html.fromHtml(mEntry.description));
-
-
-        if (mEntry.isFavorite) {
-            favorite.setImageResource(R.drawable.ic_favorite_grey);
-            favorite.setColorFilter(mContext.getResources().getColor(R.color.favorite_icon_active_tint));
-        } else {
-            favorite.setImageResource(R.drawable.ic_favorite_outline_grey);
-            favorite.setColorFilter(Color.WHITE);
-        }
-
-        ViewCompat.setElevation(favorite, 5.0f);
     }
 
     private void fetchImage() {
@@ -241,28 +217,6 @@ public class NewsItemView extends ViewGroup {
                     }
 
                 });
-
     }
 
-    @OnClick(R.id.favorite_indicator)
-    public void setFavorite(View v) {
-        if (mEntry == null) return;
-        mEntry.isFavorite = !mEntry.isFavorite;
-        ContentValues values = new ContentValues();
-        values.put(Contract.NewsTable.COLUMN_NAME_FAVORITE, mEntry.isFavorite);
-        mContext.getContentResolver()
-                .update(Contract.NewsTable.CONTENT_URI,
-                        values,
-                        Contract.NewsTable.COLUMN_NAME_URL + " = ? ",
-                        new String[]{mEntry.link}
-                );
-
-        if (mEntry.isFavorite) {
-            favorite.setImageResource(R.drawable.ic_favorite_grey);
-            favorite.setColorFilter(mContext.getResources().getColor(R.color.favorite_icon_active_tint));
-        } else {
-            favorite.setImageResource(R.drawable.ic_favorite_outline_grey);
-            favorite.setColorFilter(Color.WHITE);
-        }
-    }
 }
