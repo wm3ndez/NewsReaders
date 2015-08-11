@@ -22,20 +22,15 @@
     </string-array>
 
     <string-array name="categories_diario_libre">
+        <item>Portada</item>
         <item>Noticias</item>
         <item>Economía</item>
-        <!--<item>Actualidad</item>-->
+        <item>Estilos</item>
+        <item>Mundo</item>
         <item>Revista</item>
         <item>Deportes</item>
         <item>Opinión</item>
-        <item>Ecos</item>
-        <!--<item>Lecturas</item>-->
-        <!--<item>DL English</item>-->
-        <!--<item>DL Educación</item>-->
         <item>Tecnología</item>
-        <!--<item>Espacios</item>-->
-        <!--<item>Habitat</item>-->
-        <!--<item>Fotonoticias</item>-->
     </string-array>
 
     <string-array name="categories_el_caribe">
