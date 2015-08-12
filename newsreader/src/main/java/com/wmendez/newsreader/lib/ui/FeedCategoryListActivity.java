@@ -95,6 +95,9 @@ public class FeedCategoryListActivity extends AppCompatActivity {
                 case 2:
                     arguments.putString("newspaper", "listindiario");
                     break;
+                case 3:
+                    arguments.putString("newspaper", "celennyurena");
+                    break;
             }
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

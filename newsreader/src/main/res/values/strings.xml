@@ -18,7 +18,8 @@
     <string-array name="newspapers">
         <item>Diario Libre</item>
         <item>El Caribe</item>
-        <item>Listin Diario</item>
+        <item>Listín Diario</item>
+        <item>Celenny Ureña</item>
     </string-array>
 
     <string-array name="categories_diario_libre">
@@ -39,6 +40,10 @@
         <item>Deportes</item>
         <item>Gente</item>
         <item>Opiniones</item>
+    </string-array>
+
+    <string-array name="categories_celennyurena">
+        <item>Blog</item>
     </string-array>
 
     <string-array name="categories_listindiario">

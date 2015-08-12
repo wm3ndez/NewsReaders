@@ -116,6 +116,8 @@ public class SlidingTabsColorsFragment extends Fragment {
             stringArray = getResources().getStringArray(R.array.categories_diario_libre);
         else if (newspaper.equals("elcaribe"))
             stringArray = getResources().getStringArray(R.array.categories_el_caribe);
+        else if (newspaper.equals("celennyurena"))
+            stringArray = getResources().getStringArray(R.array.categories_celennyurena);
         else
             stringArray = getResources().getStringArray(R.array.categories_listindiario);
 
