@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ShareCompat;
@@ -76,7 +77,8 @@ public class NewsActivity extends AppCompatActivity implements ObservableScrollV
         setContentView(R.layout.activity_news);
         ButterKnife.inject(this);
 
-        mInterpolator = AnimationUtils.loadInterpolator(this, android.R.interpolator.fast_out_slow_in);
+        if (Build.VERSION.SDK_INT >= 21)
+            mInterpolator = AnimationUtils.loadInterpolator(this, android.R.interpolator.fast_out_slow_in);
 
         entry = getIntent().getParcelableExtra("news");
         populate();
@@ -150,9 +152,11 @@ public class NewsActivity extends AppCompatActivity implements ObservableScrollV
                     public void onResourceReady(Bitmap bitmap, GlideAnimation anim) {
                         super.onResourceReady(bitmap, anim);
 
-                        mImageView.setScaleX(0);
-                        mImageView.setScaleY(0);
-                        mImageView.animate().scaleX(1).scaleY(1).setInterpolator(mInterpolator).setStartDelay(300);
+                        if (Build.VERSION.SDK_INT >= 21) {
+                            mImageView.setScaleX(0);
+                            mImageView.setScaleY(0);
+                            mImageView.animate().scaleX(1).scaleY(1).setInterpolator(mInterpolator).setStartDelay(300);
+                        }
 
                         Palette.Builder builder = new Palette.Builder(bitmap);
                         builder.generate(new Palette.PaletteAsyncListener() {
@@ -184,7 +188,8 @@ public class NewsActivity extends AppCompatActivity implements ObservableScrollV
     }
 
     private void setStatusBarColor(int mutedColor) {
-        getWindow().setStatusBarColor(mutedColor);
+        if (Build.VERSION.SDK_INT >= 21)
+            getWindow().setStatusBarColor(mutedColor);
     }
 
     private void setDefaultStyle() {

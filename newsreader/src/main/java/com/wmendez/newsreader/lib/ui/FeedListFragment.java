@@ -4,6 +4,7 @@ import android.accounts.Account;
 import android.app.ActivityOptions;
 import android.content.ContentResolver;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -28,6 +29,7 @@ import com.wmendez.diariolibre.R;
 import com.wmendez.newsreader.lib.adapters.FeedListAdapter;
 import com.wmendez.newsreader.lib.adapters.RecyclerItemClickListener;
 import com.wmendez.newsreader.lib.event.FavoriteChangedEvent;
+import com.wmendez.newsreader.lib.event.NewsItemSelectedEvent;
 import com.wmendez.newsreader.lib.event.SyncEndedEvent;
 import com.wmendez.newsreader.lib.helpers.Entry;
 import com.wmendez.newsreader.lib.provider.Contract;
@@ -119,8 +121,11 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
         gridView.addOnItemTouchListener(new RecyclerItemClickListener(activity, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-//                EventBus.getDefault().post(new NewsItemSelectedEvent(adapter.getEntry(position)));
-                startNewsActivityWithTransition(view.findViewById(R.id.news_title), adapter.getEntry(position));
+                if (Build.VERSION.SDK_INT >= 21)
+                    startNewsActivityWithTransition(view.findViewById(R.id.news_title), adapter.getEntry(position));
+                else
+                    EventBus.getDefault().post(new NewsItemSelectedEvent(adapter.getEntry(position)));
+
             }
         }));
 
