@@ -15,6 +15,7 @@ import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.format.DateUtils;
+import android.text.util.Linkify;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -83,6 +84,8 @@ public class NewsActivity extends AppCompatActivity implements ObservableScrollV
         if (toolbar != null)
             setUpToolbar();
         setAdmob();
+
+        Linkify.addLinks(mNewsContent, Linkify.ALL);
     }
 
 
