@@ -36,7 +36,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/news_image_size"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/ic_launcher" />
+                    android:src="@mipmap/ic_launcher" />
 
 
                 <android.support.v7.widget.Toolbar

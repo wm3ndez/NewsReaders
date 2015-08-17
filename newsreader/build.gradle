@@ -18,6 +18,7 @@ android {
         targetSdkVersion 22
         versionName versionProps['name']
         versionCode versionProps['code'].toInteger()
+        project.ext.set("archivesBaseName", "" + defaultConfig.versionName);
     }
 
     signingConfigs {
@@ -27,33 +28,9 @@ android {
         assert localProps['keystore.props.file'];
         keyProps.load(new FileInputStream(file(localProps['keystore.props.file'])))
 
-        diariolibre {
+        release {
             storeFile file(keyProps["store"])
             keyAlias keyProps["alias.diariolibre"]
-            storePassword keyProps["storePass"]
-            keyPassword keyProps["pass"]
-        }
-        listindiario {
-            storeFile file(keyProps["store"])
-            keyAlias keyProps["alias.listindiario"]
-            storePassword keyProps["storePass"]
-            keyPassword keyProps["pass"]
-        }
-        elcaribe {
-            storeFile file(keyProps["store"])
-            keyAlias keyProps["alias.elcaribe"]
-            storePassword keyProps["storePass"]
-            keyPassword keyProps["pass"]
-        }
-        noticiassin {
-            storeFile file(keyProps["store"])
-            keyAlias keyProps["alias.noticiassin"]
-            storePassword keyProps["storePass"]
-            keyPassword keyProps["pass"]
-        }
-        elnacional {
-            storeFile file(keyProps["store"])
-            keyAlias keyProps["alias.elnacional"]
             storePassword keyProps["storePass"]
             keyPassword keyProps["pass"]
         }
