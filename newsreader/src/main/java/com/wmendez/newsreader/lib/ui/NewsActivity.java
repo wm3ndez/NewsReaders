@@ -231,7 +231,8 @@ public class NewsActivity extends AppCompatActivity implements ObservableScrollV
         int id = item.getItemId();
 
         if (id == android.R.id.home) {
-            finishAfterTransition();
+            if (Build.VERSION.SDK_INT >= 21)
+                finishAfterTransition();
             return true;
         } else if (id == R.id.menu_item_share) {
             startShareActivity();
