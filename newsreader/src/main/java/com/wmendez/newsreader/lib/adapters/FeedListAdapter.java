@@ -10,8 +10,8 @@ import com.wmendez.diariolibre.R;
 import com.wmendez.newsreader.lib.helpers.Entry;
 import com.wmendez.newsreader.lib.ui.views.NewsItemView;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 
 public class FeedListAdapter extends CursorRecyclerViewAdapter<FeedListAdapter.ViewHolder> {
@@ -39,13 +39,13 @@ public class FeedListAdapter extends CursorRecyclerViewAdapter<FeedListAdapter.V
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        @InjectView(R.id.news_item_view)
+        @Bind(R.id.news_item_view)
         NewsItemView newsItemView;
 
 
         public ViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.inject(this, itemView);
+            ButterKnife.bind(this, itemView);
         }
     }
 }

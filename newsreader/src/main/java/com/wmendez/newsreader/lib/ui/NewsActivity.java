@@ -37,29 +37,29 @@ import com.wmendez.newsreader.lib.helpers.Entry;
 import com.wmendez.newsreader.lib.ui.views.ObservableScrollView;
 import com.wmendez.newsreader.lib.util.Utils;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import it.subito.masaccio.MasaccioImageView;
 
 public class NewsActivity extends AppCompatActivity implements ObservableScrollView.Callbacks {
 
-    @InjectView(R.id.news_content)
+    @Bind(R.id.news_content)
     TextView mNewsContent;
-    @InjectView(R.id.news_image)
+    @Bind(R.id.news_image)
     MasaccioImageView mImageView;
-    @InjectView(R.id.news_title)
+    @Bind(R.id.news_title)
     TextView newsTitle;
-    @InjectView(R.id.pub_date)
+    @Bind(R.id.pub_date)
     TextView pubDate;
-    @InjectView(R.id.scrollview)
+    @Bind(R.id.scrollview)
     ObservableScrollView mScrollView;
-    @InjectView(R.id.image_container)
+    @Bind(R.id.image_container)
     View mImageViewContainer;
-    @InjectView(R.id.details_container)
+    @Bind(R.id.details_container)
     View mDetailsContainer;
-    @InjectView(R.id.header_session)
+    @Bind(R.id.header_session)
     View mHeader;
-    @InjectView(R.id.toolbar)
+    @Bind(R.id.toolbar)
     Toolbar toolbar;
 
     private boolean mHasImage = false;
@@ -75,7 +75,7 @@ public class NewsActivity extends AppCompatActivity implements ObservableScrollV
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         if (Build.VERSION.SDK_INT >= 21)
             mInterpolator = AnimationUtils.loadInterpolator(this, android.R.interpolator.fast_out_slow_in);

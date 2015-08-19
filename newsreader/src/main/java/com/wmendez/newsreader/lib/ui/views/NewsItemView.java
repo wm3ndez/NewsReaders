@@ -37,18 +37,18 @@ import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.wmendez.diariolibre.R;
 import com.wmendez.newsreader.lib.helpers.Entry;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 public class NewsItemView extends ViewGroup {
 
-    @InjectView(R.id.news_image)
+    @Bind(R.id.news_image)
     ImageView image;
-    @InjectView(R.id.news_title)
+    @Bind(R.id.news_title)
     TextView title;
-    @InjectView(R.id.summary)
+    @Bind(R.id.summary)
     TextView summary;
-    @InjectView(R.id.pub_date)
+    @Bind(R.id.pub_date)
     TextView pubDate;
 
     Context mContext;
@@ -65,7 +65,7 @@ public class NewsItemView extends ViewGroup {
         mContext = context;
         mHandler = new Handler();
         LayoutInflater.from(context).inflate(R.layout.news_item_view, this, true);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
     }
 
 
@@ -137,9 +137,6 @@ public class NewsItemView extends ViewGroup {
         if (image.getVisibility() == VISIBLE) {
             layoutView(image, paddingLeft, currentTop, image.getMeasuredWidth(), image.getMeasuredHeight());
             currentTop += getHeightWithMargins(image);
-
-            // int favoritePosition = getWidthWithMargins(image) + paddingLeft + getPaddingRight() - 80;
-            // layoutView(favorite, favoritePosition, 16, newsInfo.getMeasuredWidth(), title.getMeasuredHeight() + pubDate.getMeasuredHeight());
 
             layoutView(title, paddingLeft, currentTop, title.getMeasuredWidth(), title.getMeasuredHeight());
             currentTop += getHeightWithMargins(title);

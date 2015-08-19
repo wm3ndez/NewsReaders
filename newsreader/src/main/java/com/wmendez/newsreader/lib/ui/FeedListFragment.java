@@ -1,6 +1,7 @@
 package com.wmendez.newsreader.lib.ui;
 
 import android.accounts.Account;
+import android.annotation.TargetApi;
 import android.app.ActivityOptions;
 import android.content.ContentResolver;
 import android.database.Cursor;
@@ -37,15 +38,15 @@ import com.wmendez.newsreader.lib.provider.Contract;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import de.greenrobot.event.EventBus;
 
 
 public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
-    @InjectView(R.id.swipe_container)
+    @Bind(R.id.swipe_container)
     SwipeRefreshLayout swipeLayout;
-    @InjectView(R.id.feed_list)
+    @Bind(R.id.feed_list)
     RecyclerView gridView;
 
     private FeedListAdapter adapter;
@@ -97,7 +98,7 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
         activity = getActivity();
         contentResolver = activity.getContentResolver();
         View rootView = inflater.inflate(R.layout.fragment_feed_list, container, false);
-        ButterKnife.inject(this, rootView);
+        ButterKnife.bind(this, rootView);
 
         return rootView;
     }
@@ -138,6 +139,7 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
         gridView.setAdapter(adapter);
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void startNewsActivityWithTransition(View toolbar, Entry entry) {
 
         // Avoid system UI glitches as described here:
@@ -160,6 +162,7 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
         activity.startActivity(NewsActivity.getStartIntent(activity, entry), transitionBundle);
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void addNonNullViewToTransitionParticipants(View view, List<Pair> participants) {
         if (view == null) {
             return;
@@ -174,14 +177,13 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     private Cursor getQuery() {
-        Cursor query = contentResolver.query(
+        return contentResolver.query(
                 Contract.NewsTable.CONTENT_URI,
                 null,
                 Contract.NewsTable.COLUMN_NAME_CATEGORY + " LIKE ? AND " + Contract.NewsTable.COLUMN_NAME_NEWSPAPER + " = ? ",
                 new String[]{"%" + category + "%", newspaper},
                 Contract.NewsTable.DEFAULT_SORTING
         );
-        return query;
     }
 
     private void setAdmob(View view) {
