@@ -43,8 +43,8 @@ public class FeedCategoryListActivity extends AppCompatActivity {
         String[] regionsArray = getResources().getStringArray(R.array.newspapers);
         ArrayList<String> newspapers = new ArrayList<>(Arrays.asList(regionsArray));
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.newspaper_spinner_item, newspapers);
-        adapter.setDropDownViewResource(R.layout.newspaper_spinner_item);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, newspapers);
+        adapter.setDropDownViewResource(android.R.layout.simple_list_item_1);
         spinner.setAdapter(adapter);
 
         spinner.setOnItemSelectedListener(new NewsPaperSelected());
