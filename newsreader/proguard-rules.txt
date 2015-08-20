@@ -60,3 +60,4 @@
 
 -dontwarn com.google.android.gms.internal.*
 -dontwarn com.google.android.gms.analytics.*
+-dontwarn org.apache.http.**

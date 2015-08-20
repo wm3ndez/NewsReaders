@@ -7,15 +7,15 @@ repositories {
 }
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion "23"
+    compileSdkVersion 23
+    buildToolsVersion "23.0.0"
 
     def Properties versionProps = new Properties()
     versionProps.load(new FileInputStream(file('../version.properties')))
 
     defaultConfig {
-        minSdkVersion 17
-        targetSdkVersion 22
+        minSdkVersion 19
+        targetSdkVersion 23
         versionName versionProps['name']
         versionCode versionProps['code'].toInteger()
         project.ext.set("archivesBaseName", "" + defaultConfig.versionName);
@@ -69,10 +69,10 @@ android {
 
 dependencies {
     compile 'com.android.support:support-v4:23.0.0'
-    compile 'com.android.support:appcompat-v7:22.2.1'
+    compile 'com.android.support:appcompat-v7:23.0.0'
     compile 'com.android.support:recyclerview-v7:23.0.0'
     compile 'com.android.support:cardview-v7:23.0.0'
-    compile 'com.android.support:design:22.2.1'
+    compile 'com.android.support:design:23.0.0'
     compile 'com.android.support:palette-v7:23.0.0'
     compile 'com.google.android.gms:play-services:7.8.0'
     compile('de.greenrobot:eventbus:2.2.1') {
