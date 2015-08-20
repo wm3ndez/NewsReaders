@@ -38,12 +38,25 @@
 }
 
 
+-keep class butterknife.** { *; }
 -dontwarn butterknife.internal.**
--keep class **$$ViewInjector { *; }
--keepnames class * { @butterknife.InjectView *;}
+-keep class **$$ViewBinder { *; }
+
+-keepclasseswithmembernames class * {
+    @butterknife.* <fields>;
+}
+
+-keepclasseswithmembernames class * {
+    @butterknife.* <methods>;
+}
+
 
 -keep public class * implements com.bumptech.glide.module.GlideModule
 -keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
     **[] $VALUES;
     public *;
 }
+
+
+-dontwarn com.google.android.gms.internal.*
+-dontwarn com.google.android.gms.analytics.*
