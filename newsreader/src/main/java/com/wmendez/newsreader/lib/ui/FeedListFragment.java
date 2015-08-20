@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -34,6 +35,7 @@ import com.wmendez.newsreader.lib.event.NewsItemSelectedEvent;
 import com.wmendez.newsreader.lib.event.SyncEndedEvent;
 import com.wmendez.newsreader.lib.helpers.Entry;
 import com.wmendez.newsreader.lib.provider.Contract;
+import com.wmendez.newsreader.lib.util.PrefUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,6 +117,10 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         setUpGridView();
         setAdmob(view);
+        if (PrefUtils.getLastSync(activity) == 0L) {
+            Snackbar.make(view, "Sincronizando noticias por primera vez...", Snackbar.LENGTH_LONG).show();
+            refreshFeed();
+        }
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -131,7 +137,6 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
         }));
 
         cursor = getQuery();
-        if (cursor.getCount() == 0) refreshFeed();
 
         adapter = new FeedListAdapter(cursor);
         final int spanCount = activity.getResources().getInteger(R.integer.columns_count);
